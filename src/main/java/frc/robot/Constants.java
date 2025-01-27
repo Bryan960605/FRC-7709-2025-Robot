@@ -153,13 +153,16 @@ public final class Constants {
     public static final double yPidController_Ki = 0;
     public static final double yPidController_Kd = 0;
 
-    public static final double zPidController_Kp = 0;
-    public static final double zPidController_Ki = 0;
-    public static final double zPidController_Kd = 0;
-
     public static final double rotationPidController_Kp = 0;
     public static final double rotationPidController_Ki = 0;
     public static final double rotationPidController_Kd = 0;
+
+    public static final double xPidMinOutput = -0.2;
+    public static final double xPidMaxOutput = 0.2;
+    public static final double yPidMinOutput = -0.2;
+    public static final double yPidMaxOutput = 0.2;
+    public static final double rotationPidMinOutput = -0.2;
+    public static final double rotationPidMaxOutput = 0.2;
 
   }
 

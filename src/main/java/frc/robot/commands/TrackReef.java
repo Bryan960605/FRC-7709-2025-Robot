@@ -21,23 +21,28 @@ public class TrackReef extends Command {
   private PIDController xPidController;
   private PIDController yPidController;
 
+  private double xPidMeasurements;
+  private double yPidMeasurements;
+  private double rotationPidMeasurements;
+
   private double xPidOutput;
   private double yPidOutput;
   private double rotationPidOutput;
 
   public TrackReef(PhotonVisionSubsystem photonVisionSubsystem, SwerveSubsystem swerveSubsystem) {
-    xPidController = new PIDController(PhotonConstants.xPidController_Kp, PhotonConstants.xPidController_Ki, PhotonConstants.xPidController_Kd);
-    yPidController = new PIDController(PhotonConstants.yPidController_Kp, PhotonConstants.yPidController_Ki, PhotonConstants.yPidController_Kd);
-    rotationPidController = new PIDController(PhotonConstants.rotationPidController_Kp, PhotonConstants.rotationPidController_Ki, PhotonConstants.rotationPidController_Kd);
-    // Set limits
-    xPidController.setIntegratorRange(-0.2, 0.2);
-    yPidController.setIntegratorRange(-0.2, 0.2);
-    rotationPidController.setIntegratorRange(-0.2, 0.2);
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_PhotonVisionSubsystem = photonVisionSubsystem;
     this.m_SwerveSubsystem = swerveSubsystem;
 
     addRequirements(m_PhotonVisionSubsystem, m_SwerveSubsystem);
+    // PID
+    xPidController = new PIDController(PhotonConstants.xPidController_Kp, PhotonConstants.xPidController_Ki, PhotonConstants.xPidController_Kd);
+    yPidController = new PIDController(PhotonConstants.yPidController_Kp, PhotonConstants.yPidController_Ki, PhotonConstants.yPidController_Kd);
+    rotationPidController = new PIDController(PhotonConstants.rotationPidController_Kp, PhotonConstants.rotationPidController_Ki, PhotonConstants.rotationPidController_Kd);
+    // Set limits
+    xPidController.setIntegratorRange(PhotonConstants.xPidMinOutput, PhotonConstants.xPidMaxOutput);
+    yPidController.setIntegratorRange(PhotonConstants.yPidMaxOutput, PhotonConstants.yPidMaxOutput);
+    rotationPidController.setIntegratorRange(PhotonConstants.rotationPidMaxOutput, PhotonConstants.rotationPidMaxOutput);
   }
 
   // Called when the command is initially scheduled.
@@ -49,41 +54,17 @@ public class TrackReef extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_PhotonVisionSubsystem.hasTarget()) {
-      // Get target pose
-      var targetPose = m_PhotonVisionSubsystem.getTargetPose();
       // Y-PID calculations
-      double yMeasurements = m_PhotonVisionSubsystem.getYPidError();
-      yMeasurements = Math.abs(yMeasurements) > 0.05 ? yMeasurements : 0;
-      yPidOutput = -yPidController.calculate(yMeasurements, 0);
+      yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements();
+      yPidMeasurements = Math.abs(m_PhotonVisionSubsystem.getYPidMeasurements()) > 0.05 ? yPidMeasurements : 0;
+      yPidOutput = -yPidController.calculate(yPidMeasurements, 0);
       // Rotation-PID calculations
-      double rotationMeasurements = Units.radiansToDegrees(targetPose.getRotation().getAngle());
-      rotationMeasurements = (Math.abs(rotationMeasurements)-180) > 3 ? rotationMeasurements : 0;
-      rotationPidOutput = rotationPidController.calculate(rotationMeasurements, 180);
+      rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements();
+      rotationPidMeasurements = (Math.abs(rotationPidMeasurements) - 180) > 3 ? rotationPidMeasurements : 180;
+      rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, 180);
       // impl
       m_SwerveSubsystem.drive(0, yPidOutput, rotationPidOutput, false);
-    }else{
-      m_SwerveSubsystem.drive(0, 0, 0, false);
-    }
-    
-    
-    // if(m_PhotonVisionSubsystem.getRotationError() > 0.3) {
-    //   rotationOutput = m_PhotonVisionSubsystem.getRotationPidOutput();
-    // }else {
-    //   rotationOutput = 0;
-    // }
-    // if(m_PhotonVisionSubsystem.getYPidError() > 0.3) {
-    //   yPidOutput = m_PhotonVisionSubsystem.getYPidOutput();
-    // }else {
-    //   yPidOutput = 0;
-    // }
-  //   if(m_PhotonVisionSubsystem.getXPidError() > 0.3) {
-  //     xPidOutput = m_PhotonVisionSubsystem.getXPidOutput();
-  //   }else {
-  //   xPidOutput = 0;
-  // }
-    // m_SwerveSubsystem.drive(xPidOutput, yPidOutput, rotationOutput, false);
-
+      
   }
 
   // Called once the command ends or is interrupted.

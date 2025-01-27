@@ -4,7 +4,9 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.PhotonConstants;
 import frc.robot.subsystems.PhotonVisionSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -14,6 +16,9 @@ public class AprilTagY extends Command {
   private final PhotonVisionSubsystem m_PhotonVisionSubsystem;
   private final SwerveSubsystem m_SwerveSubsystem;
 
+  private final PIDController yPidController;
+
+  private double yPidMeasurements;
   private double yPidOutput;
 
   public AprilTagY(PhotonVisionSubsystem photonVisionSubsystem, SwerveSubsystem swerveSubsystem) {
@@ -22,19 +27,26 @@ public class AprilTagY extends Command {
     this.m_SwerveSubsystem = swerveSubsystem;
 
     addRequirements(m_PhotonVisionSubsystem, m_SwerveSubsystem);
+    // PID
+    yPidController = new PIDController(PhotonConstants.yPidController_Kp, PhotonConstants.yPidController_Ki, PhotonConstants.yPidController_Kd);
+    //set limit
+    yPidController.setIntegratorRange(PhotonConstants.yPidMinOutput, PhotonConstants.yPidMaxOutput);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_SwerveSubsystem.drive(0, 0, 0, false);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    yPidOutput = m_PhotonVisionSubsystem.getYPidOutput();
+    yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements();
+    yPidMeasurements = Math.abs(yPidMeasurements) > 0.05 ? yPidMeasurements : 0;
+    yPidOutput = -yPidController.calculate(yPidMeasurements, 0);
 
-    m_SwerveSubsystem.drive(yPidOutput, 0, 0, false);
-
+    m_SwerveSubsystem.drive(0, yPidOutput, 0, false);
   }
 
   // Called once the command ends or is interrupted.

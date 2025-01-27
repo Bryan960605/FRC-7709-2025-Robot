@@ -26,42 +26,22 @@ public class PhotonVisionSubsystem extends SubsystemBase {
   /** Creates a new PhotonVisionSubsystem. */
   private final PhotonCamera camera;
 
-  private final PIDController xPidController;
-  private final PIDController yPidController;
-  private final PIDController zPidController;
-  private final PIDController rotationPidController;
-
   private PhotonPipelineResult result;
   private PhotonTrackedTarget target;
   private Optional<MultiTargetPNPResult> results;
   private List<PhotonTrackedTarget> targets;
   private int target_ID;
 
-  private double xPidOutput;
-  private double yPidOutput;
-  private double zPidoutput;
-  private double rotationPidOutput;
 
-  private double botXError;
-  private double botYError;
-  private double botZError;
-  private double botRotationError;
+  private double botXMeasurements;
+  private double botYMeasurements;
+  private double botRotationMeasurements;
 
 
   public PhotonVisionSubsystem() {
     camera = new PhotonCamera("Logetich");
 
-    xPidController = new PIDController(PhotonConstants.xPidController_Kp, PhotonConstants.xPidController_Ki, PhotonConstants.xPidController_Kd);
-    yPidController = new PIDController(PhotonConstants.yPidController_Kp, PhotonConstants.yPidController_Ki, PhotonConstants.yPidController_Kd);
-    zPidController = new PIDController(PhotonConstants.zPidController_Kp, PhotonConstants.zPidController_Ki, PhotonConstants.zPidController_Kd);
-    rotationPidController = new PIDController(PhotonConstants.rotationPidController_Kp, PhotonConstants.rotationPidController_Ki, PhotonConstants.rotationPidController_Kd);
-
-    xPidController.setIntegratorRange(-0.4, 0.4);
-    yPidController.setIntegratorRange(-0.4, 0.4);
-    rotationPidController.setIntegratorRange(-0.4, 0.4);
-
   }
-
 
   public int getTargetID() {
     return target_ID;
@@ -75,28 +55,16 @@ public class PhotonVisionSubsystem extends SubsystemBase {
     return target.getBestCameraToTarget();
   }
 
-  public double getXPidOutput() {
-    return xPidOutput;
+  public double getXPidMeasurements() {
+    return botXMeasurements;
   }
 
-  public double getYPidOutput() {
-    return yPidOutput;
+  public double getYPidMeasurements() {
+    return botYMeasurements;
   }
 
-  public double getRotationPidOutput() {
-    return rotationPidOutput;
-  }
-
-  public double getXPidError() {
-    return xPidController.getError();
-  }
-
-  public double getYPidError() {
-    return yPidController.getError();
-  }
-
-  public double getRotationError() {
-    return rotationPidController.getError();
+  public double getRotationMeasurements() {
+    return botRotationMeasurements;
   }
 
   @Override
@@ -107,29 +75,22 @@ public class PhotonVisionSubsystem extends SubsystemBase {
     results = result.getMultiTagResult();
     targets = result.getTargets();
     if(hasTarget()) {
-
-      botXError = getTargetPose().getX();
-      botYError = getTargetPose().getY();
-      botZError = getTargetPose().getZ();
-      botRotationError = -Math.toDegrees(getTargetPose().getRotation().getAngle());
-
-      xPidOutput = xPidController.calculate(botXError, 0);
-      yPidOutput = yPidController.calculate(botYError, 0);
-      zPidoutput = zPidController.calculate(botZError, 0);
-      rotationPidOutput = rotationPidController.calculate(botRotationError, 0);
+      botXMeasurements = getTargetPose().getX();
+      botYMeasurements = getTargetPose().getY();
+      botRotationMeasurements = -Math.toDegrees(getTargetPose().getRotation().getAngle());
 
       target_ID = target.getFiducialId();
 
-      SmartDashboard.putNumber("Photon/botXError", botXError);
-      SmartDashboard.putNumber("photon/botYError", botYError);
-      SmartDashboard.putNumber("Photon/botZError", botZError);
-      SmartDashboard.putNumber("Photon/botRotationError", botRotationError);
+      SmartDashboard.putNumber("Photon/BotXError", botXMeasurements);
+      SmartDashboard.putNumber("Photon/BotYError", botYMeasurements);
+      SmartDashboard.putNumber("Photon/BotRotationError", botRotationMeasurements);
+      SmartDashboard.putNumber("Photon/target_ID", target_ID);
 
     }else {
-      xPidOutput = 0;
-      yPidOutput = 0;
-      zPidoutput = 0;
-      rotationPidOutput = 0;
+      botXMeasurements = 0;
+      botYMeasurements = 0;
+      botRotationMeasurements = 0;
+      target_ID = 0;
     }
   }
 }
