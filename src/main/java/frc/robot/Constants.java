@@ -170,7 +170,12 @@ public final class Constants {
     public static final int intakeWheel_ID = 0;
     public static final int intakeArm_ID = 0;
 
+    public static final int elevator_FirstMotor_ID = 0;
+    public static final int elevator_SecondMotor_ID = 0;
+
     public static final int armAbsolutedEncoder_ID = 0;
+
+    public static final double absolutedEncoderOffset = 0;
 
     public static final double armPid_Kp = 0;
     public static final double armPid_Ki = 0;
