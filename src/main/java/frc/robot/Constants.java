@@ -175,6 +175,8 @@ public final class Constants {
 
     public static final int armAbsolutedEncoder_ID = 0;
 
+    public static final int irSensor_ID = 0;
+
     public static final double absolutedEncoderOffset = 0;
 
     public static final double armPid_Kp = 0;
@@ -185,6 +187,7 @@ public final class Constants {
     public static final double armFeedforward_Kg = 0;
     public static final double armFeedforward_Kv = 0;
 
+    public static final double startAngle = 0;
     public static final double floorAngle = 0;
     public static final double l1Angle = 0;
     public static final double l2l3Angle = 0;
@@ -195,15 +198,31 @@ public final class Constants {
     public static final double l3Angle_Algae = 0;
     public static final double proccesorAngle = 0;
 
+    public static final double startPosition = 0;
+    public static final double floorPosition = 0;
+    public static final double l1Position = 0;
+    public static final double l2l3Position = 0;
+    public static final double l4Position = 0;
+    public static final double coralStationPosition = 0;
+    public static final double netPosition = 0;
+    public static final double l2Position_Algae = 0;
+    public static final double l3Position_Algae = 0;
+    public static final double proccesorPosition = 0;
+
     public static final double floor_Vol = 0;
     public static final double l1_Vol = 0;
-    public static final double l2l_Vol = 0;
+    public static final double l2l3_Vol = 0;
     public static final double l4_Vol = 0;
     public static final double coralStation_Vol = 0;
     public static final double net_Vol = 0;
     public static final double l2Algae_Vol = 0;
     public static final double l3Algae_Vol = 0;
     public static final double proccesor_Vol = 0;
+    
+    public static final double holdCoralVelocity = 0;
+    public static final double holdAlgaeVelocity = 0;
+
+    public static final double hasAlgaeCurrent = 0;
 
     public static final double feedForwardMax = 0;
     

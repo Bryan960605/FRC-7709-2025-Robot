@@ -10,6 +10,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -19,6 +20,8 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Velocity;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
@@ -32,13 +35,22 @@ public class IntakeSubsystem extends SubsystemBase {
   private final TalonFX elevator_SecondMotor;
 
   private final TalonFXConfiguration wheelConfig;
+  private final Slot0Configs wheelSlot0Configs;
+
   private final TalonFXConfiguration armConfig;
+  private final Slot0Configs armSlot0Configs;
+  private final MotionMagicConfigs armMotionMagicConfigs;
 
   private final TalonFXConfiguration elevatorConfig;
   private final Slot0Configs elevatorSlot0Config;
   private final MotionMagicConfigs elevatorMotionMagicConfig;
 
-  private final MotionMagicVoltage request;
+
+  private final VelocityVoltage request_Wheel;
+
+  private final MotionMagicVoltage request_Arm;
+  private final MotionMagicVoltage request_Elevator;
+
 
   private final CANcoder armAbsolutedEncoder;
 
@@ -47,6 +59,8 @@ public class IntakeSubsystem extends SubsystemBase {
   private final PIDController armPid;
 
   private final ArmFeedforward armFeedforward;
+
+  private final DigitalInput irSensor;
 
   private double pidOutput;
   private double feedforwardOutput;
@@ -68,16 +82,43 @@ public class IntakeSubsystem extends SubsystemBase {
 
     elevator_SecondMotor.setControl(new Follower(IntakeConstants.elevator_FirstMotor_ID, false));
 
+    irSensor = new DigitalInput(IntakeConstants.irSensor_ID);
+
+    arriveAngle = IntakeConstants.startAngle;
+    goalPosition = IntakeConstants.startPosition;
+
 
     // Motor Configurations
 
     wheelConfig = new TalonFXConfiguration();
+    wheelSlot0Configs = new Slot0Configs();
+
     armConfig = new TalonFXConfiguration();
+    armSlot0Configs = new Slot0Configs();
+    armMotionMagicConfigs = new MotionMagicConfigs();
+
 
     elevatorConfig = new TalonFXConfiguration();
     elevatorSlot0Config = new Slot0Configs();
     elevatorMotionMagicConfig = new MotionMagicConfigs();
-    request = new MotionMagicVoltage(0);
+
+    request_Wheel = new VelocityVoltage(0).withSlot(0);
+    request_Arm = new MotionMagicVoltage(arriveAngle);
+    request_Elevator = new MotionMagicVoltage(0);
+
+    wheelSlot0Configs.kS = 0;
+    wheelSlot0Configs.kV = 0;
+    wheelSlot0Configs.kP = 0;
+    wheelSlot0Configs.kI = 0;
+    wheelSlot0Configs.kD = 0;
+
+    armSlot0Configs.kS = 0;
+    armSlot0Configs.kG = 0;
+    armSlot0Configs.kV = 0;
+    armSlot0Configs.kA = 0;
+    armSlot0Configs.kP = 0;
+    armSlot0Configs.kI = 0;
+    armSlot0Configs.kD = 0;
 
     elevatorSlot0Config.kS = 0;
     elevatorSlot0Config.kG = 0;
@@ -100,15 +141,19 @@ public class IntakeSubsystem extends SubsystemBase {
     wheelConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     armConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
+    intakewheel.getConfigurator().apply(wheelConfig);
+    intakewheel.getConfigurator().apply(wheelSlot0Configs);
+
+    intakeArm.getConfigurator().apply(armConfig);
+    intakeArm.getConfigurator().apply(armSlot0Configs);
+    intakeArm.getConfigurator().apply(armMotionMagicConfigs);
+
     elevator_FirstMotor.getConfigurator().apply(elevatorConfig);
     elevator_SecondMotor.getConfigurator().apply(elevatorConfig);
     elevator_FirstMotor.getConfigurator().apply(elevatorSlot0Config);
     elevator_SecondMotor.getConfigurator().apply(elevatorSlot0Config);
     elevator_FirstMotor.getConfigurator().apply(elevatorMotionMagicConfig);
     elevator_SecondMotor.getConfigurator().apply(elevatorMotionMagicConfig);
-
-    intakewheel.getConfigurator().apply(wheelConfig);
-    intakeArm.getConfigurator().apply(armConfig);
 
 
     // Absolute Encoder Configurations
@@ -127,39 +172,70 @@ public class IntakeSubsystem extends SubsystemBase {
 
   }
 
+  // void
+
   public void intakeCoral() {
-    intakewheel.set(0);
+    intakewheel.set(IntakeConstants.coralStation_Vol);
     this.arriveAngle = IntakeConstants.coralStationAngle;
+    this.goalPosition = IntakeConstants.coralStationPosition; 
   }
 
   public void outCoral_L1() {
-    intakewheel.set(0);
+    intakewheel.set(IntakeConstants.l1_Vol);
     this.arriveAngle = IntakeConstants.l1Angle;
+    this.goalPosition = IntakeConstants.l1Position;
   }
 
   public void outCoral_L2L3() {
-    intakewheel.set(0);
+    intakewheel.set(IntakeConstants.l2l3_Vol);
     this.arriveAngle = IntakeConstants.l2l3Angle;
+    this.goalPosition = IntakeConstants.l2l3Position;
   }
 
   public void outCoral_L4() {
-    intakewheel.set(0);
+    intakewheel.set(IntakeConstants.l4_Vol);
     this.arriveAngle = IntakeConstants.l4Angle;
+    this.goalPosition = IntakeConstants.l4Position;
   }
 
   public void shootNet() {
-    intakewheel.set(0);
+    intakewheel.set(IntakeConstants.net_Vol);
     this.arriveAngle = IntakeConstants.netAngle;
+    this.goalPosition = IntakeConstants.netPosition;
   }
 
   public void intakeAlgae_low() {
-    intakewheel.set(0);
+    intakewheel.set(IntakeConstants.l2Algae_Vol);
     this.arriveAngle = IntakeConstants.l2Angle_Algae;
+    this.goalPosition = IntakeConstants.l2Position_Algae;
   }
 
   public void intakeAlgae_high() {
-    intakewheel.set(0);
+    intakewheel.set(IntakeConstants.l3Algae_Vol);
     this.arriveAngle = IntakeConstants.l3Angle_Algae;
+    this.goalPosition = IntakeConstants.l3Position_Algae;
+  }
+
+  public void stopElevater() {
+    this.goalPosition = IntakeConstants.startPosition;
+  }
+
+  public void stopArm() {
+    arriveAngle = IntakeConstants.startAngle;
+  }
+
+  public void holdCoral() {
+    intakewheel.setControl(request_Wheel.withVelocity(IntakeConstants.holdCoralVelocity));
+  }
+
+  public void holdAlgae() {
+    intakewheel.setControl(request_Wheel.withVelocity(IntakeConstants.holdAlgaeVelocity));
+  }
+
+  // get Value
+
+  public double getCurrentPosition() {
+    return elevator_FirstMotor.getPosition().getValueAsDouble();
   }
 
   public double getAngle() {
@@ -174,9 +250,21 @@ public class IntakeSubsystem extends SubsystemBase {
     return Units.rotationsPerMinuteToRadiansPerSecond(armAbsolutedEncoder.getVelocity().getValueAsDouble()*60);
   }
 
+  public boolean ifArrivePosition() {
+    return (Math.abs(goalPosition - getCurrentPosition()) <= 1);
+  }
+
+  public boolean hasAlgae() {
+    return intakewheel.getMotorStallCurrent().getValueAsDouble() > 0;
+  }
+
+  public boolean hasCoral() {
+    return !irSensor.get();
+  }
+
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    // Arm
     pidOutput = armPid.calculate(getAngle(), arriveAngle);
     feedforwardOutput = armFeedforward.calculate(getAngle(), pidOutput);
     if(feedforwardOutput >= IntakeConstants.feedForwardMax) {
@@ -184,13 +272,18 @@ public class IntakeSubsystem extends SubsystemBase {
     }
     output = pidOutput + feedforwardOutput;
 
+    intakeArm.set(output);
+
     // elevator
-    elevator_FirstMotor.setControl(request.withPosition(goalPosition));
+    elevator_FirstMotor.setControl(request_Elevator.withPosition(goalPosition));
+
+    //SmartDashboard
+
+    SmartDashboard.putNumber("Intake/CurrentPosition", getCurrentPosition());
+    SmartDashboard.putBoolean("Intake/ifArrivePosition", ifArrivePosition());
 
     SmartDashboard.putNumber("Intake/pidOutput", pidOutput);
     SmartDashboard.putNumber("Intake/feedforwardOutput", feedforwardOutput);
     SmartDashboard.putNumber("Intake/Output", output);
-
-    intakeArm.set(output);
   }
 }
