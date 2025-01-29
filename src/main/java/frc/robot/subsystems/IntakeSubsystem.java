@@ -216,6 +216,12 @@ public class IntakeSubsystem extends SubsystemBase {
     this.goalPosition = IntakeConstants.l3Position_Algae;
   }
 
+  public void intakeAlgae_floor() {
+    intakewheel.set(IntakeConstants.floor_Vol);
+    this.arriveAngle = IntakeConstants.floorAngle;
+    this.goalPosition = IntakeConstants.floorPosition;
+  }
+
   public void stopElevater() {
     this.goalPosition = IntakeConstants.startPosition;
   }
