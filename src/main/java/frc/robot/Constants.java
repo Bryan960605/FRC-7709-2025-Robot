@@ -218,6 +218,8 @@ public final class Constants {
     public static final double l2Algae_Vol = 0;
     public static final double l3Algae_Vol = 0;
     public static final double proccesor_Vol = 0;
+    public static final double holdCoral_Vol = 0;
+    public static final double holdAlgae_Vol = 0;
     
     public static final double holdCoralVelocity = 0;
     public static final double holdAlgaeVelocity = 0;

@@ -35,7 +35,7 @@ public class IntakeSubsystem extends SubsystemBase {
   private final TalonFX elevator_SecondMotor;
 
   private final TalonFXConfiguration wheelConfig;
-  private final Slot0Configs wheelSlot0Configs;
+  // private final Slot0Configs wheelSlot0Configs;
 
   private final TalonFXConfiguration armConfig;
   private final Slot0Configs armSlot0Configs;
@@ -46,7 +46,7 @@ public class IntakeSubsystem extends SubsystemBase {
   private final MotionMagicConfigs elevatorMotionMagicConfig;
 
 
-  private final VelocityVoltage request_Wheel;
+  // private final VelocityVoltage request_Wheel;
 
   private final MotionMagicVoltage request_Arm;
   private final MotionMagicVoltage request_Elevator;
@@ -91,7 +91,7 @@ public class IntakeSubsystem extends SubsystemBase {
     // Motor Configurations
 
     wheelConfig = new TalonFXConfiguration();
-    wheelSlot0Configs = new Slot0Configs();
+    // wheelSlot0Configs = new Slot0Configs();
 
     armConfig = new TalonFXConfiguration();
     armSlot0Configs = new Slot0Configs();
@@ -102,15 +102,15 @@ public class IntakeSubsystem extends SubsystemBase {
     elevatorSlot0Config = new Slot0Configs();
     elevatorMotionMagicConfig = new MotionMagicConfigs();
 
-    request_Wheel = new VelocityVoltage(0).withSlot(0);
+    // request_Wheel = new VelocityVoltage(0).withSlot(0);
     request_Arm = new MotionMagicVoltage(arriveAngle);
     request_Elevator = new MotionMagicVoltage(0);
 
-    wheelSlot0Configs.kS = 0;
-    wheelSlot0Configs.kV = 0;
-    wheelSlot0Configs.kP = 0;
-    wheelSlot0Configs.kI = 0;
-    wheelSlot0Configs.kD = 0;
+    // wheelSlot0Configs.kS = 0;
+    // wheelSlot0Configs.kV = 0;
+    // wheelSlot0Configs.kP = 0;
+    // wheelSlot0Configs.kI = 0;
+    // wheelSlot0Configs.kD = 0;
 
     armSlot0Configs.kS = 0;
     armSlot0Configs.kG = 0;
@@ -142,7 +142,7 @@ public class IntakeSubsystem extends SubsystemBase {
     armConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
     intakewheel.getConfigurator().apply(wheelConfig);
-    intakewheel.getConfigurator().apply(wheelSlot0Configs);
+    // intakewheel.getConfigurator().apply(wheelSlot0Configs);
 
     intakeArm.getConfigurator().apply(armConfig);
     intakeArm.getConfigurator().apply(armSlot0Configs);
@@ -225,11 +225,13 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void holdCoral() {
-    intakewheel.setControl(request_Wheel.withVelocity(IntakeConstants.holdCoralVelocity));
+    intakewheel.set(IntakeConstants.holdCoral_Vol);
+    // intakewheel.setControl(request_Wheel.withVelocity(IntakeConstants.holdCoralVelocity));
   }
 
   public void holdAlgae() {
-    intakewheel.setControl(request_Wheel.withVelocity(IntakeConstants.holdAlgaeVelocity));
+    intakewheel.set(IntakeConstants.holdAlgae_Vol);
+    // intakewheel.setControl(request_Wheel.withVelocity(IntakeConstants.holdAlgaeVelocity));
   }
 
   // get Value
@@ -255,7 +257,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public boolean hasAlgae() {
-    return intakewheel.getMotorStallCurrent().getValueAsDouble() > 0;
+    return intakewheel.getMotorStallCurrent().getValueAsDouble() > IntakeConstants.hasAlgaeCurrent;
   }
 
   public boolean hasCoral() {
