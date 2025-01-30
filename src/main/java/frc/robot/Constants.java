@@ -227,7 +227,12 @@ public final class Constants {
     public static final double hasAlgaeCurrent = 0;
 
     public static final double feedForwardMax = 0;
-    
+  }
 
+  public static class ClimberConstants {
+    public static final int climbMotor_ID = 0;
+
+    public static final boolean MotorReverse = false;
+    
   }
 }

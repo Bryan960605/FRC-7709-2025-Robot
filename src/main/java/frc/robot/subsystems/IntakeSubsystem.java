@@ -204,6 +204,12 @@ public class IntakeSubsystem extends SubsystemBase {
     this.goalPosition = IntakeConstants.netPosition;
   }
 
+  public void shootProcessor() {
+    intakewheel.set(IntakeConstants.proccesor_Vol);
+    this.arriveAngle = IntakeConstants.proccesorAngle;
+    this.goalPosition = IntakeConstants.proccesorPosition;
+  }
+
   public void intakeAlgae_low() {
     intakewheel.set(IntakeConstants.l2Algae_Vol);
     this.arriveAngle = IntakeConstants.l2Angle_Algae;
