@@ -200,25 +200,29 @@ public final class Constants {
     public static final double rotationPidMinOutput_Processor = -0.2;
     public static final double rotationPidMaxOutput_Processor = 0.2;
 
-    public static final double XPidSetPoint_Reef = 0; 
-    public static final double YPidSetPoint_Reef = 0;
-    public static final double RotationPidSetPoint_Reef = 0;
+    public static final double xPidSetPoint_RightReef = 0; 
+    public static final double yPidSetPoint_RightReef = 0;
+    public static final double rotationPidSetPoint_RightReef = 0;
 
-    public static final double XPidSetPoint_CoralStation = 0;
-    public static final double YPidSetPoint_CoralStation = 0;
-    public static final double RotationPidSetPoint_CoralStation = 0;
+    public static final double xPidSetPoint_LeftReef = 0;
+    public static final double yPidSetPoint_LeftReef = 0;
+    public static final double rotationPidSetPoint_LeftReef = 0;
 
-    public static final double XPidSetPoint_Cage = 0;
-    public static final double YPidSetPoint_Cage = 0;
-    public static final double RotationPidSetPoint_Cage = 0;
+    public static final double xPidSetPoint_CoralStation = 0;
+    public static final double yPidSetPoint_CoralStation = 0;
+    public static final double rotationPidSetPoint_CoralStation = 0;
 
-    public static final double XPidSetPoint_Processor = 0;
-    public static final double YPidSetPoint_Processor = 0;
-    public static final double RotationPidSetPoint_Processor = 0;
+    public static final double xPidSetPoint_Cage = 0;
+    public static final double yPidSetPoint_Cage = 0;
+    public static final double rotationPidSetPoint_Cage = 0;
 
-    public static final double XPidSetPoint_Net = 0;
-    public static final double YPidSetPoint_Net = 0;
-    public static final double RotationPidSetPoint_Net = 0;
+    public static final double xPidSetPoint_Processor = 0;
+    public static final double yPidSetPoint_Processor = 0;
+    public static final double rotationPidSetPoint_Processor = 0;
+
+    public static final double xPidSetPoint_Net = 0;
+    public static final double yPidSetPoint_Net = 0;
+    public static final double rotationPidSetPoint_Net = 0;
 
   }
 

@@ -59,20 +59,20 @@ public class TrackNet extends Command {
   public void execute() {
     // Y-PID calculations
     yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements();
-    yPidError = Math.abs(yPidMeasurements - PhotonConstants.YPidSetPoint_Net);
-    yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.YPidSetPoint_Net;
-    yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.YPidSetPoint_Net);
+    yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_Net);
+    yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_Net;
+    yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_Net);
     // Rotation-PID calculations
     rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements();
-    rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.RotationPidSetPoint_Net);
-    rotationPidMeasurements = (rotationPidError > 3) ? rotationPidMeasurements : PhotonConstants.RotationPidSetPoint_Net;
-    rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.RotationPidSetPoint_Net);
+    rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.rotationPidSetPoint_Net);
+    rotationPidMeasurements = (rotationPidError > 3) ? rotationPidMeasurements : PhotonConstants.rotationPidSetPoint_Net;
+    rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_Net);
   // X-PID calculations
     xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements();
-    xPidError = Math.abs(xPidMeasurements - PhotonConstants.XPidSetPoint_Net);
+    xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_Net);
     if((yPidError) < 3 && (rotationPidError) < 0.05){
       xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : 0;
-      xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.XPidSetPoint_Net);
+      xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_Net);
     } else {
       xPidOutput = 0;
     }

@@ -12,7 +12,7 @@ import frc.robot.subsystems.PhotonVisionSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class TrackReef extends Command {
+public class TrackRightReef extends Command {
   /** Creates a new TrackReef. */
   private final PhotonVisionSubsystem m_PhotonVisionSubsystem;
   private final SwerveSubsystem m_SwerveSubsystem;
@@ -33,7 +33,7 @@ public class TrackReef extends Command {
   private double yPidOutput;
   private double rotationPidOutput;
 
-  public TrackReef(PhotonVisionSubsystem photonVisionSubsystem, SwerveSubsystem swerveSubsystem) {
+  public TrackRightReef(PhotonVisionSubsystem photonVisionSubsystem, SwerveSubsystem swerveSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_PhotonVisionSubsystem = photonVisionSubsystem;
     this.m_SwerveSubsystem = swerveSubsystem;
@@ -60,20 +60,20 @@ public class TrackReef extends Command {
   public void execute() {
     // Y-PID calculations
     yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements();
-    yPidError = Math.abs(yPidMeasurements - PhotonConstants.YPidSetPoint_Reef);
-    yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.YPidSetPoint_Reef;
-    yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.YPidSetPoint_Reef);
+    yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_RightReef);
+    yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_RightReef;
+    yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_RightReef);
     // Rotation-PID calculations
     rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements();
-    rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.RotationPidSetPoint_Reef);
-    rotationPidMeasurements = (rotationPidError > 3) ? rotationPidMeasurements : PhotonConstants.RotationPidSetPoint_Reef;
-    rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.RotationPidSetPoint_Reef);
+    rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.rotationPidSetPoint_RightReef);
+    rotationPidMeasurements = (rotationPidError > 3) ? rotationPidMeasurements : PhotonConstants.rotationPidSetPoint_RightReef;
+    rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_RightReef);
   // X-PID calculations
     xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements();
-    xPidError = Math.abs(xPidMeasurements - PhotonConstants.XPidSetPoint_Reef);
+    xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_RightReef);
     if((yPidError) < 3 && (rotationPidError) < 0.05){
       xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : 0;
-      xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.XPidSetPoint_Reef);
+      xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_RightReef);
     } else {
       xPidOutput = 0;
     }

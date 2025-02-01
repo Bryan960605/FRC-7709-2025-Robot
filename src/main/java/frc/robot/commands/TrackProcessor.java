@@ -59,20 +59,20 @@ public class TrackProcessor extends Command {
   public void execute() {
     // Y-PID calculations
     yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements();
-    yPidError = Math.abs(yPidMeasurements - PhotonConstants.YPidSetPoint_Processor);
-    yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.YPidSetPoint_Processor;
-    yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.YPidSetPoint_Processor);
+    yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_Processor);
+    yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_Processor;
+    yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_Processor);
     // Rotation-PID calculations
     rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements();
-    rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.RotationPidSetPoint_Processor);
-    rotationPidMeasurements = (rotationPidError > 3) ? rotationPidMeasurements : PhotonConstants.RotationPidSetPoint_Processor;
-    rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.RotationPidSetPoint_Processor);
+    rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.rotationPidSetPoint_Processor);
+    rotationPidMeasurements = (rotationPidError > 3) ? rotationPidMeasurements : PhotonConstants.rotationPidSetPoint_Processor;
+    rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_Processor);
   // X-PID calculations
     xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements();
-    xPidError = Math.abs(xPidMeasurements - PhotonConstants.XPidSetPoint_Processor);
+    xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_Processor);
     if((yPidError) < 3 && (rotationPidError) < 0.05){
       xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : 0;
-      xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.XPidSetPoint_Processor);
+      xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_Processor);
     } else {
       xPidOutput = 0;
     }
