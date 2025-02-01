@@ -8,6 +8,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ManualDrive;
 import frc.robot.commands.TrackCage;
 import frc.robot.commands.TrackCoralStation;
+import frc.robot.commands.TrackNet;
 import frc.robot.commands.TrackProcessor;
 import frc.robot.commands.IntakeCommands.Coral_L1;
 import frc.robot.commands.IntakeCommands.Coral_L2;
@@ -92,9 +93,10 @@ public class RobotContainer {
     );
 
     driverController.rightBumper().whileTrue(new TrackCage(m_SwerveSubsystem, m_PhotonVisionSubsystem));
-    driverController.leftBumper().whileTrue(new TrackCoralStation(m_PhotonVisionSubsystem, m_SwerveSubsystem));
-    driverController.leftTrigger().whileTrue(new TrackCage(m_SwerveSubsystem, m_PhotonVisionSubsystem));
-    driverController.rightTrigger().whileTrue(new TrackProcessor(m_SwerveSubsystem, m_PhotonVisionSubsystem));
+    driverController.a().whileTrue(new TrackCoralStation(m_PhotonVisionSubsystem, m_SwerveSubsystem));
+    driverController.x().whileTrue(new TrackCage(m_SwerveSubsystem, m_PhotonVisionSubsystem));
+    driverController.y().whileTrue(new TrackProcessor(m_SwerveSubsystem, m_PhotonVisionSubsystem));
+    driverController.pov(0).whileTrue(new TrackNet(m_SwerveSubsystem, m_PhotonVisionSubsystem));
 
     operatorController.a().whileTrue(new Coral_L1(m_ElevatorSubsystem, m_EffectorSubsystem));
     operatorController.b().whileTrue(new Coral_L2(m_ElevatorSubsystem, m_EffectorSubsystem));
