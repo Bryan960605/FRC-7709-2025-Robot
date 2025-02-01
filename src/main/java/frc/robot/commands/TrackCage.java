@@ -5,15 +5,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.PhotonConstants;
 import frc.robot.subsystems.PhotonVisionSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class TrackReef extends Command {
-  /** Creates a new TrackReef. */
+public class TrackCage extends Command {
+  /** Creates a new TrackCage. */
   private final PhotonVisionSubsystem m_PhotonVisionSubsystem;
   private final SwerveSubsystem m_SwerveSubsystem;
 
@@ -33,7 +32,7 @@ public class TrackReef extends Command {
   private double yPidOutput;
   private double rotationPidOutput;
 
-  public TrackReef(PhotonVisionSubsystem photonVisionSubsystem, SwerveSubsystem swerveSubsystem) {
+  public TrackCage(SwerveSubsystem swerveSubsystem, PhotonVisionSubsystem photonVisionSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_PhotonVisionSubsystem = photonVisionSubsystem;
     this.m_SwerveSubsystem = swerveSubsystem;
@@ -44,9 +43,9 @@ public class TrackReef extends Command {
     yPidController = new PIDController(PhotonConstants.yPidController_Kp, PhotonConstants.yPidController_Ki, PhotonConstants.yPidController_Kd);
     rotationPidController = new PIDController(PhotonConstants.rotationPidController_Kp, PhotonConstants.rotationPidController_Ki, PhotonConstants.rotationPidController_Kd);
     // Set limits
-    xPidController.setIntegratorRange(PhotonConstants.xPidMinOutput_Reef, PhotonConstants.xPidMaxOutput_Reef);
-    yPidController.setIntegratorRange(PhotonConstants.yPidMaxOutput_Reef, PhotonConstants.yPidMaxOutput_Reef);
-    rotationPidController.setIntegratorRange(PhotonConstants.rotationPidMaxOutput_Reef, PhotonConstants.rotationPidMaxOutput_Reef);
+    xPidController.setIntegratorRange(PhotonConstants.xPidMinOutput_Cage, PhotonConstants.xPidMaxOutput_Cage);
+    yPidController.setIntegratorRange(PhotonConstants.yPidMaxOutput_Cage, PhotonConstants.yPidMaxOutput_Cage);
+    rotationPidController.setIntegratorRange(PhotonConstants.rotationPidMaxOutput_Cage, PhotonConstants.rotationPidMaxOutput_Cage);
   }
 
   // Called when the command is initially scheduled.
@@ -60,26 +59,25 @@ public class TrackReef extends Command {
   public void execute() {
     // Y-PID calculations
     yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements();
-    yPidError = Math.abs(yPidMeasurements - PhotonConstants.YPidSetPoint_Reef);
-    yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.YPidSetPoint_Reef;
-    yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.YPidSetPoint_Reef);
+    yPidError = Math.abs(yPidMeasurements - PhotonConstants.YPidSetPoint_Cage);
+    yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.YPidSetPoint_Cage;
+    yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.YPidSetPoint_Cage);
     // Rotation-PID calculations
     rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements();
-    rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.RotationPidSetPoint_Reef);
-    rotationPidMeasurements = (rotationPidError > 3) ? rotationPidMeasurements : PhotonConstants.RotationPidSetPoint_Reef;
-    rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.RotationPidSetPoint_Reef);
+    rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.RotationPidSetPoint_Cage);
+    rotationPidMeasurements = (rotationPidError > 3) ? rotationPidMeasurements : PhotonConstants.RotationPidSetPoint_Cage;
+    rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.RotationPidSetPoint_Cage);
   // X-PID calculations
     xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements();
-    xPidError = Math.abs(xPidMeasurements - PhotonConstants.XPidSetPoint_Reef);
+    xPidError = Math.abs(xPidMeasurements - PhotonConstants.XPidSetPoint_Cage);
     if((yPidError) < 3 && (rotationPidError) < 0.05){
       xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : 0;
-      xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.XPidSetPoint_Reef);
+      xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.XPidSetPoint_Cage);
     } else {
       xPidOutput = 0;
     }
-      // impl
-      m_SwerveSubsystem.drive(xPidOutput, yPidOutput, rotationPidOutput, false);
-      
+    // impl
+    m_SwerveSubsystem.drive(xPidOutput, yPidOutput, rotationPidOutput, false);
   }
 
   // Called once the command ends or is interrupted.

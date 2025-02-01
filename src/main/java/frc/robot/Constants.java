@@ -164,6 +164,50 @@ public final class Constants {
     public static final double rotationPidMinOutput = -0.2;
     public static final double rotationPidMaxOutput = 0.2;
 
+    public static final double xPidMinOutput_Reef = -0.2;
+    public static final double xPidMaxOutput_Reef = 0.2;
+    public static final double yPidMinOutput_Reef = -0.2;
+    public static final double yPidMaxOutput_Reef = 0.2;
+    public static final double rotationPidMinOutput_Reef = -0.2;
+    public static final double rotationPidMaxOutput_Reef = 0.2;
+
+    public static final double xPidMinOutput_CoralStation = -0.2;
+    public static final double xPidMaxOutput_CoralStation = 0.2;
+    public static final double yPidMinOutput_CoralStation = -0.2;
+    public static final double yPidMaxOutput_CoralStation = 0.2;
+    public static final double rotationPidMinOutput_CoralStation = -0.2;
+    public static final double rotationPidMaxOutput_CoralStation = 0.2;
+
+    public static final double xPidMinOutput_Cage = -0.2;
+    public static final double xPidMaxOutput_Cage = 0.2;
+    public static final double yPidMinOutput_Cage = -0.2;
+    public static final double yPidMaxOutput_Cage = 0.2;
+    public static final double rotationPidMinOutput_Cage = -0.2;
+    public static final double rotationPidMaxOutput_Cage = 0.2;
+
+    public static final double xPidMinOutput_Processor = -0.2;
+    public static final double xPidMaxOutput_Processor = 0.2;
+    public static final double yPidMinOutput_Processor = -0.2;
+    public static final double yPidMaxOutput_Processor = 0.2;
+    public static final double rotationPidMinOutput_Processor = -0.2;
+    public static final double rotationPidMaxOutput_Processor = 0.2;
+
+    public static final double XPidSetPoint_Reef = 0; 
+    public static final double YPidSetPoint_Reef = 0;
+    public static final double RotationPidSetPoint_Reef = 0;
+
+    public static final double XPidSetPoint_CoralStation = 0;
+    public static final double YPidSetPoint_CoralStation = 0;
+    public static final double RotationPidSetPoint_CoralStation = 0;
+
+    public static final double XPidSetPoint_Cage = 0;
+    public static final double YPidSetPoint_Cage = 0;
+    public static final double RotationPidSetPoint_Cage = 0;
+
+    public static final double XPidSetPoint_Processor = 0;
+    public static final double YPidSetPoint_Processor = 0;
+    public static final double RotationPidSetPoint_Processor = 0;
+
   }
 
   public class ElevatorConstants {

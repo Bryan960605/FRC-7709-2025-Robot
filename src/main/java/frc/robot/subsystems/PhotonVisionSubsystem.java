@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.estimation.CameraTargetRelation;
 import org.photonvision.targeting.MultiTargetPNPResult;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -24,7 +25,10 @@ import frc.robot.Constants.PhotonConstants;
 
 public class PhotonVisionSubsystem extends SubsystemBase {
   /** Creates a new PhotonVisionSubsystem. */
-  private final PhotonCamera camera;
+  private final PhotonCamera camera1;
+  private final PhotonCamera camera2;
+
+  private final CameraTargetRelation cameraTargetRelation;
 
   private PhotonPipelineResult result;
   private PhotonTrackedTarget target;
@@ -39,7 +43,10 @@ public class PhotonVisionSubsystem extends SubsystemBase {
 
 
   public PhotonVisionSubsystem() {
-    camera = new PhotonCamera("Logetich");
+    camera1 = new PhotonCamera("OV9287_A");
+    camera2 = new PhotonCamera("OV9287_B");
+
+    cameraTargetRelation = new CameraTargetRelation(null, null);
 
   }
 
@@ -70,7 +77,7 @@ public class PhotonVisionSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    result = camera.getLatestResult();
+    result = camera1.getLatestResult();
     target = result.getBestTarget();
     results = result.getMultiTagResult();
     targets = result.getTargets();
