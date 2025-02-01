@@ -25,7 +25,8 @@ public class IntakeAlgae_High extends Command {
   @Override
   public void initialize() {
     m_ElevatorSubsystem.intakeAlgae_High();
-    m_EndEffectorSubsystem.intakeAlgae_High();
+    m_EndEffectorSubsystem.intakeAlgae_High_Arm();
+    m_EndEffectorSubsystem.intakeAlgae_High_Wheel();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

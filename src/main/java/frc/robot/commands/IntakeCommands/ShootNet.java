@@ -33,14 +33,15 @@ public class ShootNet extends Command {
   @Override
   public void initialize() {
     m_ElevatorSubsystem.shootNet();
+    m_EndEffectorSubsystem.shootNet_Arm();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     ifFeed = ifFeedFunc.getAsBoolean();
-    if(m_ElevatorSubsystem.ifArrivePosition() && ifFeed) {
-      m_EndEffectorSubsystem.shootNet();
+    if(m_ElevatorSubsystem.ifArrivePosition() && m_EndEffectorSubsystem.ifArriveAngle() && ifFeed) {
+      m_EndEffectorSubsystem.shootNet_Wheel();
     }else {
       m_EndEffectorSubsystem.holdAlgae();
     }

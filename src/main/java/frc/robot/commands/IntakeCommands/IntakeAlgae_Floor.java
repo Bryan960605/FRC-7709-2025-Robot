@@ -25,7 +25,8 @@ public class IntakeAlgae_Floor extends Command {
   @Override
   public void initialize() {
     m_ElevatorSubsystem.intakeAlgae_Floor();
-    m_EndEffectorSubsystem.intakeAlgae_Floor();
+    m_EndEffectorSubsystem.intakeAlgae_Floor_Arm();
+    m_EndEffectorSubsystem.intakeAlgae_Floor_Wheel();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

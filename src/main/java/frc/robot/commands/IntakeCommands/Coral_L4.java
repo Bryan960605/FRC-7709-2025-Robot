@@ -33,14 +33,15 @@ public class Coral_L4 extends Command {
   @Override
   public void initialize() {
     m_ElevatorSubsystem.outCoral_L4();
+    m_EndEffectorSubsystem.outCoral_L4_Arm();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     ifFeed = ifFeedFunc.getAsBoolean();
-    if(m_ElevatorSubsystem.ifArrivePosition() && ifFeed) {
-      m_EndEffectorSubsystem.outCoral_L4();
+    if(m_ElevatorSubsystem.ifArrivePosition() && m_EndEffectorSubsystem.ifArriveAngle() && ifFeed) {
+      m_EndEffectorSubsystem.outCoral_L4_Wheel();
     }else {
       m_EndEffectorSubsystem.holdCoral();
     }

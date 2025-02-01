@@ -25,7 +25,8 @@ public class IntakeCoral extends Command {
   @Override
   public void initialize() {
     m_ElevatorSubsystem.intakeCoral();
-    m_EndEffectorSubsystem.intakeCoral();
+    m_EndEffectorSubsystem.intakeCoral_Arm();
+    m_EndEffectorSubsystem.intakeCoral_Wheel();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

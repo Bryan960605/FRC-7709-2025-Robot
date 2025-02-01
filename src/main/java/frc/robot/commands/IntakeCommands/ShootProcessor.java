@@ -33,14 +33,15 @@ public class ShootProcessor extends Command {
   @Override
   public void initialize() {
     m_ElevatorSubsystem.shootProcessor();
+    m_EndEffectorSubsystem.shootProcessor_Arm();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     ifFeed = ifFeedFunc.getAsBoolean();
-    if(m_ElevatorSubsystem.ifArrivePosition() && ifFeed) {
-      m_EndEffectorSubsystem.shootProcessor();
+    if(m_ElevatorSubsystem.ifArrivePosition() && m_EndEffectorSubsystem.ifArriveAngle() && ifFeed) {
+      m_EndEffectorSubsystem.shootProcessor_Wheel();
     }else {
       m_EndEffectorSubsystem.holdAlgae();
     }

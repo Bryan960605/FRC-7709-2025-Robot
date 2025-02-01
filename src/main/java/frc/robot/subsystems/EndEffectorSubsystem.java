@@ -131,54 +131,84 @@ public class EndEffectorSubsystem extends SubsystemBase {
 
   // void
 
-  public void intakeCoral() {
-    intakewheel.set(EndEffectorConstants.coralStation_Vol);
+  public void intakeCoral_Arm() {
     this.arriveAngle = EndEffectorConstants.coralStationAngle;
   }
 
-  public void outCoral_L1() {
-    intakewheel.set(EndEffectorConstants.l1_Vol);
+  public void intakeCoral_Wheel() {
+    intakewheel.set(EndEffectorConstants.coralStation_Vol);
+  }
+
+  public void outCoral_L1_Arm() {
     this.arriveAngle = EndEffectorConstants.l1Angle;
   }
 
-  public void outCoral_L2() {
-    intakewheel.set(EndEffectorConstants.l2_Vol);
+  public void outCoral_L1_Wheel() {
+    intakewheel.set(EndEffectorConstants.l1_Vol);
+  }
+
+  public void outCoral_L2_Arm() {
     this.arriveAngle = EndEffectorConstants.l2Angle;
   }
 
-  public void outCoral_L3() {
-    intakewheel.set(EndEffectorConstants.l3_Vol);
+  public void outCoral_L2_Wheel() {
+    intakewheel.set(EndEffectorConstants.l2_Vol);
+  }
+
+  public void outCoral_L3_Arm() {
     this.arriveAngle = EndEffectorConstants.l3Angle;
   }
 
-  public void outCoral_L4() {
-    intakewheel.set(EndEffectorConstants.l4_Vol);
+  public void outCoral_L3_Wheel() {
+    intakewheel.set(EndEffectorConstants.l3_Vol);
+  }
+
+  public void outCoral_L4_Arm() {
     this.arriveAngle = EndEffectorConstants.l4Angle;
   }
 
-  public void shootNet() {
-    intakewheel.set(EndEffectorConstants.net_Vol);
+  public void outCoral_L4_Wheel() {
+    intakewheel.set(EndEffectorConstants.l4_Vol);
+  }
+
+  public void shootNet_Arm() {
     this.arriveAngle = EndEffectorConstants.netAngle;
   }
 
-  public void shootProcessor() {
-    intakewheel.set(EndEffectorConstants.proccesor_Vol);
+  public void shootNet_Wheel() {
+    intakewheel.set(EndEffectorConstants.net_Vol);
+  }
+
+  public void shootProcessor_Arm() {
     this.arriveAngle = EndEffectorConstants.proccesorAngle;
   }
 
-  public void intakeAlgae_Low() {
-    intakewheel.set(EndEffectorConstants.l2Algae_Vol);
+  public void shootProcessor_Wheel() {
+    intakewheel.set(EndEffectorConstants.proccesor_Vol);
+  }
+
+  public void intakeAlgae_Low_Arm() {
     this.arriveAngle = EndEffectorConstants.l2Angle_Algae;
   }
 
-  public void intakeAlgae_High() {
-    intakewheel.set(EndEffectorConstants.l3Algae_Vol);
+  public void intakeAlgae_Low_Wheel() {
+    intakewheel.set(EndEffectorConstants.l2Algae_Vol);
+  }
+
+  public void intakeAlgae_High_Arm() {
     this.arriveAngle = EndEffectorConstants.l3Angle_Algae;
   }
 
-  public void intakeAlgae_Floor() {
-    intakewheel.set(EndEffectorConstants.floor_Vol);
+  public void intakeAlgae_High_Wheel() {
+    intakewheel.set(EndEffectorConstants.l3Algae_Vol);
+  }
+
+  public void intakeAlgae_Floor_Arm() {
     this.arriveAngle = EndEffectorConstants.floorAngle;
+  }
+
+  public void intakeAlgae_Floor_Wheel() {
+    intakewheel.set(EndEffectorConstants.floor_Vol);
   }
 
   public void stopArm() {
@@ -219,6 +249,10 @@ public class EndEffectorSubsystem extends SubsystemBase {
 
   public boolean hasCoral() {
     return !irSensor.get();
+  }
+
+  public boolean ifArriveAngle() {
+    return (Math.abs(arriveAngle - getAngle()) <= 1);
   }
 
   @Override
