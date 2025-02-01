@@ -6,8 +6,20 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ManualDrive;
+import frc.robot.commands.TrackCage;
+import frc.robot.commands.TrackCoralStation;
+import frc.robot.commands.TrackProcessor;
+import frc.robot.commands.IntakeCommands.Coral_L1;
+import frc.robot.commands.IntakeCommands.Coral_L2;
+import frc.robot.commands.IntakeCommands.Coral_L3;
+import frc.robot.commands.IntakeCommands.Coral_L4;
+import frc.robot.commands.IntakeCommands.IntakeAlgae_High;
+import frc.robot.commands.IntakeCommands.IntakeAlgae_Low;
+import frc.robot.commands.IntakeCommands.ShootNet;
+import frc.robot.commands.IntakeCommands.ShootProcessor;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.PhotonVisionSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -19,6 +31,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -33,20 +46,23 @@ public class RobotContainer {
   private final SwerveSubsystem m_SwerveSubsystem = new SwerveSubsystem();
   private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
   private final PhotonVisionSubsystem m_PhotonVisionSubsystem = new PhotonVisionSubsystem();
-  private final ElevatorSubsystem m_IntakeSubsystem = new ElevatorSubsystem();
+  private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
+  private final EndEffectorSubsystem m_EffectorSubsystem = new EndEffectorSubsystem();
+
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   private final CommandXboxController driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private final CommandXboxController operatorController = new CommandXboxController(OperatorConstants.kOperatorControllerPort);
 
-  // private final SendableChooser<Command> autoChooser;
+  private final SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
     // Configure the trigger bindings
-    // autoChooser = AutoBuilder.buildAutoChooser();
+    autoChooser = AutoBuilder.buildAutoChooser();
     configureBindings();
-    // SmartDashboard.putData("Auto Mode", autoChooser);
+    SmartDashboard.putData("Auto Mode", autoChooser);
   }
 
   /**
@@ -69,6 +85,27 @@ public class RobotContainer {
 
     BooleanSupplier isSlowFunc = ()-> driverController.getHID().getLeftBumperButton();
 
+    driverController.b().whileTrue(
+      Commands.runOnce(()->{
+        m_SwerveSubsystem.resetGyro();
+      })
+    );
+
+    driverController.rightBumper().whileTrue(new TrackCage(m_SwerveSubsystem, m_PhotonVisionSubsystem));
+    driverController.leftBumper().whileTrue(new TrackCoralStation(m_PhotonVisionSubsystem, m_SwerveSubsystem));
+    driverController.leftTrigger().whileTrue(new TrackCage(m_SwerveSubsystem, m_PhotonVisionSubsystem));
+    driverController.rightTrigger().whileTrue(new TrackProcessor(m_SwerveSubsystem, m_PhotonVisionSubsystem));
+
+    operatorController.a().whileTrue(new Coral_L1(m_ElevatorSubsystem, m_EffectorSubsystem));
+    operatorController.b().whileTrue(new Coral_L2(m_ElevatorSubsystem, m_EffectorSubsystem));
+    operatorController.x().whileTrue(new Coral_L3(m_ElevatorSubsystem, m_EffectorSubsystem));
+    operatorController.y().whileTrue(new Coral_L4(m_ElevatorSubsystem, m_EffectorSubsystem));
+
+    operatorController.rightBumper().whileTrue(new IntakeAlgae_High(m_ElevatorSubsystem, m_EffectorSubsystem));
+    operatorController.leftBumper().whileTrue(new IntakeAlgae_Low(m_ElevatorSubsystem, m_EffectorSubsystem));
+    operatorController.rightTrigger().whileTrue(new ShootNet(m_ElevatorSubsystem, m_EffectorSubsystem));
+    operatorController.leftTrigger().whileTrue(new ShootProcessor(m_ElevatorSubsystem, m_EffectorSubsystem));
+
 
     m_SwerveSubsystem.setDefaultCommand(new ManualDrive(m_SwerveSubsystem, xSpeedFunc, ySpeedFunc, zSpeedFunc, isSlowFunc));
   }
@@ -80,6 +117,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null;
+    return autoChooser.getSelected();
   }
 }

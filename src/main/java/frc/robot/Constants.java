@@ -22,6 +22,7 @@ public final class Constants {
   public static class OperatorConstants {
     public static final double kJoystickDeadBand = 0.1;
     public static final int kDriverControllerPort = 0;
+    public static final int kOperatorControllerPort = 1;
   }
 
   public static Double[] optimate(double currentAngle, double goalAngle, double speedMetersPerSecond){
@@ -185,6 +186,13 @@ public final class Constants {
     public static final double rotationPidMinOutput_Cage = -0.2;
     public static final double rotationPidMaxOutput_Cage = 0.2;
 
+    public static final double xPidMinOutput_Net = -0.2;
+    public static final double xPidMaxOutput_Net = 0.2;
+    public static final double yPidMinOutput_Net = -0.2;
+    public static final double yPidMaxOutput_Net = 0.2;
+    public static final double rotationPidMinOutput_Net = -0.2;
+    public static final double rotationPidMaxOutput_Net = 0.2;
+
     public static final double xPidMinOutput_Processor = -0.2;
     public static final double xPidMaxOutput_Processor = 0.2;
     public static final double yPidMinOutput_Processor = -0.2;
@@ -207,6 +215,10 @@ public final class Constants {
     public static final double XPidSetPoint_Processor = 0;
     public static final double YPidSetPoint_Processor = 0;
     public static final double RotationPidSetPoint_Processor = 0;
+
+    public static final double XPidSetPoint_Net = 0;
+    public static final double YPidSetPoint_Net = 0;
+    public static final double RotationPidSetPoint_Net = 0;
 
   }
 
