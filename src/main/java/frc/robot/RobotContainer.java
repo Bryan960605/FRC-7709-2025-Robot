@@ -99,16 +99,16 @@ public class RobotContainer {
     driverController.y().whileTrue(new TrackProcessor(m_SwerveSubsystem, m_PhotonVisionSubsystem));
     driverController.pov(0).whileTrue(new TrackNet(m_SwerveSubsystem, m_PhotonVisionSubsystem));
 
-    operatorController.pov(0).whileTrue(new Coral_L1(m_ElevatorSubsystem, m_EffectorSubsystem));
-    operatorController.b().whileTrue(new Coral_L2(m_ElevatorSubsystem, m_EffectorSubsystem));
-    operatorController.x().whileTrue(new Coral_L3(m_ElevatorSubsystem, m_EffectorSubsystem));
-    operatorController.y().whileTrue(new Coral_L4(m_ElevatorSubsystem, m_EffectorSubsystem));
+    operatorController.pov(0).whileTrue(new Coral_L1(m_ElevatorSubsystem, m_EffectorSubsystem, ifFeedFunc));
+    operatorController.b().whileTrue(new Coral_L2(m_ElevatorSubsystem, m_EffectorSubsystem, ifFeedFunc));
+    operatorController.x().whileTrue(new Coral_L3(m_ElevatorSubsystem, m_EffectorSubsystem, ifFeedFunc));
+    operatorController.y().whileTrue(new Coral_L4(m_ElevatorSubsystem, m_EffectorSubsystem, ifFeedFunc));
 
     operatorController.rightBumper().whileTrue(new IntakeAlgae_High(m_ElevatorSubsystem, m_EffectorSubsystem));
     operatorController.leftBumper().whileTrue(new IntakeAlgae_Low(m_ElevatorSubsystem, m_EffectorSubsystem));
-    operatorController.rightTrigger().whileTrue(new ShootNet(m_ElevatorSubsystem, m_EffectorSubsystem));
-    operatorController.leftTrigger().whileTrue(new ShootProcessor(m_ElevatorSubsystem, m_EffectorSubsystem));
-
+    operatorController.rightTrigger().whileTrue(new ShootNet(m_ElevatorSubsystem, m_EffectorSubsystem, ifFeedFunc));
+    operatorController.leftTrigger().whileTrue(new ShootProcessor(m_ElevatorSubsystem, m_EffectorSubsystem, ifFeedFunc));
+    
 
     m_SwerveSubsystem.setDefaultCommand(new ManualDrive(m_SwerveSubsystem, xSpeedFunc, ySpeedFunc, zSpeedFunc, isSlowFunc));
   }
