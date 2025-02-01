@@ -9,13 +9,13 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class IntakeAlgae_High extends Command {
-  /** Creates a new IntakeAlgae_High. */
+public class Coral_L3 extends Command {
+  /** Creates a new Coral_L3. */
   private final ElevatorSubsystem m_ElevatorSubsystem;
   private final EndEffectorSubsystem m_EndEffectorSubsystem;
-  public IntakeAlgae_High(ElevatorSubsystem ElevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem) {
+  public Coral_L3(ElevatorSubsystem elevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.m_ElevatorSubsystem = ElevatorSubsystem;
+    this.m_ElevatorSubsystem = elevatorSubsystem;
     this.m_EndEffectorSubsystem = endEffectorSubsystem;
 
     addRequirements(m_ElevatorSubsystem, m_EndEffectorSubsystem);
@@ -24,8 +24,8 @@ public class IntakeAlgae_High extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_ElevatorSubsystem.intakeAlgae_High();
-    m_EndEffectorSubsystem.intakeAlgae_High();
+    m_ElevatorSubsystem.outCoral_L3();
+    m_EndEffectorSubsystem.outCoral_L3();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -37,12 +37,11 @@ public class IntakeAlgae_High extends Command {
   public void end(boolean interrupted) {
     m_ElevatorSubsystem.stopElevater();
     m_EndEffectorSubsystem.stopArm();
-    m_EndEffectorSubsystem.holdAlgae();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_EndEffectorSubsystem.hasAlgae();
+    return false;
   }
 }

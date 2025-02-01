@@ -5,23 +5,27 @@
 package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.EndEffectorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Coral_L4 extends Command {
-  /** Creates a new Coral_L1. */
-  private final IntakeSubsystem m_IntakeSubsystem;
-  public Coral_L4(IntakeSubsystem intakeSubsystem) {
+  /** Creates a new Coral_L4. */
+  private final ElevatorSubsystem m_ElevatorSubsystem;
+  private final EndEffectorSubsystem m_EndEffectorSubsystem;
+  public Coral_L4(ElevatorSubsystem elevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem) { 
     // Use addRequirements() here to declare subsystem dependencies.
-    this.m_IntakeSubsystem = intakeSubsystem;
+    this.m_ElevatorSubsystem = elevatorSubsystem;
+    this.m_EndEffectorSubsystem = endEffectorSubsystem;
 
-    addRequirements(m_IntakeSubsystem);
+    addRequirements(m_ElevatorSubsystem, m_EndEffectorSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_IntakeSubsystem.outCoral_L4();
+    m_ElevatorSubsystem.outCoral_L4();
+    m_EndEffectorSubsystem.outCoral_L4();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,8 +35,8 @@ public class Coral_L4 extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_IntakeSubsystem.stopArm();
-    m_IntakeSubsystem.stopElevater();
+    m_ElevatorSubsystem.stopElevater();
+    m_EndEffectorSubsystem.stopArm();
   }
 
   // Returns true when the command should end.
