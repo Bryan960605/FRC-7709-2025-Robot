@@ -85,6 +85,7 @@ public class RobotContainer {
     DoubleSupplier zSpeedFunc = ()-> driverController.getRawAxis(4);
 
     BooleanSupplier isSlowFunc = ()-> driverController.getHID().getLeftBumperButton();
+    BooleanSupplier ifFeedFunc = ()-> operatorController.getHID().getAButton();
 
     driverController.b().whileTrue(
       Commands.runOnce(()->{
@@ -98,7 +99,7 @@ public class RobotContainer {
     driverController.y().whileTrue(new TrackProcessor(m_SwerveSubsystem, m_PhotonVisionSubsystem));
     driverController.pov(0).whileTrue(new TrackNet(m_SwerveSubsystem, m_PhotonVisionSubsystem));
 
-    operatorController.a().whileTrue(new Coral_L1(m_ElevatorSubsystem, m_EffectorSubsystem));
+    operatorController.pov(0).whileTrue(new Coral_L1(m_ElevatorSubsystem, m_EffectorSubsystem));
     operatorController.b().whileTrue(new Coral_L2(m_ElevatorSubsystem, m_EffectorSubsystem));
     operatorController.x().whileTrue(new Coral_L3(m_ElevatorSubsystem, m_EffectorSubsystem));
     operatorController.y().whileTrue(new Coral_L4(m_ElevatorSubsystem, m_EffectorSubsystem));

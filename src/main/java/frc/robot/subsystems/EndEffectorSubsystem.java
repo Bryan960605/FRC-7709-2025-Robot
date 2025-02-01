@@ -185,6 +185,10 @@ public class EndEffectorSubsystem extends SubsystemBase {
     arriveAngle = EndEffectorConstants.startAngle;
   }
 
+  public void stopWheel() {
+    intakewheel.set(0);
+  }
+
   public void holdCoral() {
     intakewheel.set(EndEffectorConstants.holdCoral_Vol);
     // intakewheel.setControl(request_Wheel.withVelocity(EndEffectorConstants.holdCoralVelocity));

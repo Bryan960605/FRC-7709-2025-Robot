@@ -4,6 +4,8 @@
 
 package frc.robot.commands.IntakeCommands;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
@@ -13,10 +15,16 @@ public class ShootNet extends Command {
   /** Creates a new ShootNet. */
   private final ElevatorSubsystem m_ElevatorSubsystem;
   private final EndEffectorSubsystem m_EndEffectorSubsystem;
-  public ShootNet(ElevatorSubsystem elevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem) {
+
+  private final BooleanSupplier ifFeedFunc;
+
+  private boolean ifFeed;
+  public ShootNet(ElevatorSubsystem elevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem, BooleanSupplier ifFeed) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_ElevatorSubsystem = elevatorSubsystem;
     this.m_EndEffectorSubsystem = endEffectorSubsystem;
+
+    this.ifFeedFunc = ifFeed;
 
     addRequirements(m_ElevatorSubsystem, m_EndEffectorSubsystem);
   }
@@ -30,8 +38,11 @@ public class ShootNet extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_ElevatorSubsystem.ifArrivePosition()) {
+    ifFeed = ifFeedFunc.getAsBoolean();
+    if(m_ElevatorSubsystem.ifArrivePosition() && ifFeed) {
       m_EndEffectorSubsystem.shootNet();
+    }else {
+      m_EndEffectorSubsystem.holdAlgae();
     }
   }
 
@@ -40,12 +51,12 @@ public class ShootNet extends Command {
   public void end(boolean interrupted) {
     m_ElevatorSubsystem.stopElevater();
     m_EndEffectorSubsystem.stopArm();
-    m_EndEffectorSubsystem.holdCoral();
+    m_EndEffectorSubsystem.stopWheel();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_EndEffectorSubsystem.hasCoral();
+    return false;
   }
 }
