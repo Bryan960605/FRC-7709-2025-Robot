@@ -11,7 +11,6 @@ import frc.robot.subsystems.ElevatorSubsystem;
 public class Coral_L2_Elevator extends Command {
   /** Creates a new Coral_L2_Elevator. */
   private final ElevatorSubsystem m_ElevatorSubsystem;
-
   public Coral_L2_Elevator(ElevatorSubsystem elevatorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_ElevatorSubsystem = elevatorSubsystem;
@@ -33,7 +32,7 @@ public class Coral_L2_Elevator extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_ElevatorSubsystem.stopElevater();
+    m_ElevatorSubsystem.toPrimitive();
   }
 
   // Returns true when the command should end.
