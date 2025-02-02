@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import org.opencv.core.Mat;
-
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -20,7 +18,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.ModuleConstants;
 
 public class SwerveModule extends SubsystemBase {
@@ -36,11 +33,6 @@ public class SwerveModule extends SubsystemBase {
 
   private final PIDController turningPidController;
   private final SimpleMotorFeedforward driveFeedForward;
-
-  private double turningPidOutput;
-  private double driveFeedForwardPutput;
-  private double driveOutput;
-
 
   public SwerveModule(int turningMotor_ID, int driveMotor_ID, int absolutedEncoder_ID, double offset) {
     turningMotor = new TalonFX(turningMotor_ID);
@@ -114,15 +106,12 @@ public class SwerveModule extends SubsystemBase {
 
   public void setState(SwerveModuleState state) {
     // Turn Motor
-      double goalAngleDeg = Math.toDegrees(Constants.optimate(getState().angle.getRadians(), state.angle.getRadians(), state.speedMetersPerSecond)[0]);
-      double speedMetersPerSecond = Constants.optimate(getState().angle.getRadians(), state.angle.getRadians(), state.speedMetersPerSecond)[1];
-      double turningMotorOutput = turningPidController.calculate(getState().angle.getDegrees(), goalAngleDeg);
+      state.optimize(getState().angle);
+      double turningMotorOutput = turningPidController.calculate(getState().angle.getDegrees(), state.angle.getDegrees());
       turningMotor.set(turningMotorOutput);
     // Drive motor
-      // double driveMotorOutput = driveFeedForward.calculate(speedMetersPerSecond)/12;
-      // this.driveOutput = driveMotorOutput;
-      // driveMotor.set(driveMotorOutput);
-      driveMotor.set(speedMetersPerSecond);
+      double driveMotorOutput = driveFeedForward.calculate(state.speedMetersPerSecond)/12;
+      driveMotor.set(driveMotorOutput);
   }
 
 

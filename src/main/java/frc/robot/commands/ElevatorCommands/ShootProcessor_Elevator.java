@@ -4,18 +4,14 @@
 
 package frc.robot.commands.ElevatorCommands;
 
-import java.util.function.BooleanSupplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.EndEffectorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ShootProcessor_Elevator extends Command {
   /** Creates a new ShootProcessor_Elevator. */
   private final ElevatorSubsystem m_ElevatorSubsystem;
-
-  public ShootProcessor_Elevator(ElevatorSubsystem elevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem, BooleanSupplier ifFeed) {
+  public ShootProcessor_Elevator(ElevatorSubsystem elevatorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_ElevatorSubsystem = elevatorSubsystem;
 
@@ -36,7 +32,7 @@ public class ShootProcessor_Elevator extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_ElevatorSubsystem.stopElevater();
+    m_ElevatorSubsystem.toPrimitive();
   }
 
   // Returns true when the command should end.
