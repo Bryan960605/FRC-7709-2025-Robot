@@ -63,8 +63,12 @@ public class ClimberSubsystem extends SubsystemBase {
     return absolutedEncoder.getAbsolutePosition().getValueAsDouble();
   }
 
-  public void setGoalAngle(double angleSetpoint){
-    goalAngle = angleSetpoint;
+  public void setOutAngle(){
+    goalAngle = ClimberConstants.climbOutAngle;
+  }
+
+  public void setInAngle(){
+    goalAngle = ClimberConstants.climbInAngle;
   }
 
   @Override

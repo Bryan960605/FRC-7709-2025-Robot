@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import java.util.function.BooleanSupplier;
-
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
@@ -104,7 +102,6 @@ public final class Constants {
 
     public static final int gyro_ID = 56;
 
-
     public static final double wheelDiameterMeters = Units.inchesToMeters(4);
 
     public static final double driveGearRatio = 1/5.36;
@@ -129,7 +126,6 @@ public final class Constants {
       new Translation2d(-kModuleDistance/2, kModuleDistance/2),
       new Translation2d(-kModuleDistance/2, -kModuleDistance/2));
 
-    
     public static final double pathingMoving_Kp = 0;
     public static final double pathingMoving_Ki = 0;
     public static final double pathingMoving_Kd = 0;
@@ -223,7 +219,6 @@ public final class Constants {
     public static final double xPidSetPoint_Net = 0;
     public static final double yPidSetPoint_Net = 0;
     public static final double rotationPidSetPoint_Net = 0;
-
   }
 
   public class ElevatorConstants {
@@ -244,13 +239,13 @@ public final class Constants {
     public static final double algaeProccesorPosition = 0;
   }
 
-  public static class Mode{
-    public static BooleanSupplier changeModeFunc = () -> nowModeIsCoral();
-    public static String nowMode = "coralMode";
-    public static boolean nowModeIsCoral(){
-      return nowMode == "coral";
-    }
-  }
+  // public static class Mode{
+  //   public static BooleanSupplier changeModeFunc = () -> nowModeIsCoral();
+  //   public static String nowMode = "coralMode";
+  //   public static boolean nowModeIsCoral(){
+  //     return nowMode == "coral";
+  //   }
+  // }
 
   public static class EndEffectorConstants {
     public static final int intakeWheel_ID = 0;
