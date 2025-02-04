@@ -9,13 +9,13 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class IntakeAlgae_Floor_Elevator extends Command {
-  /** Creates a new IntakeAlgae_Floor_Elevator. */
+public class Coral_L3 extends Command {
+  /** Creates a new Coral_L3_Elevator. */
   private final ElevatorSubsystem m_ElevatorSubsystem;
   private final EndEffectorSubsystem m_EndEffectorSubsystem;
-  public IntakeAlgae_Floor_Elevator(ElevatorSubsystem ElevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem) {
+  public Coral_L3(ElevatorSubsystem elevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.m_ElevatorSubsystem = ElevatorSubsystem;
+    this.m_ElevatorSubsystem = elevatorSubsystem;
     this.m_EndEffectorSubsystem = endEffectorSubsystem;
 
     addRequirements(m_ElevatorSubsystem, m_EndEffectorSubsystem);
@@ -24,31 +24,29 @@ public class IntakeAlgae_Floor_Elevator extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_ElevatorSubsystem.intakeAlgae_Floor();
-    m_EndEffectorSubsystem.intakeAlgae_Floor_Arm();
-    m_EndEffectorSubsystem.intakeAlgae_Floor_Wheel();
+    m_ElevatorSubsystem.outCoral_L3();
+    m_EndEffectorSubsystem.outCoral_L3_Arm();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    if (m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint()) {
+      m_EndEffectorSubsystem.outCoral_L3_Wheel();
+    }
+  }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_ElevatorSubsystem.toPrimitive();
     m_EndEffectorSubsystem.primitiveArm();
-
-    if (m_EndEffectorSubsystem.hasGamePiece()) {
-      m_EndEffectorSubsystem.holdAlgae();      
-    }else{
-      m_EndEffectorSubsystem.stopWheel();
-    }
+    m_EndEffectorSubsystem.stopWheel();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_EndEffectorSubsystem.hasGamePiece();
+    return false;
   }
 }

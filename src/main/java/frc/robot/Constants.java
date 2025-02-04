@@ -252,7 +252,8 @@ public final class Constants {
     public static final int intakeWheel_ID = 0;
     public static final int intakeArm_ID = 0;
     public static final int armAbsolutedEncoder_ID = 0;
-    public static final int irSensor_ID = 0;
+    public static final int irSensor_Coral_ID = 0;
+    public static final int irSensor_Algae_ID = 0;
 
     public static final double absolutedEncoderOffset = 0;
 

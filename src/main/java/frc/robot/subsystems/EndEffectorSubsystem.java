@@ -25,7 +25,8 @@ public class EndEffectorSubsystem extends SubsystemBase {
   private final TalonFX intakewheel;
   private final TalonFX intakeArm;
   private final CANcoder armAbsolutedEncoder;
-  private final DigitalInput irSensor;
+  private final DigitalInput irSensor_Coral;
+  private final DigitalInput irSensor_Algae;
 
   private final TalonFXConfiguration wheelConfig;
   private final TalonFXConfiguration armConfig;
@@ -43,7 +44,8 @@ public class EndEffectorSubsystem extends SubsystemBase {
     intakewheel = new TalonFX(EndEffectorConstants.intakeWheel_ID);
     intakeArm = new TalonFX(EndEffectorConstants.intakeArm_ID);
     armAbsolutedEncoder = new CANcoder(EndEffectorConstants.armAbsolutedEncoder_ID);
-    irSensor = new DigitalInput(EndEffectorConstants.irSensor_ID);
+    irSensor_Coral = new DigitalInput(EndEffectorConstants.irSensor_Coral_ID);
+    irSensor_Algae = new DigitalInput(EndEffectorConstants.irSensor_Algae_ID);
     arriveAngle = EndEffectorConstants.primitiveAngle;
 
     // Motor Configurations
@@ -174,8 +176,12 @@ public class EndEffectorSubsystem extends SubsystemBase {
     return Units.rotationsPerMinuteToRadiansPerSecond(armAbsolutedEncoder.getVelocity().getValueAsDouble()*60);
   }
 
-  public boolean hasGamePiece() {
-    return !irSensor.get();
+  public boolean hasCoral() {
+    return !irSensor_Coral.get();
+  }
+
+  public boolean hasAlgae() {
+    return !irSensor_Algae.get();
   }
 
   public boolean arriveSetPoint() {
@@ -202,6 +208,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("EndEffector/pidOutput", pidOutput);
     SmartDashboard.putNumber("EndEffector/feedforwardOutput", feedforwardOutput);
     SmartDashboard.putNumber("EndEffector/Output", output);
-    SmartDashboard.putBoolean("EndEffector/hasGamePiece", hasGamePiece());
+    SmartDashboard.putBoolean("EndEffector/hasCoral", hasCoral());
+    SmartDashboard.putBoolean("EndEffector/hasAlgae", hasAlgae());
   }
 }

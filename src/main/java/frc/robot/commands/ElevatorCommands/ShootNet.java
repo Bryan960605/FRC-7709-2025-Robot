@@ -9,11 +9,11 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ShootProcessor_Elevator extends Command {
-  /** Creates a new ShootProcessor_Elevator. */
+public class ShootNet extends Command {
+  /** Creates a new ShootNet_Elevator. */
   private final ElevatorSubsystem m_ElevatorSubsystem;
   private final EndEffectorSubsystem m_EndEffectorSubsystem;
-  public ShootProcessor_Elevator(ElevatorSubsystem elevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem) {
+  public ShootNet(ElevatorSubsystem elevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_ElevatorSubsystem = elevatorSubsystem;
     this.m_EndEffectorSubsystem = endEffectorSubsystem;
@@ -24,7 +24,7 @@ public class ShootProcessor_Elevator extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_ElevatorSubsystem.shootProcessor();
+    m_ElevatorSubsystem.shootNet();
     m_EndEffectorSubsystem.shootNet_Arm();
   }
 
@@ -32,7 +32,7 @@ public class ShootProcessor_Elevator extends Command {
   @Override
   public void execute() {
     if (m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint()) {
-      m_EndEffectorSubsystem.shootProcessor_Wheel();
+      m_EndEffectorSubsystem.shootNet_Wheel();
     }
   }
 

@@ -9,11 +9,11 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class Coral_L1_Elevator extends Command {
-  /** Creates a new Coral_L1_Elevator. */
+public class Coral_L2 extends Command {
+  /** Creates a new Coral_L2_Elevator. */
   private final ElevatorSubsystem m_ElevatorSubsystem;
   private final EndEffectorSubsystem m_EndEffectorSubsystem;
-  public Coral_L1_Elevator(ElevatorSubsystem elevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem) {
+  public Coral_L2(ElevatorSubsystem elevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_ElevatorSubsystem = elevatorSubsystem;
     this.m_EndEffectorSubsystem = endEffectorSubsystem;
@@ -24,15 +24,15 @@ public class Coral_L1_Elevator extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_ElevatorSubsystem.outCoral_L1();
-    m_EndEffectorSubsystem.outCoral_L1_Arm();
+    m_ElevatorSubsystem.outCoral_L2();
+    m_EndEffectorSubsystem.outCoral_L2_Arm();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if (m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint()) {
-      m_EndEffectorSubsystem.outCoral_L1_Wheel();
+      m_EndEffectorSubsystem.outCoral_L2_Wheel();
     }
   }
 
