@@ -4,6 +4,19 @@
 
 package frc.robot.subsystems;
 
+import java.util.List;
+import java.util.Optional;
+
+import javax.xml.crypto.dsig.Transform;
+
+import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.simulation.PhotonCameraSim;
+import org.photonvision.targeting.MultiTargetPNPResult;
+import org.photonvision.targeting.PhotonPipelineResult;
+
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -11,14 +24,22 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.estimator.PoseEstimator;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -39,6 +60,28 @@ public class SwerveSubsystem extends SubsystemBase {
   private final Field2d field;
 
   private RobotConfig robotConfig;
+
+  //vision
+  private final PhotonCamera frontCamera;
+  private final PhotonCamera backCamera;
+
+  private final Transform3d robotToFrontCamera;
+  private final Transform3d robotToBackCamera;
+
+  private final PhotonPoseEstimator frontCameraEstimator;
+  private final PhotonPoseEstimator backCameraEstimator;
+
+  private AprilTagFieldLayout aprilTagFieldLayout;
+
+  private double currentTime;
+
+  private PhotonPipelineResult frontCameraResult;
+  private PhotonPipelineResult backCameraResult;
+
+  private Pose2d bestPose2d;
+
+  private final SwerveDrivePoseEstimator swerveDrivePoseEstimator;
+
   
   /**
    * 
@@ -66,22 +109,36 @@ public class SwerveSubsystem extends SubsystemBase {
       SwerveConstants.rightBackAbsolutedEncoder_ID,
       SwerveConstants.rightBackOffset);
 
-     gyro = new Pigeon2(SwerveConstants.gyro_ID);
-     gyroConfig = new Pigeon2Configuration();
+    gyro = new Pigeon2(SwerveConstants.gyro_ID);
+    gyroConfig = new Pigeon2Configuration();
 
-     gyroConfig.MountPose.MountPoseYaw = 0;
-     gyroConfig.MountPose.MountPosePitch = 0;
-     gyroConfig.MountPose.MountPoseRoll = 0;
+    gyroConfig.MountPose.MountPoseYaw = 0;
+    gyroConfig.MountPose.MountPosePitch = 0;
+    gyroConfig.MountPose.MountPoseRoll = 0;
 
-     gyro.getConfigurator().apply(gyroConfig);
+    gyro.getConfigurator().apply(gyroConfig);
 
-     field = new Field2d();
+    field = new Field2d();
 
-     odometry = new SwerveDriveOdometry(SwerveConstants.swerveKinematics, getRotation(), getModulesPosition(), getRobotPose());
+    odometry = new SwerveDriveOdometry(SwerveConstants.swerveKinematics, getRotation(), getModulesPosition(), getRobotPose());
 
-     resetGyro();
+    resetGyro();
      // All other subsystem initialization
     // ...
+    //vision
+    frontCamera = new PhotonCamera(getName());
+    backCamera = new PhotonCamera(getName());
+
+    robotToFrontCamera = new Transform3d(new Translation3d(null, null, null), new Rotation3d(getRotation()));
+    robotToBackCamera = new Transform3d(new Translation3d(null, null, null), new Rotation3d(getRotation()));
+
+    frontCameraEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToBackCamera);
+    backCameraEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToBackCamera);
+
+    aprilTagFieldLayout = aprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+
+    swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(SwerveConstants.swerveKinematics, getRotation(), getModulesPosition(), getRobotPose());
+
 
     try{
       robotConfig = RobotConfig.fromGUISettings();
@@ -123,8 +180,21 @@ public class SwerveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    currentTime = Timer.getFPGATimestamp();
+    var frontResults = frontCameraEstimator.update(frontCameraResult, null, null);
+    var backResults = backCameraEstimator.update(backCameraResult, null, null);
+    bestPose2d =  chooseBestPose(frontResults, backResults);
+
     odometry.update(getRotation(), getModulesPosition());
+    // swerveDrivePoseEstimator.update(getRotation(), getModulesPosition());
+    swerveDrivePoseEstimator.updateWithTime(currentTime, getRotation(), getModulesPosition());
     field.setRobotPose(odometry.getPoseMeters());
+    
+    if(!(bestPose2d == null)) {
+      swerveDrivePoseEstimator.addVisionMeasurement(bestPose2d, currentTime, null);
+    }
+
+
 
     SmartDashboard.putNumber("Swerve/leftFrontAbsolutePosition", leftFront.getTurningPosition());
     SmartDashboard.putNumber("Swerve/leftBackAbsolutePosition", leftBack.getTurningPosition());
@@ -144,6 +214,22 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Swerve/leftFrontVelocity", leftFront.getDriveVelocity());
   }
 
+
+  public Pose2d chooseBestPose(Optional<EstimatedRobotPose> frontPose, Optional<EstimatedRobotPose> backPose) {
+    EstimatedRobotPose bestRobotPose;
+    Pose2d bestRobotPose2d;
+    if(frontPose.isPresent()) {
+      bestRobotPose = frontPose.get();
+      bestRobotPose2d = bestRobotPose.estimatedPose.toPose2d();
+      return bestRobotPose2d;
+    }
+    if(backPose.isPresent()) {
+      bestRobotPose = backPose.get();
+      bestRobotPose2d = bestRobotPose.estimatedPose.toPose2d();
+      return bestRobotPose2d;
+    }
+    return null;
+  }
 
   public ChassisSpeeds getChassisSpeed() {
     return SwerveConstants.swerveKinematics.toChassisSpeeds(getModuleStates());

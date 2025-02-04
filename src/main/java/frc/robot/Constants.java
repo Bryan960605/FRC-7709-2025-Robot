@@ -143,6 +143,7 @@ public final class Constants {
     public static final double maxDriveSpeed_MeterPerSecond = 5.94;
     public static final double kDriveBaseRadius = 15.73 * 0.0254;
     public static final double maxAngularVelocity_Angle = 720;
+  
   }
 
   public class PhotonConstants {

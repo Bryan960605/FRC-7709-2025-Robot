@@ -8,21 +8,24 @@ import java.util.List;
 import java.util.Optional;
 
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.estimation.CameraTargetRelation;
 import org.photonvision.targeting.MultiTargetPNPResult;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class PhotonVisionSubsystem extends SubsystemBase {
   /** Creates a new PhotonVisionSubsystem. */
-  private final PhotonCamera camera1;
-  private final PhotonCamera camera2;
 
-  private final CameraTargetRelation cameraTargetRelation;
+  private final PhotonCamera frontCamera;
+  private final PhotonCamera backCamera;
 
   private PhotonPipelineResult result;
   private PhotonTrackedTarget target;
@@ -37,10 +40,8 @@ public class PhotonVisionSubsystem extends SubsystemBase {
 
 
   public PhotonVisionSubsystem() {
-    camera1 = new PhotonCamera("OV9287_A");
-    camera2 = new PhotonCamera("OV9287_B");
-
-    cameraTargetRelation = new CameraTargetRelation(null, null);
+    frontCamera = new PhotonCamera("OV9287_Front");
+    backCamera = new PhotonCamera("OV9287_Back");
 
   }
 
@@ -71,7 +72,7 @@ public class PhotonVisionSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    result = camera1.getLatestResult();
+    result = frontCamera.getLatestResult();
     target = result.getBestTarget();
     results = result.getMultiTagResult();
     targets = result.getTargets();
