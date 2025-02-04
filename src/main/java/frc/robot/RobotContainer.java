@@ -5,20 +5,21 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.ManualDrive;
 import frc.robot.commands.TrackCage;
 import frc.robot.commands.TrackCoralStation;
 import frc.robot.commands.TrackNet;
 import frc.robot.commands.TrackProcessor;
-import frc.robot.commands.ElevatorCommands.Coral_L1_Elevator;
-import frc.robot.commands.EndEffectorCommands.Coral_L1;
-import frc.robot.commands.EndEffectorCommands.Coral_L2;
-import frc.robot.commands.EndEffectorCommands.Coral_L3;
-import frc.robot.commands.EndEffectorCommands.Coral_L4;
-import frc.robot.commands.EndEffectorCommands.IntakeAlgae_High;
-import frc.robot.commands.EndEffectorCommands.IntakeAlgae_Low;
-import frc.robot.commands.EndEffectorCommands.ShootNet;
-import frc.robot.commands.EndEffectorCommands.ShootProcessor;
+import frc.robot.commands.ElevatorCommands.Coral_L2_Elevator;
+import frc.robot.commands.ElevatorCommands.Coral_L3_Elevator;
+import frc.robot.commands.ElevatorCommands.Coral_L4_Elevator;
+import frc.robot.commands.ElevatorCommands.IntakeAlgae_Floor_Elevator;
+import frc.robot.commands.ElevatorCommands.IntakeAlgae_High_Elevator;
+import frc.robot.commands.ElevatorCommands.IntakeAlgae_Low_Elevator;
+import frc.robot.commands.ElevatorCommands.IntakeCoral_Elevator;
+import frc.robot.commands.ElevatorCommands.ShootNet_Elevator;
+import frc.robot.commands.ElevatorCommands.ShootProcessor_Elevator;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
@@ -86,7 +87,6 @@ public class RobotContainer {
     DoubleSupplier zSpeedFunc = ()-> driverController.getRawAxis(4);
 
     BooleanSupplier isSlowFunc = ()-> driverController.getHID().getLeftBumperButton();
-    BooleanSupplier ifFeedFunc = ()-> operatorController.getHID().getAButton();
 
     driverController.b().whileTrue(
       Commands.runOnce(()->{
@@ -100,16 +100,16 @@ public class RobotContainer {
     driverController.y().whileTrue(new TrackProcessor(m_SwerveSubsystem, m_PhotonVisionSubsystem));
     driverController.pov(0).whileTrue(new TrackNet(m_SwerveSubsystem, m_PhotonVisionSubsystem));
 
-    operatorController.pov(0).whileTrue(new Coral_L1(m_ElevatorSubsystem, m_EffectorSubsystem, ifFeedFunc));
-    operatorController.b().whileTrue(new Coral_L2(m_ElevatorSubsystem, m_EffectorSubsystem, ifFeedFunc));
-    operatorController.x().whileTrue(new Coral_L3(m_ElevatorSubsystem, m_EffectorSubsystem, ifFeedFunc));
-    operatorController.y().whileTrue(new Coral_L4(m_ElevatorSubsystem, m_EffectorSubsystem, ifFeedFunc));
-
-    operatorController.rightBumper().whileTrue(new IntakeAlgae_High(m_ElevatorSubsystem, m_EffectorSubsystem));
-    operatorController.leftBumper().whileTrue(new IntakeAlgae_Low(m_ElevatorSubsystem, m_EffectorSubsystem));
-    operatorController.rightTrigger().whileTrue(new ShootNet(m_ElevatorSubsystem, m_EffectorSubsystem, ifFeedFunc));
-    operatorController.leftTrigger().whileTrue(new ShootProcessor(m_ElevatorSubsystem, m_EffectorSubsystem, ifFeedFunc));
-
+    operatorController.pov(90).whileTrue(new Coral_L2_Elevator(m_ElevatorSubsystem, m_EffectorSubsystem));
+    operatorController.pov(270).whileTrue(new Coral_L3_Elevator(m_ElevatorSubsystem, m_EffectorSubsystem));
+    operatorController.pov(0).whileTrue(new IntakeAlgae_Low_Elevator(m_ElevatorSubsystem, m_EffectorSubsystem));
+    operatorController.pov(180).whileTrue(new IntakeAlgae_High_Elevator(m_ElevatorSubsystem, m_EffectorSubsystem));
+    operatorController.rightTrigger(0.4).whileTrue(new Coral_L4_Elevator(m_ElevatorSubsystem, m_EffectorSubsystem));
+    operatorController.leftTrigger(0.4).whileTrue(new ShootNet_Elevator(m_ElevatorSubsystem, m_EffectorSubsystem));
+    operatorController.leftBumper().whileTrue(new ShootProcessor_Elevator(m_ElevatorSubsystem, m_EffectorSubsystem));
+    operatorController.b().whileTrue(new IntakeCoral_Elevator(m_ElevatorSubsystem, m_EffectorSubsystem));
+    operatorController.x().whileTrue(new IntakeAlgae_Floor_Elevator(m_ElevatorSubsystem, m_EffectorSubsystem));
+    operatorController.y().onTrue(new ClimbCommand(m_ClimberSubsystem));
 
     m_SwerveSubsystem.setDefaultCommand(new ManualDrive(m_SwerveSubsystem, xSpeedFunc, ySpeedFunc, zSpeedFunc, isSlowFunc));
   }
