@@ -211,11 +211,13 @@ public class SwerveSubsystem extends SubsystemBase {
     odometry.update(getRotation(), getModulesPosition());
     // swerveDrivePoseEstimator.update(getRotation(), getModulesPosition());
     swerveDrivePoseEstimator.updateWithTime(currentTime, getRotation(), getModulesPosition());
-    field.setRobotPose(odometry.getPoseMeters());
 
     if(!(bestEstimatedPose2d == null)) {
       swerveDrivePoseEstimator.addVisionMeasurement(bestEstimatedPose2d, currentTime, stdDevs);
     }
+
+    field.setRobotPose(swerveDrivePoseEstimator.getEstimatedPosition());
+    // field.setRobotPose(odometry.getPoseMeters());
 
 
 
@@ -311,6 +313,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public void setPose(Pose2d poses) {
     odometry.resetPosition(getRotation(), getModulesPosition(), poses);
+  }
+
+  public void setPose_Estimator(Pose2d poses) {
+    swerveDrivePoseEstimator.resetPosition(getRotation(), getModulesPosition(), poses);
   }
 
 
