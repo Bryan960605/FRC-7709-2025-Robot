@@ -27,7 +27,6 @@ public class ShootNet extends Command {
     m_ElevatorSubsystem.shootNet();
     m_EndEffectorSubsystem.shootNet_Arm();
   }
-
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
