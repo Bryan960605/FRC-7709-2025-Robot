@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import java.lang.StackWalker.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +27,9 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.MatBuilder;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -38,6 +42,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.numbers.N8;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -78,9 +85,15 @@ public class SwerveSubsystem extends SubsystemBase {
   private PhotonPipelineResult frontCameraResult;
   private PhotonPipelineResult backCameraResult;
 
-  private Pose2d bestPose2d;
+  private Transform3d fieldToFrontCamera;
+  private Transform3d fieldToBackCamera;
+
+  private Pose2d bestEstimatedPose2d;
 
   private final SwerveDrivePoseEstimator swerveDrivePoseEstimator;
+
+  private Matrix<N3, N1> stdDevs;
+  private double[] stdDevsArray = {0.05, 0.05, 0.05};
 
   
   /**
@@ -135,9 +148,12 @@ public class SwerveSubsystem extends SubsystemBase {
     frontCameraEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToBackCamera);
     backCameraEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToBackCamera);
 
-    aprilTagFieldLayout = aprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
 
-    swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(SwerveConstants.swerveKinematics, getRotation(), getModulesPosition(), getRobotPose(), null, null);
+    aprilTagFieldLayout = aprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+    
+    stdDevs = new Matrix<>(Nat.N3(), Nat.N1(), stdDevsArray);
+
+    swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(SwerveConstants.swerveKinematics, getRotation(), getModulesPosition(), getRobotPose(), stdDevs, stdDevs);
 
 
     try{
@@ -180,18 +196,25 @@ public class SwerveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    frontCameraResult = frontCamera.getLatestResult();
+    backCameraResult = backCamera.getLatestResult();
+
+    Optional<Matrix<N3, N3>> frontCameraMatrix = frontCamera.getCameraMatrix();
+    Optional<Matrix<N3, N3>> backCameraMatrix = backCamera.getCameraMatrix();
+    Optional<Matrix<N8, N1>> frontCameraDistCoeffs = frontCamera.getDistCoeffs();
+    Optional<Matrix<N8, N1>> backCameraDistCoeffs = backCamera.getDistCoeffs();
     currentTime = Timer.getFPGATimestamp();
-    var frontResults = frontCameraEstimator.update(frontCameraResult, null, null);
-    var backResults = backCameraEstimator.update(backCameraResult, null, null);
-    bestPose2d =  chooseBestPose(frontResults, backResults);
+    var frontRobotEstimatedPose = getEstimatedPose(bestEstimatedPose2d, frontCameraEstimator, frontCameraMatrix, frontCameraDistCoeffs, frontCameraResult);
+    var backRobotEstimatedPose = getEstimatedPose(bestEstimatedPose2d, backCameraEstimator, backCameraMatrix, backCameraDistCoeffs, backCameraResult);
+    bestEstimatedPose2d =  chooseBestPose(frontRobotEstimatedPose, backRobotEstimatedPose);
 
     odometry.update(getRotation(), getModulesPosition());
     // swerveDrivePoseEstimator.update(getRotation(), getModulesPosition());
     swerveDrivePoseEstimator.updateWithTime(currentTime, getRotation(), getModulesPosition());
     field.setRobotPose(odometry.getPoseMeters());
 
-    if(!(bestPose2d == null)) {
-      swerveDrivePoseEstimator.addVisionMeasurement(bestPose2d, currentTime, null);
+    if(!(bestEstimatedPose2d == null)) {
+      swerveDrivePoseEstimator.addVisionMeasurement(bestEstimatedPose2d, currentTime, stdDevs);
     }
 
 
@@ -214,6 +237,10 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Swerve/leftFrontVelocity", leftFront.getDriveVelocity());
   }
 
+  public Optional<EstimatedRobotPose> getEstimatedPose(Pose2d prevRobotEstimatedPose, PhotonPoseEstimator poseEstimator, Optional<Matrix<N3, N3>> cameraMatrix, Optional<Matrix<N8, N1>> cameraDistCoeffs, PhotonPipelineResult cameraResult) {
+    poseEstimator.setReferencePose(prevRobotEstimatedPose);
+    return poseEstimator.update(cameraResult, cameraMatrix, cameraDistCoeffs);
+  }
 
   public Pose2d chooseBestPose(Optional<EstimatedRobotPose> frontPose, Optional<EstimatedRobotPose> backPose) {
     EstimatedRobotPose bestRobotPose;
