@@ -137,7 +137,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     aprilTagFieldLayout = aprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
 
-    swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(SwerveConstants.swerveKinematics, getRotation(), getModulesPosition(), getRobotPose(), null, null)
+    swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(SwerveConstants.swerveKinematics, getRotation(), getModulesPosition(), getRobotPose(), null, null);
 
 
     try{
