@@ -192,53 +192,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
   }
 
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    frontCameraResult = frontCamera.getLatestResult();
-    backCameraResult = backCamera.getLatestResult();
-
-    Optional<Matrix<N3, N3>> frontCameraMatrix = frontCamera.getCameraMatrix();
-    Optional<Matrix<N3, N3>> backCameraMatrix = backCamera.getCameraMatrix();
-    Optional<Matrix<N8, N1>> frontCameraDistCoeffs = frontCamera.getDistCoeffs();
-    Optional<Matrix<N8, N1>> backCameraDistCoeffs = backCamera.getDistCoeffs();
-    currentTime = Timer.getFPGATimestamp();
-    var frontRobotEstimatedPose = getEstimatedPose(bestEstimatedPose2d, frontCameraEstimator, frontCameraMatrix, frontCameraDistCoeffs, frontCameraResult);
-    var backRobotEstimatedPose = getEstimatedPose(bestEstimatedPose2d, backCameraEstimator, backCameraMatrix, backCameraDistCoeffs, backCameraResult);
-    bestEstimatedPose2d =  chooseBestPose(frontRobotEstimatedPose, backRobotEstimatedPose);
-
-    odometry.update(getRotation(), getModulesPosition());
-    // swerveDrivePoseEstimator.update(getRotation(), getModulesPosition());
-    swerveDrivePoseEstimator.updateWithTime(currentTime, getRotation(), getModulesPosition());
-
-    if(!(bestEstimatedPose2d == null)) {
-      swerveDrivePoseEstimator.addVisionMeasurement(bestEstimatedPose2d, currentTime, stdDevs);
-    }
-
-    field.setRobotPose(swerveDrivePoseEstimator.getEstimatedPosition());
-    // field.setRobotPose(odometry.getPoseMeters());
-
-
-
-    SmartDashboard.putNumber("Swerve/leftFrontAbsolutePosition", leftFront.getTurningPosition());
-    SmartDashboard.putNumber("Swerve/leftBackAbsolutePosition", leftBack.getTurningPosition());
-    SmartDashboard.putNumber("Swerve/rightFrontAbsolutePosition", rightFront.getTurningPosition());
-    SmartDashboard.putNumber("Swerve/rightBackAbsolutePosition", rightBack.getTurningPosition());
-
-    SmartDashboard.putNumber("Swerve/leftFrontTurningMotorPosition", leftFront.getTurningMotorPosition());
-    SmartDashboard.putNumber("Swerve/leftBackTurningMotorPosition", leftBack.getTurningMotorPosition());
-    SmartDashboard.putNumber("Swerve/rightFrontTurningMotorPosition", rightFront.getTurningMotorPosition());
-    SmartDashboard.putNumber("Swerve/rightBackTurningMotorPosition", rightBack.getTurningMotorPosition());
-    
-    SmartDashboard.putNumber("Swerve/leftFrontDrivingMotorPosition", leftFront.getDrivePosition());
-    SmartDashboard.putNumber("Swerve/leftBackDrivingMotorPosition", leftBack.getDrivePosition());
-    SmartDashboard.putNumber("Swerve/rightFrontDrivingMotorPosition", rightFront.getDrivePosition());
-    SmartDashboard.putNumber("Swerve/rightBackDrivingMotorPosition", rightBack.getDrivePosition());
-
-    SmartDashboard.putNumber("Swerve/leftFrontVelocity", leftFront.getDriveVelocity());
-  }
-
   public Optional<EstimatedRobotPose> getEstimatedPose(Pose2d prevRobotEstimatedPose, PhotonPoseEstimator poseEstimator, Optional<Matrix<N3, N3>> cameraMatrix, Optional<Matrix<N8, N1>> cameraDistCoeffs, PhotonPipelineResult cameraResult) {
     poseEstimator.setReferencePose(prevRobotEstimatedPose);
     return poseEstimator.update(cameraResult, cameraMatrix, cameraDistCoeffs);
@@ -338,5 +291,51 @@ public class SwerveSubsystem extends SubsystemBase {
     SwerveModuleState[] states = SwerveConstants.swerveKinematics.toSwerveModuleStates(targetSpeeds);
 
     setModouleStates(states);
+  }
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+    frontCameraResult = frontCamera.getLatestResult();
+    backCameraResult = backCamera.getLatestResult();
+
+    Optional<Matrix<N3, N3>> frontCameraMatrix = frontCamera.getCameraMatrix();
+    Optional<Matrix<N3, N3>> backCameraMatrix = backCamera.getCameraMatrix();
+    Optional<Matrix<N8, N1>> frontCameraDistCoeffs = frontCamera.getDistCoeffs();
+    Optional<Matrix<N8, N1>> backCameraDistCoeffs = backCamera.getDistCoeffs();
+    currentTime = Timer.getFPGATimestamp();
+    var frontRobotEstimatedPose = getEstimatedPose(bestEstimatedPose2d, frontCameraEstimator, frontCameraMatrix, frontCameraDistCoeffs, frontCameraResult);
+    var backRobotEstimatedPose = getEstimatedPose(bestEstimatedPose2d, backCameraEstimator, backCameraMatrix, backCameraDistCoeffs, backCameraResult);
+    bestEstimatedPose2d =  chooseBestPose(frontRobotEstimatedPose, backRobotEstimatedPose);
+
+    odometry.update(getRotation(), getModulesPosition());
+    // swerveDrivePoseEstimator.update(getRotation(), getModulesPosition());
+    swerveDrivePoseEstimator.updateWithTime(currentTime, getRotation(), getModulesPosition());
+
+    if(!(bestEstimatedPose2d == null)) {
+      swerveDrivePoseEstimator.addVisionMeasurement(bestEstimatedPose2d, currentTime, stdDevs);
+    }
+
+    field.setRobotPose(swerveDrivePoseEstimator.getEstimatedPosition());
+    // field.setRobotPose(odometry.getPoseMeters());
+
+
+
+    SmartDashboard.putNumber("Swerve/leftFrontAbsolutePosition", leftFront.getTurningPosition());
+    SmartDashboard.putNumber("Swerve/leftBackAbsolutePosition", leftBack.getTurningPosition());
+    SmartDashboard.putNumber("Swerve/rightFrontAbsolutePosition", rightFront.getTurningPosition());
+    SmartDashboard.putNumber("Swerve/rightBackAbsolutePosition", rightBack.getTurningPosition());
+
+    SmartDashboard.putNumber("Swerve/leftFrontTurningMotorPosition", leftFront.getTurningMotorPosition());
+    SmartDashboard.putNumber("Swerve/leftBackTurningMotorPosition", leftBack.getTurningMotorPosition());
+    SmartDashboard.putNumber("Swerve/rightFrontTurningMotorPosition", rightFront.getTurningMotorPosition());
+    SmartDashboard.putNumber("Swerve/rightBackTurningMotorPosition", rightBack.getTurningMotorPosition());
+    
+    SmartDashboard.putNumber("Swerve/leftFrontDrivingMotorPosition", leftFront.getDrivePosition());
+    SmartDashboard.putNumber("Swerve/leftBackDrivingMotorPosition", leftBack.getDrivePosition());
+    SmartDashboard.putNumber("Swerve/rightFrontDrivingMotorPosition", rightFront.getDrivePosition());
+    SmartDashboard.putNumber("Swerve/rightBackDrivingMotorPosition", rightBack.getDrivePosition());
+
+    SmartDashboard.putNumber("Swerve/leftFrontVelocity", leftFront.getDriveVelocity());
   }
 }
