@@ -205,6 +205,10 @@ public final class Constants {
     public static final double yPidSetPoint_LeftReef = 0;
     public static final double rotationPidSetPoint_LeftReef = 0;
 
+    public static final double xPidSetPoint_MiddleReef = 0;
+    public static final double yPidSetPoint_MiddleReef = 0;
+    public static final double rotationPidSetPoint_MiddleReef = 0;
+
     public static final double xPidSetPoint_CoralStation = 0;
     public static final double yPidSetPoint_CoralStation = 0;
     public static final double rotationPidSetPoint_CoralStation = 0;
