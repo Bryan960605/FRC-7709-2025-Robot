@@ -32,6 +32,8 @@ public class TrackLeftReef extends Command {
   private double yPidOutput;
   private double rotationPidOutput;
 
+  private int fiducialId;
+
   public TrackLeftReef(PhotonVisionSubsystem photonVisionSubsystem, SwerveSubsystem swerveSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_PhotonVisionSubsystem = photonVisionSubsystem;
@@ -57,26 +59,28 @@ public class TrackLeftReef extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    fiducialId = m_PhotonVisionSubsystem.getFrontTargetID();
     // Y-PID calculations
-    yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements();
+    yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_Front();
     yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_LeftReef);
     yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_LeftReef;
     yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_LeftReef);
     // Rotation-PID calculations
-    rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements();
+    rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_Front();
     rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.rotationPidSetPoint_LeftReef);
     rotationPidMeasurements = (rotationPidError > 3) ? rotationPidMeasurements : PhotonConstants.rotationPidSetPoint_LeftReef;
     rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_LeftReef);
-  // X-PID calculations
-    xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements();
+    // X-PID calculations
+    xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_Front();
     xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_LeftReef);
     if((yPidError) < 3 && (rotationPidError) < 0.05){
       xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : 0;
       xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_LeftReef);
-    } else {
+    }else {
       xPidOutput = 0;
     }
       // impl
+
       m_SwerveSubsystem.drive(xPidOutput, yPidOutput, rotationPidOutput, false);
       
   }
@@ -91,5 +95,117 @@ public class TrackLeftReef extends Command {
   @Override
   public boolean isFinished() {
     return false;
+  }
+
+  public PhotonVisionSubsystem getM_PhotonVisionSubsystem() {
+    return m_PhotonVisionSubsystem;
+  }
+
+  public SwerveSubsystem getM_SwerveSubsystem() {
+    return m_SwerveSubsystem;
+  }
+
+  public PIDController getRotationPidController() {
+    return rotationPidController;
+  }
+
+  public void setRotationPidController(PIDController rotationPidController) {
+    this.rotationPidController = rotationPidController;
+  }
+
+  public PIDController getxPidController() {
+    return xPidController;
+  }
+
+  public void setxPidController(PIDController xPidController) {
+    this.xPidController = xPidController;
+  }
+
+  public PIDController getyPidController() {
+    return yPidController;
+  }
+
+  public void setyPidController(PIDController yPidController) {
+    this.yPidController = yPidController;
+  }
+
+  public double getxPidMeasurements() {
+    return xPidMeasurements;
+  }
+
+  public void setxPidMeasurements(double xPidMeasurements) {
+    this.xPidMeasurements = xPidMeasurements;
+  }
+
+  public double getyPidMeasurements() {
+    return yPidMeasurements;
+  }
+
+  public void setyPidMeasurements(double yPidMeasurements) {
+    this.yPidMeasurements = yPidMeasurements;
+  }
+
+  public double getRotationPidMeasurements() {
+    return rotationPidMeasurements;
+  }
+
+  public void setRotationPidMeasurements(double rotationPidMeasurements) {
+    this.rotationPidMeasurements = rotationPidMeasurements;
+  }
+
+  public double getxPidError() {
+    return xPidError;
+  }
+
+  public void setxPidError(double xPidError) {
+    this.xPidError = xPidError;
+  }
+
+  public double getyPidError() {
+    return yPidError;
+  }
+
+  public void setyPidError(double yPidError) {
+    this.yPidError = yPidError;
+  }
+
+  public double getRotationPidError() {
+    return rotationPidError;
+  }
+
+  public void setRotationPidError(double rotationPidError) {
+    this.rotationPidError = rotationPidError;
+  }
+
+  public double getxPidOutput() {
+    return xPidOutput;
+  }
+
+  public void setxPidOutput(double xPidOutput) {
+    this.xPidOutput = xPidOutput;
+  }
+
+  public double getyPidOutput() {
+    return yPidOutput;
+  }
+
+  public void setyPidOutput(double yPidOutput) {
+    this.yPidOutput = yPidOutput;
+  }
+
+  public double getRotationPidOutput() {
+    return rotationPidOutput;
+  }
+
+  public void setRotationPidOutput(double rotationPidOutput) {
+    this.rotationPidOutput = rotationPidOutput;
+  }
+
+  public int getFiducialId() {
+    return fiducialId;
+  }
+
+  public void setFiducialId(int fiducialId) {
+    this.fiducialId = fiducialId;
   }
 }

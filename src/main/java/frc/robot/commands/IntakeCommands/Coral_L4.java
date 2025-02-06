@@ -2,18 +2,18 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.ElevatorCommands;
+package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ShootProcessor extends Command {
-  /** Creates a new ShootProcessor_Elevator. */
+public class Coral_L4 extends Command {
+  /** Creates a new Coral_L4_Elevator. */
   private final ElevatorSubsystem m_ElevatorSubsystem;
   private final EndEffectorSubsystem m_EndEffectorSubsystem;
-  public ShootProcessor(ElevatorSubsystem elevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem) {
+  public Coral_L4(ElevatorSubsystem elevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_ElevatorSubsystem = elevatorSubsystem;
     this.m_EndEffectorSubsystem = endEffectorSubsystem;
@@ -24,15 +24,15 @@ public class ShootProcessor extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_ElevatorSubsystem.shootProcessor();
-    m_EndEffectorSubsystem.shootNet_Arm();
+    m_ElevatorSubsystem.outCoral_L4();
+    m_EndEffectorSubsystem.outCoral_L4_Arm();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if (m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint()) {
-      m_EndEffectorSubsystem.shootProcessor_Wheel();
+      m_EndEffectorSubsystem.outCoral_L4_Wheel();
     }
   }
 

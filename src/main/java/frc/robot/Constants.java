@@ -313,4 +313,13 @@ public final class Constants {
     public static final double climbOutAngle = 0;
     public static final double climbInAngle = 0;
   }
+
+  public class LEDConstants {
+    public static final int candle_ID = 0;
+
+    public static final int ledNum = 0;
+
+    public static boolean LEDFlag = false;
+    public static boolean hasGamePiece = false;
+  }
 }

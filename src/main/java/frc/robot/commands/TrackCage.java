@@ -58,17 +58,17 @@ public class TrackCage extends Command {
   @Override
   public void execute() {
     // Y-PID calculations
-    yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements();
+    yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_Front();
     yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_Cage);
     yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_Cage;
     yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_Cage);
     // Rotation-PID calculations
-    rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements();
+    rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_Front();
     rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.rotationPidSetPoint_Cage);
     rotationPidMeasurements = (rotationPidError > 3) ? rotationPidMeasurements : PhotonConstants.rotationPidSetPoint_Cage;
     rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_Cage);
   // X-PID calculations
-    xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements();
+    xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_Front();
     xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_Cage);
     if((yPidError) < 3 && (rotationPidError) < 0.05){
       xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : 0;
