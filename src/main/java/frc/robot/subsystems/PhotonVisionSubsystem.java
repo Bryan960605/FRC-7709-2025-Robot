@@ -24,77 +24,112 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class PhotonVisionSubsystem extends SubsystemBase {
   /** Creates a new PhotonVisionSubsystem. */
 
-  private final PhotonCamera frontCamera;
+  private final PhotonCamera frontRightCamera;
+  private final PhotonCamera frontLeftCamera;
   private final PhotonCamera backCamera;
 
-  private PhotonPipelineResult frontResult;
+  private PhotonPipelineResult frontRightResult;
+  private PhotonPipelineResult frontLeftResult;
   private PhotonPipelineResult backResult;
-  private PhotonTrackedTarget frontTarget;
+  private PhotonTrackedTarget frontRightTarget;
+  private PhotonTrackedTarget frontLeftTarget;
   private PhotonTrackedTarget backTarget;
   private Optional<MultiTargetPNPResult> results;
-  private List<PhotonTrackedTarget> frontTargets;
+  private List<PhotonTrackedTarget> frontRightTargets;
+  private List<PhotonTrackedTarget> frontLeftTargets;
   private List<PhotonTrackedTarget> backTargets;
 
-  private int frontTarget_ID;
+  private int frontRightTarget_ID;
+  private int frontLeftTarget_ID;
   private int backTarget_ID;
 
 
-  private double botXMeasurements_Front;
-  private double botYMeasurements_Front;
-  private double botRotationMeasurements_Front;
+  private double botXMeasurements_FrontRight;
+  private double botYMeasurements_FrontRight;
+  private double botRotationMeasurements_FrontRight;
+  private double botXMeasurements_FrontLeft;
+  private double botYMeasurements_FrontLeft;
+  private double botRotationMeasurements_FrontLeft;
   private double botXMeasurements_Back;
   private double botYMeasurements_Back;
   private double botRotationMeasurements_Back;
 
 
   public PhotonVisionSubsystem() {
-    frontCamera = new PhotonCamera("OV9287_Front");
+    frontRightCamera = new PhotonCamera("OV9287_FrontRight");
+    frontLeftCamera = new PhotonCamera("OV9287_FrontLeft");
     backCamera = new PhotonCamera("OV9287_Back");
 
   }
 
-  public int getFrontTargetID() {
-    return frontTarget_ID;
+  public int getFrontRightTargetID() {
+    return frontRightTarget_ID;
+  }
+
+  public int getFrontLeftTargetID() {
+    return frontLeftTarget_ID;
   }
 
   public int getBackTargetID() {
     return backTarget_ID;
   }
 
-  public boolean hasFrontTarget() {
-    return frontResult.hasTargets();
+  public boolean hasFrontRightTarget() {
+    return frontRightResult.hasTargets();
+  }
+
+  public boolean hasFrontLeftTarget() {
+    return frontLeftResult.hasTargets();
   }
 
   public boolean hasBackTarget() {
     return backResult.hasTargets();
   }
 
-  public boolean hasTarget() {
-    if(frontResult.hasTargets() || backResult.hasTargets()) {
-      return true;
-    }else {
-      return false;
-    }
+  public boolean hasFrontTarget() {
+    if(hasFrontRightTarget() || hasFrontLeftTarget()) return true;
+    return false;
   }
 
-  public Transform3d getFrontTargetPose() {
-    return frontTarget.getBestCameraToTarget();
+  public boolean hasTarget() {
+    if(hasFrontTarget() || hasBackTarget()) return true;
+    return false;
+  }
+
+  public Transform3d getFrontRightTargetPose() {
+    return frontRightTarget.getBestCameraToTarget();
+  }
+
+  public Transform3d getFrontLeftTargetPose() {
+    return frontLeftTarget.getBestCameraToTarget();
   }
 
   public Transform3d getBackTargetPose() {
-    return frontTarget.getBestCameraToTarget();
+    return backTarget.getBestCameraToTarget();
   }
 
-  public double getXPidMeasurements_Front() {
-    return botXMeasurements_Front;
+  public double getXPidMeasurements_FrontRight() {
+    return botXMeasurements_FrontRight;
   }
 
-  public double getYPidMeasurements_Front() {
-    return botYMeasurements_Front;
+  public double getYPidMeasurements_FrontRight() {
+    return botYMeasurements_FrontRight;
   }
 
-  public double getRotationMeasurements_Front() {
-    return botRotationMeasurements_Front;
+  public double getRotationMeasurements_FrontRight() {
+    return botRotationMeasurements_FrontRight;
+  }
+
+  public double getXPidMeasurements_FrontLeft() {
+    return botXMeasurements_FrontLeft;
+  }
+
+  public double getYPidMeasurements_FrontLeft() {
+    return botYMeasurements_FrontLeft;
+  }
+
+  public double getRotationMeasurements_FrontLeft() {
+    return botRotationMeasurements_FrontLeft;
   }
 
   public double getXPidMeasurements_Back() {
@@ -112,31 +147,43 @@ public class PhotonVisionSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    frontResult = frontCamera.getLatestResult();
-    frontTarget = frontResult.getBestTarget();
-    frontTargets = frontResult.getTargets();
+    frontRightResult = frontRightCamera.getLatestResult();
+    frontRightTarget = frontRightResult.getBestTarget();
+    // frontRightTargets = frontRightResult.getTargets();
+    frontLeftResult = frontLeftCamera.getLatestResult();
+    frontLeftTarget = frontLeftResult.getBestTarget();
+    // frontLeftTargets = frontLeftResult.getTargets();
+    backResult = backCamera.getLatestResult();
+    backTarget = backResult.getBestTarget();
     backTargets = backResult.getTargets();
     if(hasTarget()) {
-      botXMeasurements_Front = getFrontTargetPose().getX();
-      botYMeasurements_Front = getFrontTargetPose().getY();
-      botRotationMeasurements_Front = -Math.toDegrees(getFrontTargetPose().getRotation().getAngle());
+      botXMeasurements_FrontRight = getFrontRightTargetPose().getX();
+      botYMeasurements_FrontRight = getFrontRightTargetPose().getY();
+      botRotationMeasurements_FrontRight = -Math.toDegrees(getFrontRightTargetPose().getRotation().getAngle());
+      botXMeasurements_FrontLeft = getFrontLeftTargetPose().getX();
+      botYMeasurements_FrontLeft = getFrontLeftTargetPose().getY();
+      botRotationMeasurements_FrontLeft = -Math.toDegrees(getFrontLeftTargetPose().getRotation().getAngle());
       botXMeasurements_Back = getBackTargetPose().getX();
       botYMeasurements_Back = getBackTargetPose().getY();
       botRotationMeasurements_Back = -Math.toDegrees(getBackTargetPose().getRotation().getAngle());
 
-      frontTarget_ID = frontTarget.getFiducialId();
+      frontRightTarget_ID = frontRightTarget.getFiducialId();
+      frontLeftTarget_ID = frontLeftTarget.getFiducialId();
       backTarget_ID = backTarget.getFiducialId();
       
 
-      SmartDashboard.putNumber("Photon/BotXError_Front", botXMeasurements_Front);
-      SmartDashboard.putNumber("Photon/BotYError_Front", botYMeasurements_Front);
-      SmartDashboard.putNumber("Photon/BotRotationError_Front", botRotationMeasurements_Front);
-      SmartDashboard.putNumber("Photon/FrontTarget_ID", frontTarget_ID);
+      SmartDashboard.putNumber("Photon/BotXError_Front", botXMeasurements_FrontRight);
+      SmartDashboard.putNumber("Photon/BotYError_Front", botYMeasurements_FrontRight);
+      SmartDashboard.putNumber("Photon/BotRotationError_Front", botRotationMeasurements_FrontRight);
+      SmartDashboard.putNumber("Photon/FrontTarget_ID", frontRightTarget_ID);
 
     }else {
-      botXMeasurements_Front = 0;
-      botYMeasurements_Front = 0;
-      botRotationMeasurements_Front = 0;
+      botXMeasurements_FrontRight = 0;
+      botYMeasurements_FrontRight = 0;
+      botRotationMeasurements_FrontRight = 0;
+      botXMeasurements_FrontLeft = 0;
+      botYMeasurements_FrontLeft = 0;
+      botRotationMeasurements_FrontLeft = 0;
       botXMeasurements_Back = 0;
       botYMeasurements_Back = 0;
       botRotationMeasurements_Back = 0;

@@ -205,25 +205,62 @@ public final class Constants {
     public static final double yPidSetPoint_LeftReef = 0;
     public static final double rotationPidSetPoint_LeftReef = 0;
 
-    public static final double xPidSetPoint_MiddleReef = 0;
-    public static final double yPidSetPoint_MiddleReef = 0;
-    public static final double rotationPidSetPoint_MiddleReef = 0;
+    public static final double xPidSetPoint_MiddleReef_FrontRight = 0;
+    public static final double yPidSetPoint_MiddleReef_FrontRight = 0;
+    public static final double rotationPidSetPoint_MiddleReef_FrontRight = 0;
 
-    public static final double xPidSetPoint_CoralStation = 0;
-    public static final double yPidSetPoint_CoralStation = 0;
-    public static final double rotationPidSetPoint_CoralStation = 0;
+    public static final double xPidSetPoint_MiddleReef_FrontLeft = 0;
+    public static final double yPidSetPoint_MiddleReef_FrontLeft = 0;
+    public static final double rotationPidSetPoint_MiddleReef_FrontLeft = 0;
 
-    public static final double xPidSetPoint_Cage = 0;
-    public static final double yPidSetPoint_Cage = 0;
-    public static final double rotationPidSetPoint_Cage = 0;
+    public static final double xPidSetPoint_CoralStation_Back = 0;
+    public static final double yPidSetPoint_CoralStation_Back = 0;
+    public static final double rotationPidSetPoint_CoralStation_Back = 0;
 
-    public static final double xPidSetPoint_Processor = 0;
-    public static final double yPidSetPoint_Processor = 0;
-    public static final double rotationPidSetPoint_Processor = 0;
+    public static final double xPidSetPoint_CoralStation_FrontRight = 0;
+    public static final double yPidSetPoint_CoralStation_FrontRight = 0;
+    public static final double rotationPidSetPoint_CoralStation_FrontRight = 0;
 
-    public static final double xPidSetPoint_Net = 0;
-    public static final double yPidSetPoint_Net = 0;
-    public static final double rotationPidSetPoint_Net = 0;
+    public static final double xPidSetPoint_Cage_FrontRight = 0;
+    public static final double yPidSetPoint_Cage_FrontRight = 0;
+    public static final double rotationPidSetPoint_Cage_FrontRight = 0;
+
+    public static final double xPidSetPoint_Cage_FrontLeft = 0;
+    public static final double yPidSetPoint_Cage_FrontLeft = 0;
+    public static final double rotationPidSetPoint_Cage_FrontLeft = 0;
+
+    public static final double xPidSetPoint_Cage_Back_ID20_ID11 = 0;
+    public static final double yPidSetPoint_Cage_Back_ID20_ID11 = 0;
+    public static final double rotationPidSetPoint_Cage_Back_ID20_ID11 = 0;
+
+    public static final double xPidSetPoint_Cage_Back_ID21_ID10 = 0;
+    public static final double yPidSetPoint_Cage_Back_ID21_ID10 = 0;
+    public static final double rotationPidSetPoint_Cage_Back_ID21_ID10 = 0;
+
+    public static final double xPidSetPoint_Processor_FrontRight = 0;
+    public static final double yPidSetPoint_Processor_FrontRight = 0;
+    public static final double rotationPidSetPoint_Processor_FrontRight = 0;
+
+    public static final double xPidSetPoint_Processor_FrontLeft = 0;
+    public static final double yPidSetPoint_Processor_FrontLeft = 0;
+    public static final double rotationPidSetPoint_Processor_FrontLeft = 0;
+
+    public static final double xPidSetPoint_Net_FrontRight = 0;
+    public static final double yPidSetPoint_Net_FrontRight = 0;
+    public static final double rotationPidSetPoint_Net_FrontRight = 0;
+
+    public static final double xPidSetPoint_Net_FrontLeft = 0;
+    public static final double yPidSetPoint_Net_FrontLeft = 0;
+    public static final double rotationPidSetPoint_Net_FrontLeft = 0;
+
+    public static final double xPidSetPoint_Net_Back_ID20_ID11 = 0;
+    public static final double yPidSetPoint_Net_Back_ID20_ID11 = 0;
+    public static final double rotationPidSetPoint_Net_Back_ID20_ID11 = 0;
+
+    public static final double xPidSetPoint_Net_Back_ID21_ID10 = 0;
+    public static final double yPidSetPoint_Net_Back_ID21_ID10 = 0;
+    public static final double rotationPidSetPoint_Net_Back_ID21_ID10 = 0;
+
   }
 
   public class ElevatorConstants {

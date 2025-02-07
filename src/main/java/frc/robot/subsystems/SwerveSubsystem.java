@@ -70,23 +70,28 @@ public class SwerveSubsystem extends SubsystemBase {
   private RobotConfig robotConfig;
 
   //vision
-  private final PhotonCamera frontCamera;
+  private final PhotonCamera frontRightCamera;
+  private final PhotonCamera frontLeftCamera;
   private final PhotonCamera backCamera;
 
-  private final Transform3d robotToFrontCamera;
+  private final Transform3d robotToFrontRightCamera;
+  private final Transform3d robotToFrontLeftCamera;
   private final Transform3d robotToBackCamera;
 
-  private final PhotonPoseEstimator frontCameraEstimator;
+  private final PhotonPoseEstimator frontRightCameraEstimator;
+  private final PhotonPoseEstimator frontLeftCameraEstimator;
   private final PhotonPoseEstimator backCameraEstimator;
 
   private AprilTagFieldLayout aprilTagFieldLayout;
 
   private double currentTime;
 
-  private PhotonPipelineResult frontCameraResult;
+  private PhotonPipelineResult frontRightCameraResult;
+  private PhotonPipelineResult frontLeftCameraResult;
   private PhotonPipelineResult backCameraResult;
 
-  private Transform3d fieldToFrontCamera;
+  private Transform3d fieldToFrontRightCamera;
+  private Transform3d fieldToFrontLeftCamera;
   private Transform3d fieldToBackCamera;
 
   private Pose2d bestEstimatedPose2d;
@@ -140,13 +145,16 @@ public class SwerveSubsystem extends SubsystemBase {
      // All other subsystem initialization
     // ...
     //vision
-    frontCamera = new PhotonCamera(getName());
-    backCamera = new PhotonCamera(getName());
+    frontRightCamera = new PhotonCamera("OV9287_FrontRight");
+    frontLeftCamera = new PhotonCamera("OV9287_FrontLeft");
+    backCamera = new PhotonCamera("OV9287_Back");
 
-    robotToFrontCamera = new Transform3d(new Translation3d(null, null, null), new Rotation3d(getRotation()));
+    robotToFrontRightCamera = new Transform3d(new Translation3d(null, null, null), new Rotation3d(getRotation()));
+    robotToFrontLeftCamera = new Transform3d(new Translation3d(null, null, null), new Rotation3d(getRotation()));
     robotToBackCamera = new Transform3d(new Translation3d(null, null, null), new Rotation3d(getRotation()));
 
-    frontCameraEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToBackCamera);
+    frontRightCameraEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToFrontRightCamera);
+    frontLeftCameraEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToFrontLeftCamera);
     backCameraEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToBackCamera);
 
 
@@ -198,11 +206,16 @@ public class SwerveSubsystem extends SubsystemBase {
     return poseEstimator.update(cameraResult, cameraMatrix, cameraDistCoeffs);
   }
 
-  public Pose2d chooseBestPose(Optional<EstimatedRobotPose> frontPose, Optional<EstimatedRobotPose> backPose) {
+  public Pose2d chooseBestPose(Optional<EstimatedRobotPose> frontRightPose,Optional<EstimatedRobotPose> frontLeftPose, Optional<EstimatedRobotPose> backPose) {
     EstimatedRobotPose bestRobotPose;
     Pose2d bestRobotPose2d;
-    if(frontPose.isPresent()) {
-      bestRobotPose = frontPose.get();
+    if(frontRightPose.isPresent()) {
+      bestRobotPose = frontRightPose.get();
+      bestRobotPose2d = bestRobotPose.estimatedPose.toPose2d();
+      return bestRobotPose2d;
+    }
+    if(frontLeftPose.isPresent()) {
+      bestRobotPose = frontLeftPose.get();
       bestRobotPose2d = bestRobotPose.estimatedPose.toPose2d();
       return bestRobotPose2d;
     }
@@ -297,17 +310,21 @@ public class SwerveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    frontCameraResult = frontCamera.getLatestResult();
+    frontRightCameraResult = frontRightCamera.getLatestResult();
+    frontLeftCameraResult = frontLeftCamera.getLatestResult();
     backCameraResult = backCamera.getLatestResult();
 
-    Optional<Matrix<N3, N3>> frontCameraMatrix = frontCamera.getCameraMatrix();
+    Optional<Matrix<N3, N3>> frontRightCameraMatrix = frontRightCamera.getCameraMatrix();
+    Optional<Matrix<N3, N3>> frontLeftCameraMatrix = frontLeftCamera.getCameraMatrix();
     Optional<Matrix<N3, N3>> backCameraMatrix = backCamera.getCameraMatrix();
-    Optional<Matrix<N8, N1>> frontCameraDistCoeffs = frontCamera.getDistCoeffs();
+    Optional<Matrix<N8, N1>> frontRightCameraDistCoeffs = frontRightCamera.getDistCoeffs();
+    Optional<Matrix<N8, N1>> frontLeftCameraDistCoeffs = frontLeftCamera.getDistCoeffs();
     Optional<Matrix<N8, N1>> backCameraDistCoeffs = backCamera.getDistCoeffs();
     currentTime = Timer.getFPGATimestamp();
-    var frontRobotEstimatedPose = getEstimatedPose(bestEstimatedPose2d, frontCameraEstimator, frontCameraMatrix, frontCameraDistCoeffs, frontCameraResult);
+    var frontRightRobotEstimatedPose = getEstimatedPose(bestEstimatedPose2d, frontRightCameraEstimator, frontRightCameraMatrix, frontRightCameraDistCoeffs, frontRightCameraResult);
+    var frontLeftRobotEstimatedPose = getEstimatedPose(bestEstimatedPose2d, frontLeftCameraEstimator, frontLeftCameraMatrix, frontLeftCameraDistCoeffs, frontLeftCameraResult);
     var backRobotEstimatedPose = getEstimatedPose(bestEstimatedPose2d, backCameraEstimator, backCameraMatrix, backCameraDistCoeffs, backCameraResult);
-    bestEstimatedPose2d =  chooseBestPose(frontRobotEstimatedPose, backRobotEstimatedPose);
+    bestEstimatedPose2d =  chooseBestPose(frontRightRobotEstimatedPose, frontLeftRobotEstimatedPose, backRobotEstimatedPose);
 
     odometry.update(getRotation(), getModulesPosition());
     // swerveDrivePoseEstimator.update(getRotation(), getModulesPosition());

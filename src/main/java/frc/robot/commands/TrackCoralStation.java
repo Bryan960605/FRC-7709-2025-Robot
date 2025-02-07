@@ -32,6 +32,10 @@ public class TrackCoralStation extends Command {
   private double yPidOutput;
   private double rotationPidOutput;
 
+  private int frontRightTarget_ID;
+  private int frontLeftTarget_ID;
+
+
   public TrackCoralStation(PhotonVisionSubsystem photonVisionSubsystem, SwerveSubsystem swerveSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_PhotonVisionSubsystem = photonVisionSubsystem;
@@ -57,25 +61,50 @@ public class TrackCoralStation extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    frontRightTarget_ID = m_PhotonVisionSubsystem.getFrontRightTargetID();
+    frontLeftTarget_ID = m_PhotonVisionSubsystem.getFrontLeftTargetID();
+    if(m_PhotonVisionSubsystem.hasBackTarget()) {
       // Y-PID calculations
-      yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_Front();
-      yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_CoralStation);
-      yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_CoralStation;
-      yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_CoralStation);
+      yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_Back();
+      yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_CoralStation_Back);
+      yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_CoralStation_Back;
+      yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_CoralStation_Back);
       // Rotation-PID calculations
-      rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_Front();
-      rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.rotationPidSetPoint_CoralStation);
-      rotationPidMeasurements = (rotationPidError > 3) ? rotationPidMeasurements : PhotonConstants.rotationPidSetPoint_CoralStation;
-      rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_CoralStation);
+      rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_Back();
+      rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.rotationPidSetPoint_CoralStation_Back);
+      rotationPidMeasurements = (rotationPidError > 3) ? rotationPidMeasurements : PhotonConstants.rotationPidSetPoint_CoralStation_Back;
+      rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_CoralStation_Back);
     // X-PID calculations
-      xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_Front();
-      xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_CoralStation);
+      xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_Back();
+      xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_CoralStation_Back);
       if((yPidError) < 3 && (rotationPidError) < 0.05){
         xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : 0;
-        xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_CoralStation);
+        xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_CoralStation_Back);
       } else {
         xPidOutput = 0;
       }
+    }else if(m_PhotonVisionSubsystem.hasFrontTarget()) {
+      if(m_PhotonVisionSubsystem.hasFrontTarget()) {
+        yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_FrontRight();
+        yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_CoralStation_FrontRight);
+        yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_CoralStation_FrontRight;
+        yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_CoralStation_FrontRight);
+        // Rotation-PID calculations
+        rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_FrontRight();
+        rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.rotationPidSetPoint_CoralStation_FrontRight);
+        rotationPidMeasurements = (rotationPidError > 3) ? rotationPidMeasurements : PhotonConstants.rotationPidSetPoint_CoralStation_FrontRight;
+        rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_CoralStation_FrontRight);
+      // X-PID calculations
+        xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontRight();
+        xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_CoralStation_FrontRight);
+        if((yPidError) < 3 && (rotationPidError) < 0.05){
+          xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : 0;
+          xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_CoralStation_FrontRight);
+        } else {
+          xPidOutput = 0;
+        }
+      }
+    }
       // impl
       m_SwerveSubsystem.drive(xPidOutput, yPidOutput, rotationPidOutput, false);
   }

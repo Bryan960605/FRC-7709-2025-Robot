@@ -43,7 +43,7 @@ public class AprilTagX extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_Front();
+    xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontRight();
     xPidMeasurements = Math.abs(xPidMeasurements) > 0.05 ? xPidMeasurements : 0;
     xPidOutput = -xPidController.calculate(xPidMeasurements, 0);
 

@@ -58,17 +58,17 @@ public class TrackRightReef extends Command {
   @Override
   public void execute() {
     // Y-PID calculations
-    yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_Front();
+    yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_FrontRight();
     yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_RightReef);
     yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_RightReef;
     yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_RightReef);
     // Rotation-PID calculations
-    rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_Front();
+    rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_FrontRight();
     rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.rotationPidSetPoint_RightReef);
     rotationPidMeasurements = (rotationPidError > 3) ? rotationPidMeasurements : PhotonConstants.rotationPidSetPoint_RightReef;
     rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_RightReef);
   // X-PID calculations
-    xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_Front();
+    xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontRight();
     xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_RightReef);
     if((yPidError) < 3 && (rotationPidError) < 0.05){
       xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : 0;

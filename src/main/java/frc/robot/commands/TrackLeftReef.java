@@ -59,19 +59,19 @@ public class TrackLeftReef extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    fiducialId = m_PhotonVisionSubsystem.getFrontTargetID();
+    fiducialId = m_PhotonVisionSubsystem.getFrontLeftTargetID();
     // Y-PID calculations
-    yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_Front();
+    yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_FrontLeft();
     yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_LeftReef);
     yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_LeftReef;
     yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_LeftReef);
     // Rotation-PID calculations
-    rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_Front();
+    rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_FrontLeft();
     rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.rotationPidSetPoint_LeftReef);
     rotationPidMeasurements = (rotationPidError > 3) ? rotationPidMeasurements : PhotonConstants.rotationPidSetPoint_LeftReef;
     rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_LeftReef);
     // X-PID calculations
-    xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_Front();
+    xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontLeft();
     xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_LeftReef);
     if((yPidError) < 3 && (rotationPidError) < 0.05){
       xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : 0;
