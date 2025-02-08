@@ -66,16 +66,16 @@ public final class Constants {
       new Translation2d(-kModuleDistance/2, -kModuleDistance/2)
     );
 
-    public static final double turningPidController_Kp = 0.012;
+    public static final double turningPidController_Kp = 0.013;
     public static final double turningPidController_Ki = 0;
-    public static final double turningPidController_Kd = 0;
+    public static final double turningPidController_Kd = 0.0001;
 
     public static final double drivePidController_Kp = 0;
     public static final double drivePidController_Ki = 0;
     public static final double drivePidController_Kd = 0;
 
-    public static final double driveFeedforward_Ks = 0.05;
-    public static final double driveFeedforward_Kv = 2.58;
+    public static final double driveFeedforward_Ks = 0.13;
+    public static final double driveFeedforward_Kv = 2;
 
   }
 
@@ -138,7 +138,7 @@ public final class Constants {
 
     public static final double maxDriveSpeed_MeterPerSecond = 5.94;
     public static final double kDriveBaseRadius = 15.73 * 0.0254;
-    public static final double maxAngularVelocity_Angle = 720;
+    public static final double maxAngularVelocity_Angle = 850;
   
   }
 

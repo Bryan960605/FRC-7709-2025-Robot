@@ -80,11 +80,11 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public double getDriveVelocity() {
-    return driveMotor.getVelocity().getValueAsDouble()*ModuleConstants.driveEncoderRot2Meter;
+    return driveMotor.getVelocity().getValueAsDouble()*ModuleConstants.driveEncoderRot2MeterPerSec;
   }
 
   public double getDrivePosition() {
-    return driveMotor.getPosition().getValueAsDouble();//*ModuleConstants.driveEncoderRot2Meter
+    return driveMotor.getPosition().getValueAsDouble()*ModuleConstants.driveEncoderRot2Meter;//*ModuleConstants.driveEncoderRot2Meter
   }
 
   public double getTurningPosition() {

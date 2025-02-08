@@ -15,9 +15,13 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.numbers.N8;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -56,9 +60,9 @@ public class PhotonVisionSubsystem extends SubsystemBase {
 
 
   public PhotonVisionSubsystem() {
-    frontRightCamera = new PhotonCamera("OV9287_FrontRight");
-    frontLeftCamera = new PhotonCamera("OV9287_FrontLeft");
-    backCamera = new PhotonCamera("OV9287_Back");
+    frontRightCamera = new PhotonCamera("OV9281_FrontRight");
+    frontLeftCamera = new PhotonCamera("OV9281_FrontLeft");
+    backCamera = new PhotonCamera("OV9281_Back");
 
   }
 
@@ -108,6 +112,20 @@ public class PhotonVisionSubsystem extends SubsystemBase {
     return backTarget.getBestCameraToTarget();
   }
 
+  public Optional<Matrix<N3, N3>> getCameraMatrix(String camera) {
+    if(camera == "FrontRight") return frontRightCamera.getCameraMatrix();
+    if(camera == "FrontLeft") return frontLeftCamera.getCameraMatrix();
+    if(camera == "Back") return backCamera.getCameraMatrix();
+    return null;
+  }
+
+  public Optional<Matrix<N8, N1>> getCameraDistCoeffs(String camera) {
+    if(camera == "FrontRight") return frontRightCamera.getDistCoeffs();
+    if(camera == "FrontLeft") return frontLeftCamera.getDistCoeffs();
+    if(camera == "Back") return backCamera.getDistCoeffs();
+    return null;
+  }
+
   public double getXPidMeasurements_FrontRight() {
     return botXMeasurements_FrontRight;
   }
@@ -155,7 +173,7 @@ public class PhotonVisionSubsystem extends SubsystemBase {
     // frontLeftTargets = frontLeftResult.getTargets();
     backResult = backCamera.getLatestResult();
     backTarget = backResult.getBestTarget();
-    backTargets = backResult.getTargets();
+    // backTargets = backResult.getTargets();
     if(hasTarget()) {
       botXMeasurements_FrontRight = getFrontRightTargetPose().getX();
       botYMeasurements_FrontRight = getFrontRightTargetPose().getY();

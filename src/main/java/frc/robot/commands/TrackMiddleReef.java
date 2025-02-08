@@ -99,6 +99,10 @@ public class TrackMiddleReef extends Command {
     }else {
       xPidOutput = 0;
     }
+  }else {
+    xPidOutput = 0;
+    yPidOutput = 0;
+    rotationPidOutput = 0;
   }
       // impl
 

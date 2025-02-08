@@ -144,6 +144,10 @@ public class TrackNet extends Command {
         xPidOutput = 0;
       }
     }
+  }else {
+    xPidOutput = 0;
+    yPidOutput = 0;
+    rotationPidOutput = 0;
   }
     // impl
     m_SwerveSubsystem.drive(xPidOutput, yPidOutput, rotationPidOutput, false);

@@ -44,8 +44,8 @@ public class AprilTagX extends Command {
   @Override
   public void execute() {
     xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontRight();
-    xPidMeasurements = Math.abs(xPidMeasurements) > 0.05 ? xPidMeasurements : 0;
-    xPidOutput = -xPidController.calculate(xPidMeasurements, 0);
+    xPidMeasurements = Math.abs(xPidMeasurements) > 0.05 ? xPidMeasurements : 1;
+    xPidOutput = -xPidController.calculate(xPidMeasurements, 1);
 
     m_SwerveSubsystem.drive(xPidOutput, 0, 0, false);
   }
