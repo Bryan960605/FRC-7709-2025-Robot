@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.LEDConstants;
 import frc.robot.Constants.PhotonConstants;
 import frc.robot.subsystems.PhotonVisionSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -52,6 +53,10 @@ public class TrackRightReef extends Command {
   @Override
   public void initialize() {
     m_SwerveSubsystem.drive(0, 0, 0, false);
+
+    LEDConstants.LEDFlag = true;
+    LEDConstants.tracking = true;
+    LEDConstants.arrivePosition_Base = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -77,19 +82,27 @@ public class TrackRightReef extends Command {
       xPidOutput = 0;
     }
       // impl
+      if(xPidMeasurements == PhotonConstants.xPidSetPoint_RightReef 
+      && yPidMeasurements == PhotonConstants.yPidSetPoint_RightReef 
+      && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_RightReef) {
+        LEDConstants.LEDFlag = true;
+        LEDConstants.arrivePosition_Base = true;
+      }
       m_SwerveSubsystem.drive(xPidOutput, yPidOutput, rotationPidOutput, false);
-      
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_SwerveSubsystem.drive(0, 0, 0, false);
+    LEDConstants.arrivePosition_Base = false;
+    LEDConstants.tracking = false;
+    LEDConstants.LEDFlag = true;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return LEDConstants.arrivePosition_Base;
   }
 }

@@ -362,5 +362,15 @@ public final class Constants {
 
     public static boolean LEDFlag = false;
     public static boolean hasGamePiece = false;
+    public static boolean intakeGamePiece = false;
+    public static boolean tracking = false;
+    public static boolean arrivePosition_Intake = false;
+    public static boolean intakeArriving = false;
+    public static boolean arrivePosition_Base = false;
+    public static boolean shootGamePiece = false;
+    public static boolean onCage = false;
+    public static boolean climbing = false;
+    public static boolean fireAnimation = false;
+
   }
 }

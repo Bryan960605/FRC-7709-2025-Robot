@@ -9,6 +9,8 @@ import java.time.format.SignStyle;
 import com.ctre.phoenix.led.Animation;
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.CANdleConfiguration;
+import com.ctre.phoenix.led.FireAnimation;
+import com.ctre.phoenix.led.StrobeAnimation;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
 import com.ctre.phoenix.led.CANdle.VBatOutputMode;
 
@@ -37,26 +39,87 @@ public class LEDSubsystem extends SubsystemBase {
     ledAnimation = null;
   }
 
-  public void hadGamePiece() {
-    ledAnimation = null;
+  public void fireAnimation() {
+    ledAnimation = new FireAnimation(ledNum, ledNum, ledNum, ledNum, ledNum);
     candle.animate(ledAnimation);
+    LEDConstants.LEDFlag = false;
+  }
+
+  public void hasGamePiece() {
+    candle.animate(null);
     candle.setLEDs(255, 255, 255, 255, ledNum, ledNum);
+    LEDConstants.LEDFlag = false;
   }
 
-  public void Tracking() {
-
+  public void tracking() {
+    ledAnimation = new StrobeAnimation(ledNum, ledNum, ledNum);
+    candle.animate(ledAnimation);
+    candle.setLEDs(ledNum, ledNum, ledNum, ledNum, ledNum, ledNum);
+    LEDConstants.LEDFlag = false;
   }
 
-  public void IntakeGamePiece() {
-
+  public void arrivePosition_Base() {
+    candle.animate(null);
+    candle.setLEDs(ledNum, ledNum, ledNum, ledNum, ledNum, ledNum);
+    LEDConstants.LEDFlag = false;
   }
 
-  public void arrivePosition() {
-    
+  public void intakeGamePiece() {
+    ledAnimation = new StrobeAnimation(ledNum, ledNum, ledNum);
+    candle.animate(ledAnimation);
+    candle.setLEDs(ledNum, ledNum, ledNum, ledNum, ledNum, ledNum);
+    LEDConstants.LEDFlag = false;
   }
+
+  public void arrivePosition_Intake() {
+    candle.animate(null);
+    candle.setLEDs(ledNum, ledNum, ledNum, ledNum, ledNum, ledNum);
+    LEDConstants.LEDFlag = false;
+  }
+
+  public void intakeArriving() {
+    ledAnimation = new StrobeAnimation(ledNum, ledNum, ledNum);
+    candle.animate(ledAnimation);
+    candle.setLEDs(ledNum, ledNum, ledNum, ledNum, ledNum, ledNum);
+    LEDConstants.LEDFlag = false;
+  }
+
+  public void shootGamePiece() {
+    ledAnimation = new StrobeAnimation(ledNum, ledNum, ledNum);
+    candle.animate(ledAnimation);
+    candle.setLEDs(ledNum, ledNum, ledNum, ledNum, ledNum, ledNum);
+    LEDConstants.LEDFlag = false;
+  }
+
+  public void climbing() {
+    ledAnimation = new StrobeAnimation(ledNum, ledNum, ledNum);
+    candle.animate(ledAnimation);
+    candle.setLEDs(ledNum, ledNum, ledNum, ledNum, ledNum, ledNum);
+    LEDConstants.LEDFlag = false;
+  }
+
+  public void onCage() {
+    candle.animate(null);
+    candle.setLEDs(ledNum, ledNum, ledNum, ledNum, ledNum, ledNum);
+    LEDConstants.LEDFlag = false;
+  }
+
+  
+
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if(LEDConstants.LEDFlag) {
+      if(LEDConstants.arrivePosition_Intake) arrivePosition_Intake();
+      else if(LEDConstants.intakeArriving) intakeArriving();
+      else if(LEDConstants.arrivePosition_Base) arrivePosition_Base();
+      else if(LEDConstants.tracking) tracking();
+      else if(LEDConstants.hasGamePiece) hasGamePiece();
+      else if(LEDConstants.hasGamePiece) intakeGamePiece();
+      else if(LEDConstants.onCage) onCage();
+      else if(LEDConstants.climbing) climbing();
+      else if(LEDConstants.fireAnimation) fireAnimation();
+    }
   }
 }
