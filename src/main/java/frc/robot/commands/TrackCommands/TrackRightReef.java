@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.TrackCommands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -12,7 +12,7 @@ import frc.robot.subsystems.PhotonVisionSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class TrackLeftReef extends Command {
+public class TrackRightReef extends Command {
   /** Creates a new TrackReef. */
   private final PhotonVisionSubsystem m_PhotonVisionSubsystem;
   private final SwerveSubsystem m_SwerveSubsystem;
@@ -33,9 +33,7 @@ public class TrackLeftReef extends Command {
   private double yPidOutput;
   private double rotationPidOutput;
 
-  private int fiducialId;
-
-  public TrackLeftReef(PhotonVisionSubsystem photonVisionSubsystem, SwerveSubsystem swerveSubsystem) {
+  public TrackRightReef(PhotonVisionSubsystem photonVisionSubsystem, SwerveSubsystem swerveSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_PhotonVisionSubsystem = photonVisionSubsystem;
     this.m_SwerveSubsystem = swerveSubsystem;
@@ -57,53 +55,48 @@ public class TrackLeftReef extends Command {
     m_SwerveSubsystem.drive(0, 0, 0, false);
 
     LEDConstants.tracking = true;
-    LEDConstants.arrivePosition_Base = true;
+    LEDConstants.arrivePosition_Base = false;
     LEDConstants.LEDFlag = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    fiducialId = m_PhotonVisionSubsystem.getFrontLeftTargetID();
     // Y-PID calculations
-    yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_FrontLeft();
-    yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_LeftReef);
-    yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_LeftReef;
-    yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_LeftReef);
+    yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_FrontRight();
+    yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_RightReef);
+    yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_RightReef;
+    yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_RightReef);
     // Rotation-PID calculations
-    rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_FrontLeft();
-    rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.rotationPidSetPoint_LeftReef);
-    rotationPidMeasurements = (rotationPidError > 3) ? rotationPidMeasurements : PhotonConstants.rotationPidSetPoint_LeftReef;
-    rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_LeftReef);
+    rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_FrontRight();
+    rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.rotationPidSetPoint_RightReef);
+    rotationPidMeasurements = (rotationPidError > 3) ? rotationPidMeasurements : PhotonConstants.rotationPidSetPoint_RightReef;
+    rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_RightReef);
     // X-PID calculations
-    xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontLeft();
-    xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_LeftReef);
+    xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontRight();
+    xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_RightReef);
     if((yPidError) < 3 && (rotationPidError) < 0.05){
       xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : 0;
-      xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_LeftReef);
-    }else {
+      xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_RightReef);
+    } else {
       xPidOutput = 0;
     }
-    if(xPidMeasurements == PhotonConstants.xPidSetPoint_LeftReef 
-    && yPidMeasurements == PhotonConstants.yPidSetPoint_LeftReef 
-    && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_LeftReef) {
+    // impl
+    if(xPidMeasurements == PhotonConstants.xPidSetPoint_RightReef 
+    && yPidMeasurements == PhotonConstants.yPidSetPoint_RightReef 
+    && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_RightReef) {
       LEDConstants.arrivePosition_Base = true;
       LEDConstants.LEDFlag = true;
     }
-
-      // impl
-
-      m_SwerveSubsystem.drive(xPidOutput, yPidOutput, rotationPidOutput, false);
-      
+    m_SwerveSubsystem.drive(xPidOutput, yPidOutput, rotationPidOutput, false);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_SwerveSubsystem.drive(0, 0, 0, false);
-
-    LEDConstants.tracking = false;
     LEDConstants.arrivePosition_Base = false;
+    LEDConstants.tracking = false;
     LEDConstants.LEDFlag = true;
   }
 
@@ -112,5 +105,4 @@ public class TrackLeftReef extends Command {
   public boolean isFinished() {
     return LEDConstants.arrivePosition_Base;
   }
-
 }
