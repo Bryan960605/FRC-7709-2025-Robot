@@ -306,9 +306,6 @@ public class SwerveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    frontRightCameraResult = frontRightCamera.getLatestResult();
-    frontLeftCameraResult = frontLeftCamera.getLatestResult();
-    backCameraResult = backCamera.getLatestResult();
 
     Optional<Matrix<N3, N3>> frontRightCameraMatrix = m_PhotonVisionSubsystem.getCameraMatrix("FrontRight");
     Optional<Matrix<N3, N3>> frontLeftCameraMatrix = m_PhotonVisionSubsystem.getCameraMatrix("FrontLeft");
