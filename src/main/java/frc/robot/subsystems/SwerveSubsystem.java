@@ -95,6 +95,7 @@ public class SwerveSubsystem extends SubsystemBase {
   private Transform3d fieldToBackCamera;
 
   private Pose2d bestEstimatedPose2d;
+  private Pose2d prevRobotEstimatedPose;
 
   private final SwerveDrivePoseEstimator swerveDrivePoseEstimator;
 
@@ -139,7 +140,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     field = new Field2d();
 
-    odometry = new SwerveDriveOdometry(SwerveConstants.swerveKinematics, getRotation(), getModulesPosition(), getRobotPose());
+    odometry = new SwerveDriveOdometry(SwerveConstants.swerveKinematics, getRotation(), getModulesPosition(), new Pose2d());
 
     resetGyro();
      // All other subsystem initialization
@@ -157,8 +158,7 @@ public class SwerveSubsystem extends SubsystemBase {
     frontLeftCameraEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToFrontLeftCamera);
     backCameraEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToBackCamera);
 
-
-    aprilTagFieldLayout = aprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+    // aprilTagFieldLayout = AprilTagFieldLayout.loadField(k2025ReefScape);
     
     stdDevs = new Matrix<>(Nat.N3(), Nat.N1(), stdDevsArray);
 
@@ -233,7 +233,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
 
   public Pose2d getRobotPose() {
-    return field.getRobotPose();
+    return odometry.getPoseMeters();
   }
 
   public Rotation2d getRotation() {
@@ -243,8 +243,8 @@ public class SwerveSubsystem extends SubsystemBase {
   public SwerveModulePosition[] getModulesPosition() {
     return new SwerveModulePosition[]{
       leftFront.getPosition(),
-      leftBack.getPosition(),
       rightFront.getPosition(),
+      leftBack.getPosition(),
       rightBack.getPosition()
     };
   }
@@ -252,8 +252,8 @@ public class SwerveSubsystem extends SubsystemBase {
   public SwerveModuleState[] getModuleStates() {
     return new SwerveModuleState[]{
       leftFront.getState(),
-      leftBack.getState(),
       rightFront.getState(),
+      leftBack.getState(),
       rightBack.getState()
     };
   }
@@ -261,16 +261,16 @@ public class SwerveSubsystem extends SubsystemBase {
   public void setModouleStates(SwerveModuleState[] desiredStates) {
       SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, SwerveConstants.maxDriveSpeed_MeterPerSecond);
       leftFront.setState(desiredStates[0]);
-      leftBack.setState(desiredStates[1]);
-      rightFront.setState(desiredStates[2]);
+      rightFront.setState(desiredStates[1]);
+      leftBack.setState(desiredStates[2]);
       rightBack.setState(desiredStates[3]);
   }
 
   public void setModouleStates_Auto(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, SwerveConstants.maxDriveSpeed_MeterPerSecond);
     leftFront.setState(desiredStates[0]);
-    leftBack.setState(desiredStates[1]);
-    rightFront.setState(desiredStates[2]);
+    rightFront.setState(desiredStates[1]);
+    leftBack.setState(desiredStates[2]);
     rightBack.setState(desiredStates[3]);
 }
 
@@ -293,7 +293,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // ySpeed = ySpeed * SwerveConstants.maxDriveSpeed_MeterPerSecond;
     // zSpeed = zSpeed * Math.toRadians(SwerveConstants.maxAngularVelocity_Angle);
     if(fieldOrient) {
-      state = SwerveConstants.swerveKinematics.toSwerveModuleStates(ChassisSpeeds.fromRobotRelativeSpeeds(xSpeed, ySpeed, zSpeed, getRotation()));//之後要處理MaxSpeedPerSecond跟MaxRadianPerSecond的問題
+      state = SwerveConstants.swerveKinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, zSpeed, getRotation()));//之後要處理MaxSpeedPerSecond跟MaxRadianPerSecond的問題
     }else{
       state = SwerveConstants.swerveKinematics.toSwerveModuleStates(new ChassisSpeeds(xSpeed, ySpeed, zSpeed));
     }
@@ -321,9 +321,10 @@ public class SwerveSubsystem extends SubsystemBase {
     Optional<Matrix<N8, N1>> frontLeftCameraDistCoeffs = frontLeftCamera.getDistCoeffs();
     Optional<Matrix<N8, N1>> backCameraDistCoeffs = backCamera.getDistCoeffs();
     currentTime = Timer.getFPGATimestamp();
-    var frontRightRobotEstimatedPose = getEstimatedPose(bestEstimatedPose2d, frontRightCameraEstimator, frontRightCameraMatrix, frontRightCameraDistCoeffs, frontRightCameraResult);
-    var frontLeftRobotEstimatedPose = getEstimatedPose(bestEstimatedPose2d, frontLeftCameraEstimator, frontLeftCameraMatrix, frontLeftCameraDistCoeffs, frontLeftCameraResult);
-    var backRobotEstimatedPose = getEstimatedPose(bestEstimatedPose2d, backCameraEstimator, backCameraMatrix, backCameraDistCoeffs, backCameraResult);
+    prevRobotEstimatedPose = swerveDrivePoseEstimator.getEstimatedPosition();
+    var frontRightRobotEstimatedPose = getEstimatedPose(prevRobotEstimatedPose, frontRightCameraEstimator, frontRightCameraMatrix, frontRightCameraDistCoeffs, frontRightCameraResult);
+    var frontLeftRobotEstimatedPose = getEstimatedPose(prevRobotEstimatedPose, frontLeftCameraEstimator, frontLeftCameraMatrix, frontLeftCameraDistCoeffs, frontLeftCameraResult);
+    var backRobotEstimatedPose = getEstimatedPose(prevRobotEstimatedPose, backCameraEstimator, backCameraMatrix, backCameraDistCoeffs, backCameraResult);
     bestEstimatedPose2d =  chooseBestPose(frontRightRobotEstimatedPose, frontLeftRobotEstimatedPose, backRobotEstimatedPose);
 
     odometry.update(getRotation(), getModulesPosition());
