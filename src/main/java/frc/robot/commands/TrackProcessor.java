@@ -54,9 +54,9 @@ public class TrackProcessor extends Command {
   public void initialize() {
     m_SwerveSubsystem.drive(0, 0, 0, false);
 
-    LEDConstants.LEDFlag = true;
     LEDConstants.tracking = true;
     LEDConstants.arrivePosition_Intake = false;
+    LEDConstants.LEDFlag = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -105,16 +105,16 @@ public class TrackProcessor extends Command {
       }
       }
   }
-  if((xPidMeasurements == PhotonConstants.xPidSetPoint_Processor_FrontRight 
-  && yPidMeasurements == PhotonConstants.yPidSetPoint_Processor_FrontRight
-  && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_Processor_FrontRight)
-  || (xPidMeasurements == PhotonConstants.xPidSetPoint_Processor_FrontLeft
-  && yPidMeasurements == PhotonConstants.yPidSetPoint_Processor_FrontLeft
-  && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_Cage_FrontLeft)) {
-        LEDConstants.LEDFlag = true;
-        LEDConstants.arrivePosition_Base = true;
-      }
-    // impl
+    if((xPidMeasurements == PhotonConstants.xPidSetPoint_Processor_FrontRight 
+    && yPidMeasurements == PhotonConstants.yPidSetPoint_Processor_FrontRight
+    && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_Processor_FrontRight)
+    || (xPidMeasurements == PhotonConstants.xPidSetPoint_Processor_FrontLeft
+    && yPidMeasurements == PhotonConstants.yPidSetPoint_Processor_FrontLeft
+    && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_Processor_FrontLeft)) {
+          LEDConstants.arrivePosition_Base = true;
+          LEDConstants.LEDFlag = true;
+        }
+      // impl
     m_SwerveSubsystem.drive(xPidOutput, yPidOutput, rotationPidOutput, false);
   }
 

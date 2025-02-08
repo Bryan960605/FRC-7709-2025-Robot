@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.PhotonVisionSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.Constants.LEDConstants;
 import frc.robot.Constants.PhotonConstants;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -54,6 +55,10 @@ public class TrackMiddleReef extends Command {
   @Override
   public void initialize() {
     m_SwerveSubsystem.drive(0, 0, 0, false);
+
+    LEDConstants.tracking = true;
+    LEDConstants.arrivePosition_Base = true;
+    LEDConstants.LEDFlag = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -79,34 +84,44 @@ public class TrackMiddleReef extends Command {
       }else {
         xPidOutput = 0;
       }
-  }else if(m_PhotonVisionSubsystem.hasFrontLeftTarget()) {
-    // Y-PID calculations
-    yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_FrontLeft();
-    yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_MiddleReef_FrontLeft);
-    yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_MiddleReef_FrontLeft;
-    yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_MiddleReef_FrontLeft);
-    // Rotation-PID calculations
-    rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_FrontLeft();
-    rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.rotationPidSetPoint_MiddleReef_FrontLeft);
-    rotationPidMeasurements = (rotationPidError > 3) ? rotationPidMeasurements : PhotonConstants.rotationPidSetPoint_MiddleReef_FrontLeft;
-    rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_MiddleReef_FrontLeft);
-    // X-PID calculations
-    xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontLeft();
-    xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_MiddleReef_FrontLeft);
-    if((yPidError) < 3 && (rotationPidError) < 0.05){
-      xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : 0;
-      xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_MiddleReef_FrontLeft);
+    }else if(m_PhotonVisionSubsystem.hasFrontLeftTarget()) {
+      // Y-PID calculations
+      yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_FrontLeft();
+      yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_MiddleReef_FrontLeft);
+      yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_MiddleReef_FrontLeft;
+      yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_MiddleReef_FrontLeft);
+      // Rotation-PID calculations
+      rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_FrontLeft();
+      rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.rotationPidSetPoint_MiddleReef_FrontLeft);
+      rotationPidMeasurements = (rotationPidError > 3) ? rotationPidMeasurements : PhotonConstants.rotationPidSetPoint_MiddleReef_FrontLeft;
+      rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_MiddleReef_FrontLeft);
+      // X-PID calculations
+      xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontLeft();
+      xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_MiddleReef_FrontLeft);
+      if((yPidError) < 3 && (rotationPidError) < 0.05){
+        xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : 0;
+        xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_MiddleReef_FrontLeft);
+      }else {
+        xPidOutput = 0;
+      }
     }else {
       xPidOutput = 0;
+      yPidOutput = 0;
+      rotationPidOutput = 0;
     }
-  }else {
-    xPidOutput = 0;
-    yPidOutput = 0;
-    rotationPidOutput = 0;
-  }
+
+    if((xPidMeasurements == PhotonConstants.xPidSetPoint_MiddleReef_FrontRight 
+    && yPidMeasurements == PhotonConstants.yPidSetPoint_MiddleReef_FrontRight
+    && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_MiddleReef_FrontRight)
+    || (xPidMeasurements == PhotonConstants.xPidSetPoint_MiddleReef_FrontLeft
+    && yPidMeasurements == PhotonConstants.yPidSetPoint_MiddleReef_FrontLeft
+    && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_MiddleReef_FrontLeft)) {
+        LEDConstants.arrivePosition_Base = true;
+        LEDConstants.LEDFlag = true;
+      }
       // impl
 
-      m_SwerveSubsystem.drive(xPidOutput, yPidOutput, rotationPidOutput, false);
+    m_SwerveSubsystem.drive(xPidOutput, yPidOutput, rotationPidOutput, false);
       
   }
 
@@ -114,11 +129,15 @@ public class TrackMiddleReef extends Command {
   @Override
   public void end(boolean interrupted) {
     m_SwerveSubsystem.drive(0, 0, 0, false);
+
+    LEDConstants.arrivePosition_Base = false;
+    LEDConstants.tracking = false;
+    LEDConstants.LEDFlag = true;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return LEDConstants.arrivePosition_Base;
   }
 }

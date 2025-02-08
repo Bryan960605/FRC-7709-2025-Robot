@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.LEDConstants;
 import frc.robot.Constants.PhotonConstants;
 import frc.robot.subsystems.PhotonVisionSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -56,6 +57,10 @@ public class TrackCoralStation extends Command {
   @Override
   public void initialize() {
     m_SwerveSubsystem.drive(0, 0, 0, false);
+
+    LEDConstants.tracking = true;
+    LEDConstants.arrivePosition_Base = true;
+    LEDConstants.LEDFlag = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -84,7 +89,7 @@ public class TrackCoralStation extends Command {
         xPidOutput = 0;
       }
     }else if(m_PhotonVisionSubsystem.hasFrontTarget()) {
-      if(m_PhotonVisionSubsystem.hasFrontTarget()) {
+      if(m_PhotonVisionSubsystem.hasFrontRightTarget()) {
         yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_FrontRight();
         yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_CoralStation_FrontRight);
         yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_CoralStation_FrontRight;
@@ -109,6 +114,16 @@ public class TrackCoralStation extends Command {
       yPidOutput = 0;
       rotationPidOutput = 0;
     }
+
+    if((xPidMeasurements == PhotonConstants.xPidSetPoint_CoralStation_FrontRight 
+    && yPidMeasurements == PhotonConstants.yPidSetPoint_CoralStation_FrontRight
+    && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_CoralStation_FrontRight)
+    || (xPidMeasurements == PhotonConstants.xPidSetPoint_CoralStation_Back
+    && yPidMeasurements == PhotonConstants.yPidSetPoint_CoralStation_Back
+    && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_CoralStation_Back)) {
+        LEDConstants.arrivePosition_Base = true;
+        LEDConstants.LEDFlag = true;
+      }
       // impl
       m_SwerveSubsystem.drive(xPidOutput, yPidOutput, rotationPidOutput, false);
   }
@@ -117,11 +132,15 @@ public class TrackCoralStation extends Command {
   @Override
   public void end(boolean interrupted) {
     m_SwerveSubsystem.drive(0, 0, 0, false);
+
+    LEDConstants.tracking = false;
+    LEDConstants.arrivePosition_Base = false;
+    LEDConstants.LEDFlag = true;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return LEDConstants.arrivePosition_Base;
   }
 }

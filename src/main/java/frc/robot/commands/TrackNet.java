@@ -55,6 +55,10 @@ public class TrackNet extends Command {
   @Override
   public void initialize() {
     m_SwerveSubsystem.drive(0, 0, 0, false);
+
+    LEDConstants.tracking = true;
+    LEDConstants.arrivePosition_Base = false;
+    LEDConstants.LEDFlag = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -162,8 +166,8 @@ public class TrackNet extends Command {
   || (xPidMeasurements == PhotonConstants.xPidSetPoint_Net_Back_ID20_ID11
   && yPidMeasurements == PhotonConstants.yPidSetPoint_Net_Back_ID20_ID11
   && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_Net_Back_ID20_ID11)) {
-        LEDConstants.LEDFlag = true;
-        LEDConstants.arrivePosition_Base = true;
+      LEDConstants.LEDFlag = true;
+      LEDConstants.arrivePosition_Base = true;
       }
     // impl
     m_SwerveSubsystem.drive(xPidOutput, yPidOutput, rotationPidOutput, false);

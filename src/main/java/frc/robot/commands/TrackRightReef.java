@@ -54,9 +54,9 @@ public class TrackRightReef extends Command {
   public void initialize() {
     m_SwerveSubsystem.drive(0, 0, 0, false);
 
-    LEDConstants.LEDFlag = true;
     LEDConstants.tracking = true;
     LEDConstants.arrivePosition_Base = false;
+    LEDConstants.LEDFlag = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -72,7 +72,7 @@ public class TrackRightReef extends Command {
     rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.rotationPidSetPoint_RightReef);
     rotationPidMeasurements = (rotationPidError > 3) ? rotationPidMeasurements : PhotonConstants.rotationPidSetPoint_RightReef;
     rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_RightReef);
-  // X-PID calculations
+    // X-PID calculations
     xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontRight();
     xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_RightReef);
     if((yPidError) < 3 && (rotationPidError) < 0.05){
@@ -81,14 +81,14 @@ public class TrackRightReef extends Command {
     } else {
       xPidOutput = 0;
     }
-      // impl
-      if(xPidMeasurements == PhotonConstants.xPidSetPoint_RightReef 
-      && yPidMeasurements == PhotonConstants.yPidSetPoint_RightReef 
-      && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_RightReef) {
-        LEDConstants.LEDFlag = true;
-        LEDConstants.arrivePosition_Base = true;
-      }
-      m_SwerveSubsystem.drive(xPidOutput, yPidOutput, rotationPidOutput, false);
+    // impl
+    if(xPidMeasurements == PhotonConstants.xPidSetPoint_RightReef 
+    && yPidMeasurements == PhotonConstants.yPidSetPoint_RightReef 
+    && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_RightReef) {
+      LEDConstants.arrivePosition_Base = true;
+      LEDConstants.LEDFlag = true;
+    }
+    m_SwerveSubsystem.drive(xPidOutput, yPidOutput, rotationPidOutput, false);
   }
 
   // Called once the command ends or is interrupted.

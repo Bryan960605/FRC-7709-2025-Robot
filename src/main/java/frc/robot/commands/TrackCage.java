@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.LEDConstants;
 import frc.robot.Constants.PhotonConstants;
 import frc.robot.subsystems.PhotonVisionSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -54,6 +55,10 @@ public class TrackCage extends Command {
   @Override
   public void initialize() {
     m_SwerveSubsystem.drive(0, 0, 0, false);
+
+    LEDConstants.tracking = true;
+    LEDConstants.arrivePosition_Base = true;
+    LEDConstants.LEDFlag = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -150,6 +155,21 @@ public class TrackCage extends Command {
     yPidOutput = 0;
     rotationPidOutput = 0;
   }
+  if((xPidMeasurements == PhotonConstants.xPidSetPoint_Cage_FrontRight 
+  && yPidMeasurements == PhotonConstants.yPidSetPoint_Cage_FrontRight
+  && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_Cage_FrontRight)
+  || (xPidMeasurements == PhotonConstants.xPidSetPoint_Cage_FrontLeft
+  && yPidMeasurements == PhotonConstants.yPidSetPoint_Cage_FrontLeft
+  && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_Cage_FrontLeft)
+  || (xPidMeasurements == PhotonConstants.xPidSetPoint_Cage_Back_ID21_ID10
+  && yPidMeasurements == PhotonConstants.yPidSetPoint_Cage_Back_ID21_ID10
+  && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_Cage_Back_ID21_ID10)
+  || (xPidMeasurements == PhotonConstants.xPidSetPoint_Cage_Back_ID20_ID11
+  && yPidMeasurements == PhotonConstants.yPidSetPoint_Cage_Back_ID20_ID11
+  && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_Cage_Back_ID20_ID11)) {
+      LEDConstants.LEDFlag = true;
+      LEDConstants.arrivePosition_Base = true;
+      }
     // impl
     m_SwerveSubsystem.drive(xPidOutput, yPidOutput, rotationPidOutput, false);
   }
@@ -158,11 +178,15 @@ public class TrackCage extends Command {
   @Override
   public void end(boolean interrupted) {
     m_SwerveSubsystem.drive(0, 0, 0, false);
+
+    LEDConstants.tracking = false;
+    LEDConstants.arrivePosition_Base = false;
+    LEDConstants.LEDFlag = true;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return LEDConstants.arrivePosition_Base;
   }
 }
