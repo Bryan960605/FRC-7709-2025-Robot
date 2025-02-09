@@ -162,6 +162,13 @@ public class PhotonVisionSubsystem extends SubsystemBase {
     return botRotationMeasurements_Back;
   }
 
+  public PhotonPipelineResult getResult(String camera) {
+    if(camera == "FrontRight") return frontRightResult;
+    if(camera == "FrontLeft") return frontLeftResult;
+    if(camera == "Back") return backResult;
+    return null;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -174,20 +181,12 @@ public class PhotonVisionSubsystem extends SubsystemBase {
     backResult = backCamera.getLatestResult();
     backTarget = backResult.getBestTarget();
     // backTargets = backResult.getTargets();
-    if(hasTarget()) {
+    if(hasFrontRightTarget()) {
       botXMeasurements_FrontRight = getFrontRightTargetPose().getX();
       botYMeasurements_FrontRight = getFrontRightTargetPose().getY();
-      botRotationMeasurements_FrontRight = -Math.toDegrees(getFrontRightTargetPose().getRotation().getAngle());
-      botXMeasurements_FrontLeft = getFrontLeftTargetPose().getX();
-      botYMeasurements_FrontLeft = getFrontLeftTargetPose().getY();
-      botRotationMeasurements_FrontLeft = -Math.toDegrees(getFrontLeftTargetPose().getRotation().getAngle());
-      botXMeasurements_Back = getBackTargetPose().getX();
-      botYMeasurements_Back = getBackTargetPose().getY();
-      botRotationMeasurements_Back = -Math.toDegrees(getBackTargetPose().getRotation().getAngle());
+      botRotationMeasurements_FrontRight = Math.toDegrees(getFrontRightTargetPose().getRotation().getAngle());
 
       frontRightTarget_ID = frontRightTarget.getFiducialId();
-      frontLeftTarget_ID = frontLeftTarget.getFiducialId();
-      backTarget_ID = backTarget.getFiducialId();
       
 
       SmartDashboard.putNumber("Photon/BotXError_Front", botXMeasurements_FrontRight);
@@ -199,9 +198,39 @@ public class PhotonVisionSubsystem extends SubsystemBase {
       botXMeasurements_FrontRight = 0;
       botYMeasurements_FrontRight = 0;
       botRotationMeasurements_FrontRight = 0;
+    }
+    if(hasFrontLeftTarget()) {
+      botXMeasurements_FrontLeft = getFrontLeftTargetPose().getX();
+      botYMeasurements_FrontLeft = getFrontLeftTargetPose().getY();
+      botRotationMeasurements_FrontLeft = Math.toDegrees(getFrontLeftTargetPose().getRotation().getAngle());
+
+      frontLeftTarget_ID = frontLeftTarget.getFiducialId();
+      
+
+      // SmartDashboard.putNumber("Photon/BotXError_Front", botXMeasurements_FrontRight);
+      // SmartDashboard.putNumber("Photon/BotYError_Front", botYMeasurements_FrontRight);
+      // SmartDashboard.putNumber("Photon/BotRotationError_Front", botRotationMeasurements_FrontRight);
+      // SmartDashboard.putNumber("Photon/FrontTarget_ID", frontRightTarget_ID);
+
+    }else {
       botXMeasurements_FrontLeft = 0;
       botYMeasurements_FrontLeft = 0;
       botRotationMeasurements_FrontLeft = 0;
+    }
+    if(hasBackTarget()) {
+      botXMeasurements_Back = getBackTargetPose().getX();
+      botYMeasurements_Back = getBackTargetPose().getY();
+      botRotationMeasurements_Back = Math.toDegrees(getBackTargetPose().getRotation().getAngle());
+
+      backTarget_ID = backTarget.getFiducialId();
+      
+
+      // SmartDashboard.putNumber("Photon/BotXError_Front", botXMeasurements_FrontRight);
+      // SmartDashboard.putNumber("Photon/BotYError_Front", botYMeasurements_FrontRight);
+      // SmartDashboard.putNumber("Photon/BotRotationError_Front", botRotationMeasurements_FrontRight);
+      // SmartDashboard.putNumber("Photon/FrontTarget_ID", frontRightTarget_ID);
+
+    }else {
       botXMeasurements_Back = 0;
       botYMeasurements_Back = 0;
       botRotationMeasurements_Back = 0;

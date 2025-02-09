@@ -30,6 +30,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.MatBuilder;
+import edu.wpi.first.math.MathSharedStore;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.estimator.PoseEstimator;
@@ -106,7 +107,7 @@ public class SwerveSubsystem extends SubsystemBase {
   /**
    * 
    */
-  public SwerveSubsystem() {
+  public SwerveSubsystem(PhotonVisionSubsystem photonVisionSubsystem) {
     leftFront = new SwerveModule(
       SwerveConstants.leftFrontTurning_ID,
       SwerveConstants.leftFrontDrive_ID,
@@ -142,22 +143,24 @@ public class SwerveSubsystem extends SubsystemBase {
 
     odometry = new SwerveDriveOdometry(SwerveConstants.swerveKinematics, getRotation(), getModulesPosition(), new Pose2d());
 
-    m_PhotonVisionSubsystem = new PhotonVisionSubsystem();
+    m_PhotonVisionSubsystem = photonVisionSubsystem;
     resetGyro();
      // All other subsystem initialization
     // ...
     //vision
-    robotToFrontRightCamera = new Transform3d(new Translation3d(null, null, null), new Rotation3d(getRotation()));
-    robotToFrontLeftCamera = new Transform3d(new Translation3d(null, null, null), new Rotation3d(getRotation()));
-    robotToBackCamera = new Transform3d(new Translation3d(null, null, null), new Rotation3d(getRotation()));
+    robotToFrontRightCamera = new Transform3d(new Translation3d(0, 0, 0), new Rotation3d(getRotation()));
+    robotToFrontLeftCamera = new Transform3d(new Translation3d(0, 0, 0), new Rotation3d(getRotation()));
+    robotToBackCamera = new Transform3d(new Translation3d(0, 0, 0), new Rotation3d(getRotation()));
+
+    aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+
+
+    
+    stdDevs = new Matrix<>(Nat.N3(), Nat.N1(), stdDevsArray);
 
     frontRightCameraEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToFrontRightCamera);
     frontLeftCameraEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToFrontLeftCamera);
     backCameraEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToBackCamera);
-
-    aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
-    
-    stdDevs = new Matrix<>(Nat.N3(), Nat.N1(), stdDevsArray);
 
     swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(SwerveConstants.swerveKinematics, getRotation(), getModulesPosition(), getRobotPose(), stdDevs, stdDevs);
 
@@ -198,7 +201,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public Optional<EstimatedRobotPose> getEstimatedPose(Pose2d prevRobotEstimatedPose, PhotonPoseEstimator poseEstimator, Optional<Matrix<N3, N3>> cameraMatrix, Optional<Matrix<N8, N1>> cameraDistCoeffs, PhotonPipelineResult cameraResult) {
-    poseEstimator.setReferencePose(prevRobotEstimatedPose);
+    // poseEstimator.setReferencePose(prevRobotEstimatedPose);
     return poseEstimator.update(cameraResult, cameraMatrix, cameraDistCoeffs);
   }
 
@@ -306,6 +309,9 @@ public class SwerveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    frontRightCameraResult = m_PhotonVisionSubsystem.getResult("FrontRight");
+    frontLeftCameraResult = m_PhotonVisionSubsystem.getResult("FrontLeft");
+    backCameraResult = m_PhotonVisionSubsystem.getResult("Back");
 
     Optional<Matrix<N3, N3>> frontRightCameraMatrix = m_PhotonVisionSubsystem.getCameraMatrix("FrontRight");
     Optional<Matrix<N3, N3>> frontLeftCameraMatrix = m_PhotonVisionSubsystem.getCameraMatrix("FrontLeft");
@@ -313,7 +319,7 @@ public class SwerveSubsystem extends SubsystemBase {
     Optional<Matrix<N8, N1>> frontRightCameraDistCoeffs = m_PhotonVisionSubsystem.getCameraDistCoeffs("FrontRight");
     Optional<Matrix<N8, N1>> frontLeftCameraDistCoeffs = m_PhotonVisionSubsystem.getCameraDistCoeffs("FrontLeft");
     Optional<Matrix<N8, N1>> backCameraDistCoeffs = m_PhotonVisionSubsystem.getCameraDistCoeffs("Back");
-    currentTime = Timer.getFPGATimestamp();
+
     prevRobotEstimatedPose = swerveDrivePoseEstimator.getEstimatedPosition();
     var frontRightRobotEstimatedPose = getEstimatedPose(prevRobotEstimatedPose, frontRightCameraEstimator, frontRightCameraMatrix, frontRightCameraDistCoeffs, frontRightCameraResult);
     var frontLeftRobotEstimatedPose = getEstimatedPose(prevRobotEstimatedPose, frontLeftCameraEstimator, frontLeftCameraMatrix, frontLeftCameraDistCoeffs, frontLeftCameraResult);
@@ -322,9 +328,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
     odometry.update(getRotation(), getModulesPosition());
     swerveDrivePoseEstimator.update(getRotation(), getModulesPosition());
-    swerveDrivePoseEstimator.updateWithTime(currentTime, getRotation(), getModulesPosition());
+    // swerveDrivePoseEstimator.updateWithTime(currentTime, getRotation(), getModulesPosition());
 
     if(!(bestEstimatedPose2d == null)) {
+      currentTime = MathSharedStore.getTimestamp();
       swerveDrivePoseEstimator.addVisionMeasurement(bestEstimatedPose2d, currentTime, stdDevs);
     }
 

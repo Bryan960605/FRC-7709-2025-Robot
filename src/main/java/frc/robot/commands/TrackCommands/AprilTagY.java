@@ -42,9 +42,13 @@ public class AprilTagY extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_FrontRight();
-    yPidMeasurements = Math.abs(yPidMeasurements) > 0.05 ? yPidMeasurements : 0;
-    yPidOutput = -yPidController.calculate(yPidMeasurements, 0);
+    if(m_PhotonVisionSubsystem.hasFrontRightTarget()) {
+      yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_FrontRight();
+      yPidMeasurements = Math.abs(yPidMeasurements) > 0.05 ? yPidMeasurements : 0;
+      yPidOutput = -yPidController.calculate(yPidMeasurements, 0);
+    }else {
+      yPidOutput = 0;
+    }
 
     m_SwerveSubsystem.drive(0, yPidOutput, 0, false);
   }

@@ -75,8 +75,8 @@ public class TrackRightReef extends Command {
     // X-PID calculations
     xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontRight();
     xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_RightReef);
-    if((yPidError) < 3 && (rotationPidError) < 0.05){
-      xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : 0;
+    if((yPidError) < 0.05 && (rotationPidError) < 3){
+      xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : PhotonConstants.xPidSetPoint_RightReef;
       xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_RightReef);
     } else {
       xPidOutput = 0;

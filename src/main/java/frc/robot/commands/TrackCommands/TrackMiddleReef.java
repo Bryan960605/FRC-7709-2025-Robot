@@ -5,6 +5,7 @@
 package frc.robot.commands.TrackCommands;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.PhotonVisionSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -57,7 +58,7 @@ public class TrackMiddleReef extends Command {
     m_SwerveSubsystem.drive(0, 0, 0, false);
 
     LEDConstants.tracking = true;
-    LEDConstants.arrivePosition_Base = true;
+    LEDConstants.arrivePosition_Base = false;
     LEDConstants.LEDFlag = true;
   }
 
@@ -78,8 +79,8 @@ public class TrackMiddleReef extends Command {
       // X-PID calculations
       xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontRight();
       xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_MiddleReef_FrontRight);
-      if((yPidError) < 3 && (rotationPidError) < 0.05){
-        xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : 0;
+      if((yPidError) < 0.05 && (rotationPidError) < 3){
+        xPidMeasurements = (xPidError > 0.05) ? xPidMeasurements : PhotonConstants.xPidSetPoint_MiddleReef_FrontRight;
         xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_MiddleReef_FrontRight);
       }else {
         xPidOutput = 0;
@@ -98,8 +99,8 @@ public class TrackMiddleReef extends Command {
       // X-PID calculations
       xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontLeft();
       xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_MiddleReef_FrontLeft);
-      if((yPidError) < 3 && (rotationPidError) < 0.05){
-        xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : 0;
+      if((yPidError) < 0.05 && (rotationPidError) < 3){
+        xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : PhotonConstants.xPidSetPoint_MiddleReef_FrontLeft;
         xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_MiddleReef_FrontLeft);
       }else {
         xPidOutput = 0;
@@ -110,16 +111,18 @@ public class TrackMiddleReef extends Command {
       rotationPidOutput = 0;
     }
 
-    if((xPidMeasurements == PhotonConstants.xPidSetPoint_MiddleReef_FrontRight 
-    && yPidMeasurements == PhotonConstants.yPidSetPoint_MiddleReef_FrontRight
-    && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_MiddleReef_FrontRight)
-    || (xPidMeasurements == PhotonConstants.xPidSetPoint_MiddleReef_FrontLeft
-    && yPidMeasurements == PhotonConstants.yPidSetPoint_MiddleReef_FrontLeft
-    && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_MiddleReef_FrontLeft)) {
-        LEDConstants.arrivePosition_Base = true;
-        LEDConstants.LEDFlag = true;
-      }
+    // if((xPidMeasurements == PhotonConstants.xPidSetPoint_MiddleReef_FrontRight 
+    // && yPidMeasurements == PhotonConstants.yPidSetPoint_MiddleReef_FrontRight
+    // && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_MiddleReef_FrontRight)) {
+    // // || (xPidMeasurements == PhotonConstants.xPidSetPoint_MiddleReef_FrontLeft
+    // // && yPidMeasurements == PhotonConstants.yPidSetPoint_MiddleReef_FrontLeft
+    // // && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_MiddleReef_FrontLeft)) {
+    //     LEDConstants.arrivePosition_Base = true;
+    //     LEDConstants.LEDFlag = true;
+    //   }
       // impl
+
+    SmartDashboard.putBoolean("isFinish", LEDConstants.arrivePosition_Base);
 
     m_SwerveSubsystem.drive(xPidOutput, yPidOutput, rotationPidOutput, false);
       
@@ -138,6 +141,6 @@ public class TrackMiddleReef extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return LEDConstants.arrivePosition_Base;
+    return false;
   }
 }

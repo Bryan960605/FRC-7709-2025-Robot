@@ -17,8 +17,12 @@ import frc.robot.commands.IntakeCommands.IntakeAlgae_Low;
 import frc.robot.commands.IntakeCommands.IntakeCoral;
 import frc.robot.commands.IntakeCommands.ShootNet;
 import frc.robot.commands.IntakeCommands.ShootProcessor;
+import frc.robot.commands.TrackCommands.AprilTagRotation;
+import frc.robot.commands.TrackCommands.AprilTagX;
+import frc.robot.commands.TrackCommands.AprilTagY;
 import frc.robot.commands.TrackCommands.TrackCage;
 import frc.robot.commands.TrackCommands.TrackCoralStation;
+import frc.robot.commands.TrackCommands.TrackMiddleReef;
 import frc.robot.commands.TrackCommands.TrackNet;
 import frc.robot.commands.TrackCommands.TrackProcessor;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -47,18 +51,18 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final SwerveSubsystem m_SwerveSubsystem = new SwerveSubsystem();
-  private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
+  // private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
   private final PhotonVisionSubsystem m_PhotonVisionSubsystem = new PhotonVisionSubsystem();
-  private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
-  private final EndEffectorSubsystem m_EffectorSubsystem = new EndEffectorSubsystem();
+  private final SwerveSubsystem m_SwerveSubsystem = new SwerveSubsystem(m_PhotonVisionSubsystem);
+  // private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
+  // private final EndEffectorSubsystem m_EffectorSubsystem = new EndEffectorSubsystem();
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   private final CommandXboxController driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
-  private final CommandXboxController operatorController = new CommandXboxController(OperatorConstants.kOperatorControllerPort);
+  // private final CommandXboxController operatorController = new CommandXboxController(OperatorConstants.kOperatorControllerPort);
 
   private final SendableChooser<Command> autoChooser;
 
@@ -95,22 +99,27 @@ public class RobotContainer {
       })
     );
 
-    driverController.rightBumper().whileTrue(new TrackCage(m_SwerveSubsystem, m_PhotonVisionSubsystem));
-    driverController.a().whileTrue(new TrackCoralStation(m_PhotonVisionSubsystem, m_SwerveSubsystem));
-    driverController.x().whileTrue(new TrackCage(m_SwerveSubsystem, m_PhotonVisionSubsystem));
-    driverController.y().whileTrue(new TrackProcessor(m_SwerveSubsystem, m_PhotonVisionSubsystem));
-    driverController.pov(0).whileTrue(new TrackNet(m_SwerveSubsystem, m_PhotonVisionSubsystem));
+    driverController.rightBumper().whileTrue(new TrackMiddleReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
+    driverController.a().whileTrue(new AprilTagRotation(m_PhotonVisionSubsystem, m_SwerveSubsystem));
+    driverController.y().whileTrue(new AprilTagY(m_PhotonVisionSubsystem, m_SwerveSubsystem));
+    driverController.x().whileTrue(new AprilTagX(m_PhotonVisionSubsystem, m_SwerveSubsystem));
 
-    operatorController.pov(90).whileTrue(new Coral_L1(m_ElevatorSubsystem, m_EffectorSubsystem));
-    operatorController.pov(270).whileTrue(new Coral_L3(m_ElevatorSubsystem, m_EffectorSubsystem));
-    operatorController.pov(0).whileTrue(new IntakeAlgae_Low(m_ElevatorSubsystem, m_EffectorSubsystem));
-    operatorController.pov(180).whileTrue(new IntakeAlgae_High(m_ElevatorSubsystem, m_EffectorSubsystem));
-    operatorController.rightTrigger(0.4).whileTrue(new Coral_L4(m_ElevatorSubsystem, m_EffectorSubsystem));
-    operatorController.leftTrigger(0.4).whileTrue(new ShootNet(m_ElevatorSubsystem, m_EffectorSubsystem));
-    operatorController.leftBumper().whileTrue(new ShootProcessor(m_ElevatorSubsystem, m_EffectorSubsystem));
-    operatorController.b().whileTrue(new IntakeCoral(m_ElevatorSubsystem, m_EffectorSubsystem));
-    operatorController.x().whileTrue(new IntakeAlgae_Floor(m_ElevatorSubsystem, m_EffectorSubsystem));
-    operatorController.y().onTrue(new ClimbCommand(m_ClimberSubsystem));
+    // driverController.rightBumper().whileTrue(new TrackCage(m_SwerveSubsystem, m_PhotonVisionSubsystem));
+    // driverController.a().whileTrue(new TrackCoralStation(m_PhotonVisionSubsystem, m_SwerveSubsystem));
+    // driverController.x().whileTrue(new TrackCage(m_SwerveSubsystem, m_PhotonVisionSubsystem));
+    // driverController.y().whileTrue(new TrackProcessor(m_SwerveSubsystem, m_PhotonVisionSubsystem));
+    // driverController.pov(0).whileTrue(new TrackNet(m_SwerveSubsystem, m_PhotonVisionSubsystem));
+
+    // operatorController.pov(90).whileTrue(new Coral_L1(m_ElevatorSubsystem, m_EffectorSubsystem));
+    // operatorController.pov(270).whileTrue(new Coral_L3(m_ElevatorSubsystem, m_EffectorSubsystem));
+    // operatorController.pov(0).whileTrue(new IntakeAlgae_Low(m_ElevatorSubsystem, m_EffectorSubsystem));
+    // operatorController.pov(180).whileTrue(new IntakeAlgae_High(m_ElevatorSubsystem, m_EffectorSubsystem));
+    // operatorController.rightTrigger(0.4).whileTrue(new Coral_L4(m_ElevatorSubsystem, m_EffectorSubsystem));
+    // operatorController.leftTrigger(0.4).whileTrue(new ShootNet(m_ElevatorSubsystem, m_EffectorSubsystem));
+    // operatorController.leftBumper().whileTrue(new ShootProcessor(m_ElevatorSubsystem, m_EffectorSubsystem));
+    // operatorController.b().whileTrue(new IntakeCoral(m_ElevatorSubsystem, m_EffectorSubsystem));
+    // operatorController.x().whileTrue(new IntakeAlgae_Floor(m_ElevatorSubsystem, m_EffectorSubsystem));
+    // operatorController.y().onTrue(new ClimbCommand(m_ClimberSubsystem));
 
     m_SwerveSubsystem.setDefaultCommand(new ManualDrive(m_SwerveSubsystem, xSpeedFunc, ySpeedFunc, zSpeedFunc, isSlowFunc));
   }

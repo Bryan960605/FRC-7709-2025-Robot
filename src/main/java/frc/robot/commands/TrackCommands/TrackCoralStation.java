@@ -82,8 +82,8 @@ public class TrackCoralStation extends Command {
     // X-PID calculations
       xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_Back();
       xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_CoralStation_Back);
-      if((yPidError) < 3 && (rotationPidError) < 0.05){
-        xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : 0;
+      if((yPidError) < 0.05 && (rotationPidError) < 3){
+        xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : PhotonConstants.xPidSetPoint_CoralStation_Back;
         xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_CoralStation_Back);
       } else {
         xPidOutput = 0;
@@ -102,8 +102,8 @@ public class TrackCoralStation extends Command {
       // X-PID calculations
         xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontRight();
         xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_CoralStation_FrontRight);
-        if((yPidError) < 3 && (rotationPidError) < 0.05){
-          xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : 0;
+        if((yPidError) < 0.05 && (rotationPidError) < 3){
+          xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : PhotonConstants.xPidSetPoint_CoralStation_FrontRight;
           xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_CoralStation_FrontRight);
         } else {
           xPidOutput = 0;

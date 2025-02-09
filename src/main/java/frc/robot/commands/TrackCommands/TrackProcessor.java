@@ -77,8 +77,8 @@ public class TrackProcessor extends Command {
       // X-PID calculations
         xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontRight();
         xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_Processor_FrontRight);
-        if((yPidError) < 3 && (rotationPidError) < 0.05){
-          xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : 0;
+        if((yPidError) < 0.05 && (rotationPidError) < 3){
+          xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : PhotonConstants.xPidSetPoint_Processor_FrontRight;
           xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_Processor_FrontRight);
         } else {
           xPidOutput = 0;
@@ -97,8 +97,8 @@ public class TrackProcessor extends Command {
     // X-PID calculations
       xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontLeft();
       xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_Processor_FrontLeft);
-      if((yPidError) < 3 && (rotationPidError) < 0.05){
-        xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : 0;
+      if((yPidError) < 0.05 && (rotationPidError) < 3){
+        xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : PhotonConstants.xPidSetPoint_Processor_FrontLeft;
         xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_Processor_FrontLeft);
       } else {
         xPidOutput = 0;

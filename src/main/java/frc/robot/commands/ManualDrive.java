@@ -57,7 +57,7 @@ public class ManualDrive extends Command {
   @Override
   public void execute() {
     this.xSpeed = -xSpeedFunc.getAsDouble();
-    this.ySpeed = ySpeedFunc.getAsDouble();
+    this.ySpeed = -ySpeedFunc.getAsDouble();
     this.zSpeed = -zSpeedFunc.getAsDouble();
 
     this.xSpeed = MathUtil.applyDeadband(this.xSpeed, OperatorConstants.kJoystickDeadBand);

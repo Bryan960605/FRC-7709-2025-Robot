@@ -42,9 +42,13 @@ public class AprilTagRotation extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    rotationMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_FrontRight();
-    rotationMeasurements = Math.abs(rotationMeasurements - 180) > 3 ? rotationMeasurements : 180;
-    rotationPidOutput = -rotationPidController.calculate(rotationMeasurements, 180);
+    if(m_PhotonVisionSubsystem.hasFrontRightTarget()) {
+      rotationMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_FrontRight();
+      rotationMeasurements = Math.abs(rotationMeasurements - 180) > 3 ? rotationMeasurements : 180;
+      rotationPidOutput = rotationPidController.calculate(rotationMeasurements, 180);
+   }else {
+      rotationPidOutput = 0;
+   }
 
     m_SwerveSubsystem.drive(0, 0, rotationPidOutput, false);
 

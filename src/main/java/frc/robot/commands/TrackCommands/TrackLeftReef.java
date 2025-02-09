@@ -78,8 +78,8 @@ public class TrackLeftReef extends Command {
     // X-PID calculations
     xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontLeft();
     xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_LeftReef);
-    if((yPidError) < 3 && (rotationPidError) < 0.05){
-      xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : 0;
+    if((yPidError) < 0.05 && (rotationPidError) < 3){
+      xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : PhotonConstants.xPidSetPoint_LeftReef;
       xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_LeftReef);
     }else {
       xPidOutput = 0;
