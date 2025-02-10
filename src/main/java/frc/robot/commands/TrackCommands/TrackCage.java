@@ -6,6 +6,7 @@ package frc.robot.commands.TrackCommands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.Constants.PhotonConstants;
 import frc.robot.subsystems.PhotonVisionSubsystem;
@@ -68,87 +69,83 @@ public class TrackCage extends Command {
 
     if(m_PhotonVisionSubsystem.hasFrontTarget()) {
       if(m_PhotonVisionSubsystem.hasFrontRightTarget()) {
+        // Rotation-PID calculations
+        rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_FrontRight();
+        rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.rotationPidSetPoint_Cage_FrontRight);
+        rotationPidMeasurements = (rotationPidError > 0.5) ? rotationPidMeasurements : PhotonConstants.rotationPidSetPoint_Cage_FrontRight;
+        rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_Cage_FrontRight);
+        rotationPidOutput = Constants.setMaxOutput(rotationPidOutput, PhotonConstants.rotationPidMaxOutput_Cage);
         // Y-PID calculations
         yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_FrontRight();
         yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_Cage_FrontRight);
         yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_Cage_FrontRight;
         yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_Cage_FrontRight);
-        // Rotation-PID calculations
-        rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_FrontRight();
-        rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.rotationPidSetPoint_Cage_FrontRight);
-        rotationPidMeasurements = (rotationPidError > 3) ? rotationPidMeasurements : PhotonConstants.rotationPidSetPoint_Cage_FrontRight;
-        rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_Cage_FrontRight);
-      // X-PID calculations
+        yPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.yPidMaxOutput_Cage);
+        // Y-PID calculations
         xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontRight();
         xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_Cage_FrontRight);
-        if((yPidError) < 0.05 && (rotationPidError) < 3){
-          xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : PhotonConstants.xPidSetPoint_Cage_FrontRight;
-          xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_Cage_FrontRight);
-        } else {
-          xPidOutput = 0;
-        }
-    }else if(m_PhotonVisionSubsystem.hasFrontLeftTarget()) {
-      // Y-PID calculations
-      yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_FrontLeft();
-      yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_Cage_FrontLeft);
-      yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_Cage_FrontLeft;
-      yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_Cage_FrontLeft);
-      // Rotation-PID calculations
-      rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_FrontLeft();
-      rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.rotationPidSetPoint_Cage_FrontLeft);
-      rotationPidMeasurements = (rotationPidError > 3) ? rotationPidMeasurements : PhotonConstants.rotationPidSetPoint_Cage_FrontLeft;
-      rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_Cage_FrontLeft);
-    // X-PID calculations
-      xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontLeft();
-      xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_Cage_FrontLeft);
-      if((yPidError) < 0.05 && (rotationPidError) < 3){
-        xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : PhotonConstants.xPidSetPoint_Cage_FrontLeft;
+        xPidMeasurements = (xPidError > 0.05) ? xPidMeasurements : PhotonConstants.xPidSetPoint_Cage_FrontRight;
+        xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_Cage_FrontRight);
+        xPidOutput = Math.min(PhotonConstants.xPidMaxOutput_Cage, Math.max(PhotonConstants.xPidMinOutput_Cage, xPidOutput));
+      }else if(m_PhotonVisionSubsystem.hasFrontLeftTarget()) {
+        // Rotation-PID calculations
+        rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_FrontLeft();
+        rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.rotationPidSetPoint_Cage_FrontLeft);
+        rotationPidMeasurements = (rotationPidError > 0.5) ? rotationPidMeasurements : PhotonConstants.rotationPidSetPoint_Cage_FrontLeft;
+        rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_Cage_FrontLeft);
+        rotationPidOutput = Constants.setMaxOutput(rotationPidOutput, PhotonConstants.rotationPidMaxOutput_Cage);
+        // Y-PID calculations
+        yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_FrontLeft();
+        yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_Cage_FrontLeft);
+        yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_Cage_FrontLeft;
+        yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_Cage_FrontLeft);
+        yPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.yPidMaxOutput_Cage);
+        // Y-PID calculations
+        xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontLeft();
+        xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_Cage_FrontLeft);
+        xPidMeasurements = (xPidError > 0.05) ? xPidMeasurements : PhotonConstants.xPidSetPoint_Cage_FrontLeft;
         xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_Cage_FrontLeft);
-      } else {
-        xPidOutput = 0;
-      }
+        xPidOutput = Math.min(PhotonConstants.xPidMaxOutput_Cage, Math.max(PhotonConstants.xPidMinOutput_Cage, xPidOutput));
     }
   }else if(m_PhotonVisionSubsystem.hasBackTarget()) {
     if(backTarget_ID == 20 || backTarget_ID == 11) {
+      // Rotation-PID calculations
+      rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_Back();
+      rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.rotationPidSetPoint_Cage_Back_ID20_ID11);
+      rotationPidMeasurements = (rotationPidError > 0.5) ? rotationPidMeasurements : PhotonConstants.rotationPidSetPoint_Cage_Back_ID20_ID11;
+      rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_Cage_Back_ID20_ID11);
+      rotationPidOutput = Constants.setMaxOutput(rotationPidOutput, PhotonConstants.rotationPidMaxOutput_Cage);
       // Y-PID calculations
-      yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_FrontLeft();
+      yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_Back();
       yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_Cage_Back_ID20_ID11);
       yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_Cage_Back_ID20_ID11;
       yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_Cage_Back_ID20_ID11);
-      // Rotation-PID calculations
-      rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_FrontLeft();
-      rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.rotationPidSetPoint_Cage_Back_ID20_ID11);
-      rotationPidMeasurements = (rotationPidError > 3) ? rotationPidMeasurements : PhotonConstants.rotationPidSetPoint_Cage_Back_ID20_ID11;
-      rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_Cage_Back_ID20_ID11);
-    // X-PID calculations
-      xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontLeft();
-      xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_Cage_Back_ID20_ID11);
-      if((yPidError) < 0.05 && (rotationPidError) < 3){
-        xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : PhotonConstants.xPidSetPoint_Cage_Back_ID20_ID11;
-        xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_Cage_Back_ID20_ID11);
-      } else {
-        xPidOutput = 0;
-      }
-    }else if(backTarget_ID == 21 || backTarget_ID == 10) {
+      yPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.yPidMaxOutput_Cage);
       // Y-PID calculations
-      yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_FrontLeft();
+      xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_Back();
+      xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_Cage_Back_ID20_ID11);
+      xPidMeasurements = (xPidError > 0.05) ? xPidMeasurements : PhotonConstants.xPidSetPoint_Cage_Back_ID20_ID11;
+      xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_Cage_Back_ID20_ID11);
+      xPidOutput = Math.min(PhotonConstants.xPidMaxOutput_Cage, Math.max(PhotonConstants.xPidMinOutput_Cage, xPidOutput));
+    }else if(backTarget_ID == 21 || backTarget_ID == 10) {
+      // Rotation-PID calculations
+      rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_Back();
+      rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.rotationPidSetPoint_Cage_Back_ID21_ID10);
+      rotationPidMeasurements = (rotationPidError > 0.5) ? rotationPidMeasurements : PhotonConstants.rotationPidSetPoint_Cage_Back_ID21_ID10;
+      rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_Cage_Back_ID21_ID10);
+      rotationPidOutput = Constants.setMaxOutput(rotationPidOutput, PhotonConstants.rotationPidMaxOutput_Cage);
+      // Y-PID calculations
+      yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_Back();
       yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_Cage_Back_ID21_ID10);
       yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_Cage_Back_ID21_ID10;
       yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_Cage_Back_ID21_ID10);
-      // Rotation-PID calculations
-      rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_FrontLeft();
-      rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.rotationPidSetPoint_Cage_Back_ID21_ID10);
-      rotationPidMeasurements = (rotationPidError > 3) ? rotationPidMeasurements : PhotonConstants.rotationPidSetPoint_Cage_Back_ID21_ID10;
-      rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_Cage_Back_ID21_ID10);
-    // X-PID calculations
-      xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontLeft();
+      yPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.yPidMaxOutput_Cage);
+      // Y-PID calculations
+      xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_Back();
       xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_Cage_Back_ID21_ID10);
-      if((yPidError) < 0.05 && (rotationPidError) < 3){
-        xPidMeasurements = (xPidError) > 0.05 ? xPidMeasurements : PhotonConstants.xPidSetPoint_Cage_Back_ID21_ID10;
-        xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_Cage_Back_ID21_ID10);
-      } else {
-        xPidOutput = 0;
-      }
+      xPidMeasurements = (xPidError > 0.05) ? xPidMeasurements : PhotonConstants.xPidSetPoint_Cage_Back_ID21_ID10;
+      xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_Cage_Back_ID21_ID10);
+      xPidOutput = Math.min(PhotonConstants.xPidMaxOutput_Cage, Math.max(PhotonConstants.xPidMinOutput_Cage, xPidOutput));
     }
   }else {
     xPidOutput = 0;

@@ -5,6 +5,7 @@
 package frc.robot.commands.TrackCommands;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.PhotonConstants;
 import frc.robot.subsystems.PhotonVisionSubsystem;
@@ -43,13 +44,16 @@ public class AprilTagX extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+
     if(m_PhotonVisionSubsystem.hasFrontRightTarget()) {
       xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontRight();
       xPidMeasurements = Math.abs(xPidMeasurements - 1) > 0.05 ? xPidMeasurements : 1;
-      xPidOutput = -xPidController.calculate(xPidMeasurements, 1);
+      xPidOutput = -Math.min(PhotonConstants.xPidMaxOutput, Math.max(PhotonConstants.xPidMinOutput, xPidController.calculate(xPidMeasurements, 1)));
     }else {
       xPidOutput = 0;
     }
+
+    SmartDashboard.putNumber("AprilTagX/ pidOutput", xPidOutput);
 
     m_SwerveSubsystem.drive(xPidOutput, 0, 0, false);
   }

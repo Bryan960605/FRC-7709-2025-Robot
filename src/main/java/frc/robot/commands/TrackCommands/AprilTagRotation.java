@@ -44,7 +44,7 @@ public class AprilTagRotation extends Command {
   public void execute() {
     if(m_PhotonVisionSubsystem.hasFrontRightTarget()) {
       rotationMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_FrontRight();
-      rotationMeasurements = Math.abs(rotationMeasurements - 180) > 3 ? rotationMeasurements : 180;
+      rotationMeasurements = Math.abs(rotationMeasurements - 180) > 1.5 ? rotationMeasurements : 180;
       rotationPidOutput = rotationPidController.calculate(rotationMeasurements, 180);
    }else {
       rotationPidOutput = 0;

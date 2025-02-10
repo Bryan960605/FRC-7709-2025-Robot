@@ -23,6 +23,10 @@ public final class Constants {
     public static final int kOperatorControllerPort = 1;
   }
 
+  public static double setMaxOutput(double output, double maxOutput){
+    return Math.min(maxOutput, Math.max(-maxOutput, output));
+  }
+
   // public static Double[] optimate(double currentAngle, double goalAngle, double speedMetersPerSecond){
   //   Double[] goal = new Double[2];
   //   double delta = Math.abs(goalAngle - currentAngle);
@@ -143,11 +147,11 @@ public final class Constants {
   }
 
   public class PhotonConstants {
-    public static final double xPidController_Kp = 0.5;
+    public static final double xPidController_Kp = 0.4;
     public static final double xPidController_Ki = 0;
     public static final double xPidController_Kd = 0;
 
-    public static final double yPidController_Kp = 0.5;
+    public static final double yPidController_Kp = 0.4;
     public static final double yPidController_Ki = 0;
     public static final double yPidController_Kd = 0;
 
@@ -205,7 +209,7 @@ public final class Constants {
     public static final double yPidSetPoint_LeftReef = 0;
     public static final double rotationPidSetPoint_LeftReef = 0;
 
-    public static final double xPidSetPoint_MiddleReef_FrontRight = 1;
+    public static final double xPidSetPoint_MiddleReef_FrontRight = 0.5;
     public static final double yPidSetPoint_MiddleReef_FrontRight = 0;
     public static final double rotationPidSetPoint_MiddleReef_FrontRight = 180;
 
