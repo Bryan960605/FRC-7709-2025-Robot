@@ -32,6 +32,8 @@ public class PhotonVisionSubsystem extends SubsystemBase {
   private final PhotonCamera frontLeftCamera;
   private final PhotonCamera backCamera;
 
+  private final Transform3d frontRightToRobot;
+
   private PhotonPipelineResult frontRightResult;
   private PhotonPipelineResult frontLeftResult;
   private PhotonPipelineResult backResult;
@@ -63,6 +65,8 @@ public class PhotonVisionSubsystem extends SubsystemBase {
     frontRightCamera = new PhotonCamera("OV9281_FrontRight");
     frontLeftCamera = new PhotonCamera("OV9281_FrontLeft");
     backCamera = new PhotonCamera("OV9281_Back");
+
+    frontRightToRobot = new Transform3d(null, null, null, null);
 
   }
 
@@ -189,10 +193,10 @@ public class PhotonVisionSubsystem extends SubsystemBase {
       frontRightTarget_ID = frontRightTarget.getFiducialId();
       
 
-      SmartDashboard.putNumber("Photon/BotXError_Front", botXMeasurements_FrontRight);
-      SmartDashboard.putNumber("Photon/BotYError_Front", botYMeasurements_FrontRight);
-      SmartDashboard.putNumber("Photon/BotRotationError_Front", botRotationMeasurements_FrontRight);
-      SmartDashboard.putNumber("Photon/FrontTarget_ID", frontRightTarget_ID);
+      SmartDashboard.putNumber("Photon/BotXMeasurements_FrontRight", botXMeasurements_FrontRight);
+      SmartDashboard.putNumber("Photon/BotYMeasurements_FrontRight", botYMeasurements_FrontRight);
+      SmartDashboard.putNumber("Photon/BotRotatioMeasurements_FrontRight", botRotationMeasurements_FrontRight);
+      SmartDashboard.putNumber("Photon/FrontRightTarget_ID", frontRightTarget_ID);
 
     }else {
       botXMeasurements_FrontRight = 0;

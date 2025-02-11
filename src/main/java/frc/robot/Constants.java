@@ -201,9 +201,9 @@ public final class Constants {
     public static final double rotationPidMinOutput_Processor = -0.2;
     public static final double rotationPidMaxOutput_Processor = 0.2;
 
-    public static final double xPidSetPoint_RightReef = 0; 
-    public static final double yPidSetPoint_RightReef = 0;
-    public static final double rotationPidSetPoint_RightReef = 0;
+    public static final double xPidSetPoint_RightReef = 0.445; 
+    public static final double yPidSetPoint_RightReef = 0.144;
+    public static final double rotationPidSetPoint_RightReef = 225;
 
     public static final double xPidSetPoint_LeftReef = 0;
     public static final double yPidSetPoint_LeftReef = 0;

@@ -79,13 +79,13 @@ public class TrackNet extends Command {
         yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_Net_FrontRight);
         yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_Net_FrontRight;
         yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_Net_FrontRight);
-        yPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.yPidMaxOutput_Net);
-        // Y-PID calculations
+        yPidOutput = Constants.setMaxOutput(yPidOutput, PhotonConstants.yPidMaxOutput_Net);
+        // X-PID calculations
         xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontRight();
         xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_Net_FrontRight);
         xPidMeasurements = (xPidError > 0.05) ? xPidMeasurements : PhotonConstants.xPidSetPoint_Net_FrontRight;
         xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_Net_FrontRight);
-        xPidOutput = Math.min(PhotonConstants.xPidMaxOutput_Net, Math.max(PhotonConstants.xPidMinOutput_Net, xPidOutput));
+        xPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.xPidMaxOutput_Net);
       }else if(m_PhotonVisionSubsystem.hasFrontLeftTarget()) {
         // Rotation-PID calculations
         rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_FrontLeft();
@@ -98,13 +98,13 @@ public class TrackNet extends Command {
         yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_Net_FrontLeft);
         yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_Net_FrontLeft;
         yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_Net_FrontLeft);
-        yPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.yPidMaxOutput_Net);
-        // Y-PID calculations
+        yPidOutput = Constants.setMaxOutput(yPidOutput, PhotonConstants.yPidMaxOutput_Net);
+        // X-PID calculations
         xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontLeft();
         xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_Net_FrontLeft);
         xPidMeasurements = (xPidError > 0.05) ? xPidMeasurements : PhotonConstants.xPidSetPoint_Net_FrontLeft;
         xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_Net_FrontLeft);
-        xPidOutput = Math.min(PhotonConstants.xPidMaxOutput_Net, Math.max(PhotonConstants.xPidMinOutput_Net, xPidOutput));
+        xPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.xPidMaxOutput_Net);
     } 
   }else if(m_PhotonVisionSubsystem.hasBackTarget()) {
     if(backTarget_ID == 20 || backTarget_ID == 11) {
@@ -119,13 +119,13 @@ public class TrackNet extends Command {
       yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_Net_Back_ID20_ID11);
       yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_Net_Back_ID20_ID11;
       yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_Net_Back_ID20_ID11);
-      yPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.yPidMaxOutput_Net);
-      // Y-PID calculations
+      yPidOutput = Constants.setMaxOutput(yPidOutput, PhotonConstants.yPidMaxOutput_Net);
+      // X-PID calculations
       xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_Back();
       xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_Net_Back_ID20_ID11);
       xPidMeasurements = (xPidError > 0.05) ? xPidMeasurements : PhotonConstants.xPidSetPoint_Net_Back_ID20_ID11;
       xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_Net_Back_ID20_ID11);
-      xPidOutput = Math.min(PhotonConstants.xPidMaxOutput_Net, Math.max(PhotonConstants.xPidMinOutput_Net, xPidOutput));
+      xPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.xPidMaxOutput_Net);
     }else if(backTarget_ID == 21 || backTarget_ID == 10) {
       // Rotation-PID calculations
       rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_Back();
@@ -138,13 +138,13 @@ public class TrackNet extends Command {
       yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_Net_Back_ID21_ID10);
       yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_Net_Back_ID21_ID10;
       yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_Net_Back_ID21_ID10);
-      yPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.yPidMaxOutput_Net);
-      // Y-PID calculations
+      yPidOutput = Constants.setMaxOutput(yPidOutput, PhotonConstants.yPidMaxOutput_Net);
+      // X-PID calculations
       xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_Back();
       xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_Net_Back_ID21_ID10);
       xPidMeasurements = (xPidError > 0.05) ? xPidMeasurements : PhotonConstants.xPidSetPoint_Net_Back_ID21_ID10;
       xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_Net_Back_ID21_ID10);
-      xPidOutput = Math.min(PhotonConstants.xPidMaxOutput_Net, Math.max(PhotonConstants.xPidMinOutput_Net, xPidOutput));
+      xPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.xPidMaxOutput_Net);
     }
   }else {
     xPidOutput = 0;

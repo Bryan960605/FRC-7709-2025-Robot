@@ -77,13 +77,13 @@ public class TrackLeftReef extends Command {
       yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_LeftReef);
       yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_LeftReef;
       yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_LeftReef);
-      yPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.yPidMaxOutput_Reef);
-      // Y-PID calculations
+      yPidOutput = Constants.setMaxOutput(yPidOutput, PhotonConstants.yPidMaxOutput_Reef);
+      // X-PID calculations
       xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontLeft();
       xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_LeftReef);
       xPidMeasurements = (xPidError > 0.05) ? xPidMeasurements : PhotonConstants.xPidSetPoint_LeftReef;
       xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_LeftReef);
-      xPidOutput = Math.min(PhotonConstants.xPidMaxOutput_Reef, Math.max(PhotonConstants.xPidMinOutput_Reef, xPidOutput));
+      xPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.xPidSetPoint_LeftReef);
     }else {
       xPidOutput = 0;
       yPidOutput = 0;

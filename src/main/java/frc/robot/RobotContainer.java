@@ -22,9 +22,11 @@ import frc.robot.commands.TrackCommands.AprilTagX;
 import frc.robot.commands.TrackCommands.AprilTagY;
 import frc.robot.commands.TrackCommands.TrackCage;
 import frc.robot.commands.TrackCommands.TrackCoralStation;
+import frc.robot.commands.TrackCommands.TrackLeftReef;
 import frc.robot.commands.TrackCommands.TrackMiddleReef;
 import frc.robot.commands.TrackCommands.TrackNet;
 import frc.robot.commands.TrackCommands.TrackProcessor;
+import frc.robot.commands.TrackCommands.TrackRightReef;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
@@ -99,7 +101,7 @@ public class RobotContainer {
       })
     );
 
-    driverController.rightBumper().whileTrue(new TrackMiddleReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
+    driverController.rightBumper().whileTrue(new TrackRightReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
     driverController.a().whileTrue(new AprilTagRotation(m_PhotonVisionSubsystem, m_SwerveSubsystem));
     driverController.y().whileTrue(new AprilTagY(m_PhotonVisionSubsystem, m_SwerveSubsystem));
     driverController.x().whileTrue(new AprilTagX(m_PhotonVisionSubsystem, m_SwerveSubsystem));
