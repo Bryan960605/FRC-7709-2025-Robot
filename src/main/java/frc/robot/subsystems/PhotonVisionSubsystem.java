@@ -16,6 +16,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -33,6 +34,9 @@ public class PhotonVisionSubsystem extends SubsystemBase {
   private final PhotonCamera backCamera;
 
   private final Transform3d frontRightToRobot;
+  private final Transform3d frontLeftToRobot;
+  private final Transform3d backToRobot;
+
 
   private PhotonPipelineResult frontRightResult;
   private PhotonPipelineResult frontLeftResult;
@@ -66,7 +70,9 @@ public class PhotonVisionSubsystem extends SubsystemBase {
     frontLeftCamera = new PhotonCamera("OV9281_FrontLeft");
     backCamera = new PhotonCamera("OV9281_Back");
 
-    frontRightToRobot = new Transform3d(null, null, null, null);
+    frontRightToRobot = new Transform3d(null, null, null, new Rotation3d(new Rotation2d(0)));
+    frontLeftToRobot = new Transform3d(null, null, null, new Rotation3d(new Rotation2d(0)));
+    backToRobot = new Transform3d(null, null, null, new Rotation3d(new Rotation2d(0)));
 
   }
 
@@ -114,6 +120,18 @@ public class PhotonVisionSubsystem extends SubsystemBase {
 
   public Transform3d getBackTargetPose() {
     return backTarget.getBestCameraToTarget();
+  }
+
+  public Transform3d getRobotToTargetPose_FrontRight() {
+    return frontRightTarget.getBestCameraToTarget().plus(frontRightToRobot);
+  }
+
+  public Transform3d getRobotToTargetPose_FrontLeft() {
+    return frontLeftTarget.getBestCameraToTarget().plus(frontLeftToRobot);
+  }
+
+  public Transform3d getRobotToTargetPose_Back() {
+    return backTarget.getBestCameraToTarget().plus(backToRobot);
   }
 
   public Optional<Matrix<N3, N3>> getCameraMatrix(String camera) {
@@ -186,9 +204,9 @@ public class PhotonVisionSubsystem extends SubsystemBase {
     backTarget = backResult.getBestTarget();
     // backTargets = backResult.getTargets();
     if(hasFrontRightTarget()) {
-      botXMeasurements_FrontRight = getFrontRightTargetPose().getX();
-      botYMeasurements_FrontRight = getFrontRightTargetPose().getY();
-      botRotationMeasurements_FrontRight = Math.toDegrees(getFrontRightTargetPose().getRotation().getAngle());
+      botXMeasurements_FrontRight = getRobotToTargetPose_FrontRight().getX();
+      botYMeasurements_FrontRight = getRobotToTargetPose_FrontRight().getY();
+      botRotationMeasurements_FrontRight = Math.toDegrees(getRobotToTargetPose_FrontRight().getRotation().getAngle());
 
       frontRightTarget_ID = frontRightTarget.getFiducialId();
       
@@ -204,9 +222,9 @@ public class PhotonVisionSubsystem extends SubsystemBase {
       botRotationMeasurements_FrontRight = 0;
     }
     if(hasFrontLeftTarget()) {
-      botXMeasurements_FrontLeft = getFrontLeftTargetPose().getX();
-      botYMeasurements_FrontLeft = getFrontLeftTargetPose().getY();
-      botRotationMeasurements_FrontLeft = Math.toDegrees(getFrontLeftTargetPose().getRotation().getAngle());
+      botXMeasurements_FrontLeft = getRobotToTargetPose_FrontLeft().getX();
+      botYMeasurements_FrontLeft = getRobotToTargetPose_FrontLeft().getY();
+      botRotationMeasurements_FrontLeft = Math.toDegrees(getRobotToTargetPose_FrontLeft().getRotation().getAngle());
 
       frontLeftTarget_ID = frontLeftTarget.getFiducialId();
       
@@ -222,9 +240,9 @@ public class PhotonVisionSubsystem extends SubsystemBase {
       botRotationMeasurements_FrontLeft = 0;
     }
     if(hasBackTarget()) {
-      botXMeasurements_Back = getBackTargetPose().getX();
-      botYMeasurements_Back = getBackTargetPose().getY();
-      botRotationMeasurements_Back = Math.toDegrees(getBackTargetPose().getRotation().getAngle());
+      botXMeasurements_Back = getRobotToTargetPose_Back().getX();
+      botYMeasurements_Back = getRobotToTargetPose_Back().getY();
+      botRotationMeasurements_Back = Math.toDegrees(getRobotToTargetPose_Back().getRotation().getAngle());
 
       backTarget_ID = backTarget.getFiducialId();
       
