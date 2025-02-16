@@ -77,7 +77,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
   }
 
   public void intakeCoral_Wheel() {
-    intakewheel.set(EndEffectorConstants.coralInVol);
+    intakewheel.setVoltage(EndEffectorConstants.coralInVol);
   }
 
   public void outCoral_L1_Arm() {
@@ -85,7 +85,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
   }
 
   public void outCoral_L1_Wheel() {
-    intakewheel.set(EndEffectorConstants.coralL1OutVol);
+    intakewheel.setVoltage(EndEffectorConstants.coralL1OutVol);
   }
 
   public void outCoral_L2_Arm() {
@@ -93,7 +93,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
   }
 
   public void outCoral_L2_Wheel() {
-    intakewheel.set(EndEffectorConstants.coralL2OutVol);
+    intakewheel.setVoltage(EndEffectorConstants.coralL2OutVol);
   }
 
   public void outCoral_L3_Arm() {
@@ -101,7 +101,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
   }
 
   public void outCoral_L3_Wheel() {
-    intakewheel.set(EndEffectorConstants.coralL3OutVol);
+    intakewheel.setVoltage(EndEffectorConstants.coralL3OutVol);
   }
 
   public void outCoral_L4_Arm() {
@@ -109,7 +109,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
   }
 
   public void outCoral_L4_Wheel() {
-    intakewheel.set(EndEffectorConstants.coralL4OutVol);
+    intakewheel.setVoltage(EndEffectorConstants.coralL4OutVol);
   }
 
   public void shootNet_Arm() {
@@ -117,7 +117,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
   }
 
   public void shootNet_Wheel() {
-    intakewheel.set(EndEffectorConstants.algaeShootNetVol);
+    intakewheel.setVoltage(EndEffectorConstants.algaeShootNetVol);
   }
 
   public void shootProcessor_Arm() {
@@ -125,7 +125,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
   }
 
   public void shootProcessor_Wheel() {
-    intakewheel.set(EndEffectorConstants.algaeShootProcessorVol);
+    intakewheel.setVoltage(EndEffectorConstants.algaeShootProcessorVol);
   }
 
   public void intakeAlgae_Low_Arm() {
@@ -133,7 +133,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
   }
 
   public void intakeAlgae_Low_Wheel() {
-    intakewheel.set(EndEffectorConstants.algaeLowInVol);
+    intakewheel.setVoltage(EndEffectorConstants.algaeLowInVol);
   }
 
   public void intakeAlgae_High_Arm() {
@@ -141,7 +141,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
   }
 
   public void intakeAlgae_High_Wheel() {
-    intakewheel.set(EndEffectorConstants.algaeHighInVol);
+    intakewheel.setVoltage(EndEffectorConstants.algaeHighInVol);
   }
 
   public void intakeAlgae_Floor_Arm() {
@@ -149,7 +149,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
   }
 
   public void intakeAlgae_Floor_Wheel() {
-    intakewheel.set(EndEffectorConstants.algaeFloorInVol);
+    intakewheel.setVoltage(EndEffectorConstants.algaeFloorInVol);
   }
 
   public void primitiveArm() {
@@ -157,11 +157,19 @@ public class EndEffectorSubsystem extends SubsystemBase {
   }
 
   public void holdAlgae(){
-    intakewheel.set(EndEffectorConstants.algaeHoldVol);
+    intakewheel.setVoltage(EndEffectorConstants.algaeHoldVol);
   }
 
   public void stopWheel() {
-    intakewheel.set(0);
+    intakewheel.setVoltage(0);
+  }
+
+  public double getPosition() {
+    return intakeArm.getPosition().getValueAsDouble();
+  }
+
+  public double getAbsolutePosition() {
+    return armAbsolutedEncoder.getAbsolutePosition().getValueAsDouble();
   }
 
   public double getAngle() {
@@ -196,7 +204,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
   public void periodic() {
     // Arm
     pidOutput = armPID.calculate(getAngle(), arriveAngle);
-    feedforwardOutput = armFeedforward.calculate(getRadians(), getVelocity());
+    feedforwardOutput = armFeedforward.calculate(getRadians(), getVelocity())/12;
     // feedforwardOutput = armFeedforward.calculate(getAngle(), pidOutput);
     // if(feedforwardOutput >= EndEffectorConstants.feedForwardMax) {
     //   feedforwardOutput = EndEffectorConstants.feedForwardMax;
