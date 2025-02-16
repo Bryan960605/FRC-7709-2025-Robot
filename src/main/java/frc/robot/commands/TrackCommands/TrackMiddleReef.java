@@ -8,7 +8,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.PhotonVisionSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.SwerveSubsystem_Kraken;
 import frc.robot.Constants;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.Constants.PhotonConstants;
@@ -17,7 +17,7 @@ import frc.robot.Constants.PhotonConstants;
 public class TrackMiddleReef extends Command {
   /** Creates a new TrackMiddleReef. */
   private final PhotonVisionSubsystem m_PhotonVisionSubsystem;
-  private final SwerveSubsystem m_SwerveSubsystem;
+  private final SwerveSubsystem_Kraken m_SwerveSubsystem;
 
   private PIDController rotationPidController;
   private PIDController xPidController;
@@ -37,7 +37,7 @@ public class TrackMiddleReef extends Command {
 
   private int fiducialId;
 
-  public TrackMiddleReef(PhotonVisionSubsystem photonVisionSubsystem, SwerveSubsystem swerveSubsystem) {
+  public TrackMiddleReef(PhotonVisionSubsystem photonVisionSubsystem, SwerveSubsystem_Kraken swerveSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_PhotonVisionSubsystem = photonVisionSubsystem;
     this.m_SwerveSubsystem = swerveSubsystem;

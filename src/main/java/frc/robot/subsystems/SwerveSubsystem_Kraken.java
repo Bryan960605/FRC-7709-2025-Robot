@@ -53,14 +53,14 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.SwerveConstants;
+import frc.robot.Constants.Swerve_KrakenConstants;;
 
-public class SwerveSubsystem extends SubsystemBase {
+public class SwerveSubsystem_Kraken extends SubsystemBase {
   /** Creates a new SwerveSubsystem. */
-  private final SwerveModule leftFront;
-  private final SwerveModule leftBack;
-  private final SwerveModule rightFront;
-  private final SwerveModule rightBack;
+  private final SwerveModule_Kraken leftFront;
+  private final SwerveModule_Kraken leftBack;
+  private final SwerveModule_Kraken rightFront;
+  private final SwerveModule_Kraken rightBack;
 
   private final Pigeon2 gyro;
   private final Pigeon2Configuration gyroConfig;
@@ -107,30 +107,30 @@ public class SwerveSubsystem extends SubsystemBase {
   /**
    * 
    */
-  public SwerveSubsystem(PhotonVisionSubsystem photonVisionSubsystem) {
-    leftFront = new SwerveModule(
-      SwerveConstants.leftFrontTurning_ID,
-      SwerveConstants.leftFrontDrive_ID,
-      SwerveConstants.leftFrontAbsolutedEncoder_ID,
-      SwerveConstants.leftFrontOffset
+  public SwerveSubsystem_Kraken(PhotonVisionSubsystem photonVisionSubsystem) {
+    leftFront = new SwerveModule_Kraken(
+      Swerve_KrakenConstants.leftFrontTurning_ID,
+      Swerve_KrakenConstants.leftFrontDrive_ID,
+      Swerve_KrakenConstants.leftFrontAbsolutedEncoder_ID,
+      Swerve_KrakenConstants.leftFrontOffset
             );
-    leftBack = new SwerveModule(
-      SwerveConstants.leftBackTurning_ID,
-      SwerveConstants.leftBackDrive_ID,
-      SwerveConstants.leftBackAbsolutedEncoder_ID,
-      SwerveConstants.leftBackOffset);
-    rightFront = new SwerveModule(
-      SwerveConstants.rightFrontTurning_ID,
-      SwerveConstants.rightFrontDrive_ID,
-      SwerveConstants.rightFrontAbsolutedEncoder_ID,
-      SwerveConstants.rightFrontOffset);
-    rightBack = new SwerveModule(
-      SwerveConstants.rightBackTurning_ID,
-      SwerveConstants.rightBackDrive_ID,
-      SwerveConstants.rightBackAbsolutedEncoder_ID,
-      SwerveConstants.rightBackOffset);
+    leftBack = new SwerveModule_Kraken(
+      Swerve_KrakenConstants.leftBackTurning_ID,
+      Swerve_KrakenConstants.leftBackDrive_ID,
+      Swerve_KrakenConstants.leftBackAbsolutedEncoder_ID,
+      Swerve_KrakenConstants.leftBackOffset);
+    rightFront = new SwerveModule_Kraken(
+      Swerve_KrakenConstants.rightFrontTurning_ID,
+      Swerve_KrakenConstants.rightFrontDrive_ID,
+      Swerve_KrakenConstants.rightFrontAbsolutedEncoder_ID,
+      Swerve_KrakenConstants.rightFrontOffset);
+    rightBack = new SwerveModule_Kraken(
+      Swerve_KrakenConstants.rightBackTurning_ID,
+      Swerve_KrakenConstants.rightBackDrive_ID,
+      Swerve_KrakenConstants.rightBackAbsolutedEncoder_ID,
+      Swerve_KrakenConstants.rightBackOffset);
 
-    gyro = new Pigeon2(SwerveConstants.gyro_ID);
+    gyro = new Pigeon2(Swerve_KrakenConstants.gyro_ID);
     gyroConfig = new Pigeon2Configuration();
 
     gyroConfig.MountPose.MountPoseYaw = 0;
@@ -141,7 +141,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     field = new Field2d();
 
-    odometry = new SwerveDriveOdometry(SwerveConstants.swerveKinematics, getRotation(), getModulesPosition(), new Pose2d());
+    odometry = new SwerveDriveOdometry(Swerve_KrakenConstants.swerveKinematics, getRotation(), getModulesPosition(), new Pose2d());
 
     m_PhotonVisionSubsystem = photonVisionSubsystem;
     resetGyro();
@@ -162,7 +162,7 @@ public class SwerveSubsystem extends SubsystemBase {
     frontLeftCameraEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToFrontLeftCamera);
     backCameraEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToBackCamera);
 
-    swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(SwerveConstants.swerveKinematics, getRotation(), getModulesPosition(), getRobotPose(), stdDevs, stdDevs);
+    swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(Swerve_KrakenConstants.swerveKinematics, getRotation(), getModulesPosition(), getRobotPose(), stdDevs, stdDevs);
 
     try{
       robotConfig = RobotConfig.fromGUISettings();
@@ -177,8 +177,8 @@ public class SwerveSubsystem extends SubsystemBase {
             this::getChassisSpeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             (speeds, feedforwards) -> autoDrive(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
             new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-            new PIDConstants(SwerveConstants.pathingMoving_Kp, SwerveConstants.pathingMoving_Ki, SwerveConstants.pathingMoving_Kd), // Rotation PID constants
-            new PIDConstants(SwerveConstants.pathingtheta_Kp, SwerveConstants.pathingtheta_Ki, SwerveConstants.pathingtheta_Kd) // Translation PID constants
+            new PIDConstants(Swerve_KrakenConstants.pathingMoving_Kp, Swerve_KrakenConstants.pathingMoving_Ki, Swerve_KrakenConstants.pathingMoving_Kd), // Rotation PID constants
+            new PIDConstants(Swerve_KrakenConstants.pathingtheta_Kp, Swerve_KrakenConstants.pathingtheta_Ki, Swerve_KrakenConstants.pathingtheta_Kd) // Translation PID constants
             ),
             robotConfig, // The robot configuration
             () -> {
@@ -227,7 +227,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public ChassisSpeeds getChassisSpeed() {
-    return SwerveConstants.swerveKinematics.toChassisSpeeds(getModuleStates());
+    return Swerve_KrakenConstants.swerveKinematics.toChassisSpeeds(getModuleStates());
   }
 
 
@@ -258,7 +258,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void setModouleStates(SwerveModuleState[] desiredStates) {
-      SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, SwerveConstants.maxDriveSpeed_MeterPerSecond);
+      SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Swerve_KrakenConstants.maxDriveSpeed_MeterPerSecond);
       leftFront.setState(desiredStates[0]);
       rightFront.setState(desiredStates[1]);
       leftBack.setState(desiredStates[2]);
@@ -266,7 +266,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void setModouleStates_Auto(SwerveModuleState[] desiredStates) {
-    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, SwerveConstants.maxDriveSpeed_MeterPerSecond);
+    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Swerve_KrakenConstants.maxDriveSpeed_MeterPerSecond);
     leftFront.setState(desiredStates[0]);
     rightFront.setState(desiredStates[1]);
     leftBack.setState(desiredStates[2]);
@@ -288,20 +288,20 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public void drive(double xSpeed, double ySpeed, double zSpeed, boolean fieldOrient) {
     SwerveModuleState[] state;
-    xSpeed = xSpeed * SwerveConstants.maxDriveSpeed_MeterPerSecond;
-    ySpeed = ySpeed * SwerveConstants.maxDriveSpeed_MeterPerSecond;
-    zSpeed = zSpeed * Math.toRadians(SwerveConstants.maxAngularVelocity_Angle);
+    xSpeed = xSpeed * Swerve_KrakenConstants.maxDriveSpeed_MeterPerSecond;
+    ySpeed = ySpeed * Swerve_KrakenConstants.maxDriveSpeed_MeterPerSecond;
+    zSpeed = zSpeed * Math.toRadians(Swerve_KrakenConstants.maxAngularVelocity_Angle);
     if(fieldOrient) {
-      state = SwerveConstants.swerveKinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, zSpeed, getRotation()));//之後要處理MaxSpeedPerSecond跟MaxRadianPerSecond的問題
+      state = Swerve_KrakenConstants.swerveKinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, zSpeed, getRotation()));//之後要處理MaxSpeedPerSecond跟MaxRadianPerSecond的問題
     }else{
-      state = SwerveConstants.swerveKinematics.toSwerveModuleStates(new ChassisSpeeds(xSpeed, ySpeed, zSpeed));
+      state = Swerve_KrakenConstants.swerveKinematics.toSwerveModuleStates(new ChassisSpeeds(xSpeed, ySpeed, zSpeed));
     }
     setModouleStates(state);
   } 
 
   public void autoDrive(ChassisSpeeds speeds) {
     ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(speeds, 0.01);
-    SwerveModuleState[] states = SwerveConstants.swerveKinematics.toSwerveModuleStates(targetSpeeds);
+    SwerveModuleState[] states = Swerve_KrakenConstants.swerveKinematics.toSwerveModuleStates(targetSpeeds);
 
     setModouleStates(states);
   }

@@ -10,13 +10,13 @@ import frc.robot.Constants;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.Constants.PhotonConstants;
 import frc.robot.subsystems.PhotonVisionSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.SwerveSubsystem_Kraken;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class TrackLeftReef extends Command {
   /** Creates a new TrackReef. */
   private final PhotonVisionSubsystem m_PhotonVisionSubsystem;
-  private final SwerveSubsystem m_SwerveSubsystem;
+  private final SwerveSubsystem_Kraken m_SwerveSubsystem;
 
   private PIDController rotationPidController;
   private PIDController xPidController;
@@ -36,7 +36,7 @@ public class TrackLeftReef extends Command {
 
   private int fiducialId;
 
-  public TrackLeftReef(PhotonVisionSubsystem photonVisionSubsystem, SwerveSubsystem swerveSubsystem) {
+  public TrackLeftReef(PhotonVisionSubsystem photonVisionSubsystem, SwerveSubsystem_Kraken swerveSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_PhotonVisionSubsystem = photonVisionSubsystem;
     this.m_SwerveSubsystem = swerveSubsystem;

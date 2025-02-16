@@ -12,11 +12,11 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.SwerveSubsystem_Kraken;
 
 public class ManualDrive extends Command {
   /** Creates a new ManualDrive. */
-  private final SwerveSubsystem m_SwerveSubsystem;
+  private final SwerveSubsystem_Kraken m_SwerveSubsystem;
 
   private final DoubleSupplier xSpeedFunc;
   private final DoubleSupplier ySpeedFunc;
@@ -31,7 +31,7 @@ public class ManualDrive extends Command {
   private double ySpeed;
   private double zSpeed;
   private boolean isSlow;
-  public ManualDrive(SwerveSubsystem swerveSubsystem, DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier zSpeed, BooleanSupplier isSlow) {
+  public ManualDrive(SwerveSubsystem_Kraken swerveSubsystem, DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier zSpeed, BooleanSupplier isSlow) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_SwerveSubsystem = swerveSubsystem;
     this.xSpeedFunc = xSpeed;

@@ -8,20 +8,20 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.PhotonConstants;
 import frc.robot.subsystems.PhotonVisionSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.SwerveSubsystem_Kraken;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AprilTagY extends Command {
   /** Creates a new TrackReef. */
   private final PhotonVisionSubsystem m_PhotonVisionSubsystem;
-  private final SwerveSubsystem m_SwerveSubsystem;
+  private final SwerveSubsystem_Kraken m_SwerveSubsystem;
 
   private final PIDController yPidController;
 
   private double yPidMeasurements;
   private double yPidOutput;
 
-  public AprilTagY(PhotonVisionSubsystem photonVisionSubsystem, SwerveSubsystem swerveSubsystem) {
+  public AprilTagY(PhotonVisionSubsystem photonVisionSubsystem, SwerveSubsystem_Kraken swerveSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_PhotonVisionSubsystem = photonVisionSubsystem;
     this.m_SwerveSubsystem = swerveSubsystem;

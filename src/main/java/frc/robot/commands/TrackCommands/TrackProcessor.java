@@ -10,13 +10,13 @@ import frc.robot.Constants;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.Constants.PhotonConstants;
 import frc.robot.subsystems.PhotonVisionSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.SwerveSubsystem_Kraken;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class TrackProcessor extends Command {
   /** Creates a new TrackCage. */
   private final PhotonVisionSubsystem m_PhotonVisionSubsystem;
-  private final SwerveSubsystem m_SwerveSubsystem;
+  private final SwerveSubsystem_Kraken m_SwerveSubsystem;
 
   private PIDController rotationPidController;
   private PIDController xPidController;
@@ -34,7 +34,7 @@ public class TrackProcessor extends Command {
   private double yPidOutput;
   private double rotationPidOutput;
 
-  public TrackProcessor(SwerveSubsystem swerveSubsystem, PhotonVisionSubsystem photonVisionSubsystem) {
+  public TrackProcessor(SwerveSubsystem_Kraken swerveSubsystem, PhotonVisionSubsystem photonVisionSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_PhotonVisionSubsystem = photonVisionSubsystem;
     this.m_SwerveSubsystem = swerveSubsystem;

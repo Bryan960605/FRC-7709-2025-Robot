@@ -39,7 +39,7 @@ public final class Constants {
   //   return goal;
   // }
 
-  public static class ModuleConstants {
+  public static class Module_KrakenConstants {
 
     public static final double pidRangeMin = -180;
     public static final double pidRangeMax = 180;
@@ -83,7 +83,7 @@ public final class Constants {
 
   }
 
-  public class SwerveConstants {
+  public class Swerve_KrakenConstants {
     public static final int leftFrontDrive_ID = 4;
     public static final int leftBackDrive_ID = 3;
     public static final int rightFrontDrive_ID = 1;
@@ -375,6 +375,86 @@ public final class Constants {
     public static boolean onCage = false;
     public static boolean climbing = false;
     public static boolean fireAnimation = false;
+
+  }
+
+  public static class Module_NeoConstants {
+
+    public static final double pidRangeMin = -180;
+    public static final double pidRangeMax = 180;
+
+    public static final double wheelDiameterMeters = Units.inchesToMeters(4);
+    public static final double driveGearRatio = 1/5.36;
+    public static final double turningGearRatio = 1.0/(150/7);
+
+    public static final double driveEncoderRot2Meter = driveGearRatio*Math.PI*wheelDiameterMeters;
+
+    public static final double kModuleDistance = 22.24*0.0254;
+
+    public static SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
+      new Translation2d(kModuleDistance/2, kModuleDistance/2),
+      new Translation2d(kModuleDistance/2, -kModuleDistance/2),
+      new Translation2d(-kModuleDistance/2, kModuleDistance/2),
+      new Translation2d(-kModuleDistance/2, -kModuleDistance/2)
+    );
+
+    public static final double turningPidController_Kp = 0.012;
+    public static final double turningPidController_Ki = 0;
+    public static final double turningPidController_Kd = 0;
+
+    public static final double drivePidController_Kp = 0.2;
+    public static final double drivePidController_Ki = 0;
+    public static final double drivePidController_Kd = 0;
+
+    public static final double driveFeedforward_Ks = 0.13;
+    public static final double driveFeedforward_Kv = 2.58;
+
+  }
+
+  public class Swerve_NeoConstants {
+    public static final int rightFrontDrive_ID = 18;
+    public static final int rightBackDrive_ID = 13;
+    public static final int leftFrontDrive_ID = 1;
+    public static final int leftBackDrive_ID = 19;
+
+    public static final int rightFrontTurning_ID = 29;
+    public static final int rightBackTurning_ID = 26;
+    public static final int leftFrontTurning_ID = 3;
+    public static final int leftBackTurning_ID = 4;
+
+    public static final int rightFrontAbsolutedEncoder_ID = 41;
+    public static final int rightBackAbsolutedEncoder_ID = 42;
+    public static final int leftFrontAbsolutedEncoder_ID = 43;
+    public static final int leftBackAbsolutedEncoder_ID = 44;
+
+    public static final double leftFrontOffset = -0.106689;
+    public static final double leftBackOffset = 0.373535;
+    public static final double rightFrontOffset = -0.058837;
+    public static final double rightBackOffset = 0.416503;
+
+    public static final int gyro_ID = 55;
+
+    public static final double kModuleDistance = 22.24*0.0254;
+    public static SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
+      new Translation2d(kModuleDistance/2, kModuleDistance/2),
+      new Translation2d(kModuleDistance/2, -kModuleDistance/2),
+      new Translation2d(-kModuleDistance/2, kModuleDistance/2),
+      new Translation2d(-kModuleDistance/2, -kModuleDistance/2));
+
+    
+    public static final double pathingMoving_Kp = 0;
+    public static final double pathingMoving_Ki = 0;
+    public static final double pathingMoving_Kd = 0;
+
+    public static final double pathingtheta_Kp = 0;
+    public static final double pathingtheta_Ki = 0;
+    public static final double pathingtheta_Kd = 0;
+
+    public static final double maxOutput = 0;
+
+    public static final double maxDriveSpeed_MeterPerSecond = 4.6;
+    public static final double kDriveBaseRadius = 15.73 * 0.0254;
+    public static final double maxAngularVelocity_Angle = 720;
 
   }
 }
