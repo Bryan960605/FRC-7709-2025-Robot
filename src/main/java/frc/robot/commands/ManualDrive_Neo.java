@@ -13,10 +13,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.SwerveSubsystem_Kraken;
+import frc.robot.subsystems.SwerveSubsystem_Neo;
 
-public class ManualDrive extends Command {
+public class ManualDrive_Neo extends Command {
   /** Creates a new ManualDrive. */
-  private final SwerveSubsystem_Kraken m_SwerveSubsystem;
+  private final SwerveSubsystem_Neo m_SwerveSubsystem_Neo;
 
   private final DoubleSupplier xSpeedFunc;
   private final DoubleSupplier ySpeedFunc;
@@ -31,9 +32,9 @@ public class ManualDrive extends Command {
   private double ySpeed;
   private double zSpeed;
   private boolean isSlow;
-  public ManualDrive(SwerveSubsystem_Kraken swerveSubsystem, DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier zSpeed, BooleanSupplier isSlow) {
+  public ManualDrive_Neo(SwerveSubsystem_Neo swerveSubsystem_Neo, DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier zSpeed, BooleanSupplier isSlow) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.m_SwerveSubsystem = swerveSubsystem;
+    this.m_SwerveSubsystem_Neo = swerveSubsystem_Neo;
     this.xSpeedFunc = xSpeed;
     this.ySpeedFunc = ySpeed;
     this.zSpeedFunc = zSpeed;
@@ -43,7 +44,7 @@ public class ManualDrive extends Command {
     this.yLimiter = new SlewRateLimiter(4.6);
     this.zLimiter = new SlewRateLimiter(4.6);
 
-    addRequirements(m_SwerveSubsystem);
+    addRequirements(m_SwerveSubsystem_Neo);
 
   }
 
@@ -84,13 +85,13 @@ public class ManualDrive extends Command {
     SmartDashboard.putNumber("ManualDrive/Yspeed", ySpeed);
     SmartDashboard.putNumber("ManualDrive/Zspeed", zSpeed);
 
-    m_SwerveSubsystem.drive(this.xSpeed, this.ySpeed, this.zSpeed,true);
+    m_SwerveSubsystem_Neo.drive(this.xSpeed, this.ySpeed, this.zSpeed,true);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_SwerveSubsystem.drive(0, 0, 0, false);
+    m_SwerveSubsystem_Neo.drive(0, 0, 0, false);
   }
 
   // Returns true when the command should end.

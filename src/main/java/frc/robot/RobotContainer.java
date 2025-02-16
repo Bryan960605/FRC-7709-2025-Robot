@@ -6,7 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ClimbCommand;
-import frc.robot.commands.ManualDrive;
+import frc.robot.commands.ManualDrive_Kraken;
 import frc.robot.commands.IntakeCommands.Coral_L1;
 import frc.robot.commands.IntakeCommands.Coral_L2;
 import frc.robot.commands.IntakeCommands.Coral_L3;
@@ -123,7 +123,7 @@ public class RobotContainer {
     // operatorController.x().whileTrue(new IntakeAlgae_Floor(m_ElevatorSubsystem, m_EffectorSubsystem));
     // operatorController.y().onTrue(new ClimbCommand(m_ClimberSubsystem));
 
-    m_SwerveSubsystem.setDefaultCommand(new ManualDrive(m_SwerveSubsystem, xSpeedFunc, ySpeedFunc, zSpeedFunc, isSlowFunc));
+    m_SwerveSubsystem.setDefaultCommand(new ManualDrive_Kraken(m_SwerveSubsystem, xSpeedFunc, ySpeedFunc, zSpeedFunc, isSlowFunc));
   }
 
   /**
