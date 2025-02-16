@@ -328,7 +328,7 @@ public final class Constants {
     public static final double coralL2OutVol = 0;
     public static final double coralL3OutVol = 0;
     public static final double coralL4OutVol = 0;
-    public static final double coralInVol = 0;
+    public static final double coralInSpeed_RotionPerSecond = 0;
     public static final double algaeFloorInVol = 0;
     public static final double algaeShootNetVol = 0;
     public static final double algaeLowInVol = 0;

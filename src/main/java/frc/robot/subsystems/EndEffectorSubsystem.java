@@ -5,7 +5,10 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -31,6 +34,9 @@ public class EndEffectorSubsystem extends SubsystemBase {
   private final TalonFXConfiguration wheelConfig;
   private final TalonFXConfiguration armConfig;
   private final CANcoderConfiguration absolutedEncoderConfig;
+  private final MotionMagicConfigs speedMotionMagicConfigs;
+  private final Slot0Configs speedSlot0Configs;
+  private final MotionMagicVelocityVoltage request_EndEffectorSpeed;
 
   private final PIDController armPID;
   private final ArmFeedforward armFeedforward;
@@ -51,20 +57,38 @@ public class EndEffectorSubsystem extends SubsystemBase {
     // Motor Configurations
     wheelConfig = new TalonFXConfiguration();
     armConfig = new TalonFXConfiguration();
+    speedMotionMagicConfigs = new MotionMagicConfigs();
+    speedSlot0Configs = wheelConfig.Slot0;
+    request_EndEffectorSpeed = new MotionMagicVelocityVoltage(0);
 
     wheelConfig.MotorOutput.withNeutralMode(NeutralModeValue.Brake);
     armConfig.MotorOutput.withNeutralMode(NeutralModeValue.Brake);
     wheelConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     armConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    
+    //slot0
+    speedSlot0Configs.kS = 0;
+    speedSlot0Configs.kV = 0;
+    speedSlot0Configs.kA = 0;
+    speedSlot0Configs.kP = 0;
+    speedSlot0Configs.kI = 0;
+    speedSlot0Configs.kD = 0;
 
-    intakewheel.getConfigurator().apply(wheelConfig);
-    intakeArm.getConfigurator().apply(armConfig);
+    //MotioinMagic Config
+    speedMotionMagicConfigs.MotionMagicAcceleration = 400;
+    speedMotionMagicConfigs.MotionMagicJerk = 4000;
 
     // Absolute Encoder Configurations
     absolutedEncoderConfig = new CANcoderConfiguration();
     absolutedEncoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
     absolutedEncoderConfig.MagnetSensor.MagnetOffset = EndEffectorConstants.absolutedEncoderOffset;
     armAbsolutedEncoder.getConfigurator().apply(absolutedEncoderConfig);
+
+    //Motor Configurations
+    intakewheel.getConfigurator().apply(wheelConfig);
+    intakewheel.getConfigurator().apply(speedMotionMagicConfigs);
+    intakewheel.getConfigurator().apply(speedSlot0Configs);
+    intakeArm.getConfigurator().apply(armConfig);
 
     // PID Controller and Feedforward
     armPID = new PIDController(EndEffectorConstants.armPID_Kp, EndEffectorConstants.armPID_Ki, EndEffectorConstants.armPID_Kd);
@@ -77,7 +101,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
   }
 
   public void intakeCoral_Wheel() {
-    intakewheel.setVoltage(EndEffectorConstants.coralInVol);
+    intakewheel.setControl(request_EndEffectorSpeed.withVelocity(EndEffectorConstants.coralInSpeed_RotionPerSecond));
   }
 
   public void outCoral_L1_Arm() {
@@ -161,7 +185,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
   }
 
   public void stopWheel() {
-    intakewheel.setVoltage(0);
+    intakewheel.setControl(request_EndEffectorSpeed.withVelocity(0));
   }
 
   public double getPosition() {
