@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.ManualDrive_Kraken;
+import frc.robot.commands.ManualDrive_Neo;
 import frc.robot.commands.IntakeCommands.Coral_L1;
 import frc.robot.commands.IntakeCommands.Coral_L2;
 import frc.robot.commands.IntakeCommands.Coral_L3;
@@ -32,6 +33,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.PhotonVisionSubsystem;
 import frc.robot.subsystems.SwerveSubsystem_Kraken;
+import frc.robot.subsystems.SwerveSubsystem_Neo;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -56,6 +58,7 @@ public class RobotContainer {
   // private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
   private final PhotonVisionSubsystem m_PhotonVisionSubsystem = new PhotonVisionSubsystem();
   private final SwerveSubsystem_Kraken m_SwerveSubsystem = new SwerveSubsystem_Kraken(m_PhotonVisionSubsystem);
+  private final SwerveSubsystem_Neo m_SwerveSubsystem_Neo = new SwerveSubsystem_Neo(m_PhotonVisionSubsystem);
   // private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   // private final EndEffectorSubsystem m_EffectorSubsystem = new EndEffectorSubsystem();
 
@@ -124,6 +127,7 @@ public class RobotContainer {
     // operatorController.y().onTrue(new ClimbCommand(m_ClimberSubsystem));
 
     m_SwerveSubsystem.setDefaultCommand(new ManualDrive_Kraken(m_SwerveSubsystem, xSpeedFunc, ySpeedFunc, zSpeedFunc, isSlowFunc));
+    m_SwerveSubsystem_Neo.setDefaultCommand(new ManualDrive_Neo(m_SwerveSubsystem_Neo, xSpeedFunc, ySpeedFunc, zSpeedFunc, isSlowFunc));
   }
 
   /**
