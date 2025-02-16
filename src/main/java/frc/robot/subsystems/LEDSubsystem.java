@@ -40,14 +40,14 @@ public class LEDSubsystem extends SubsystemBase {
   }
 
   public void fireAnimation() {
-    ledAnimation = new FireAnimation(ledNum, ledNum, ledNum, ledNum, ledNum);
+    ledAnimation = new FireAnimation(0.2, 0.5, ledNum, 0.5, 0.5);
     candle.animate(ledAnimation);
     LEDConstants.LEDFlag = false;
   }
 
   public void hasGamePiece() {
     candle.animate(null);
-    candle.setLEDs(255, 255, 255, 255, ledNum, ledNum);
+    candle.setLEDs(0, 255, 0, 0, 0, ledNum);
     LEDConstants.LEDFlag = false;
   }
 
@@ -67,13 +67,13 @@ public class LEDSubsystem extends SubsystemBase {
   public void intakeGamePiece() {
     ledAnimation = new StrobeAnimation(ledNum, ledNum, ledNum);
     candle.animate(ledAnimation);
-    candle.setLEDs(ledNum, ledNum, ledNum, ledNum, ledNum, ledNum);
+    candle.setLEDs(255, 0, 0, 0, 0, ledNum);
     LEDConstants.LEDFlag = false;
   }
 
   public void arrivePosition_Intake() {
     candle.animate(null);
-    candle.setLEDs(ledNum, ledNum, ledNum, ledNum, ledNum, ledNum);
+    candle.setLEDs(0, 0, 255, 0, 0, ledNum);
     LEDConstants.LEDFlag = false;
   }
 

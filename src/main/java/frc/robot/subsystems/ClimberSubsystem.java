@@ -52,7 +52,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
     // PID and Feedforward
     climbPID = new PIDController(ClimberConstants.climbPID_Kp, ClimberConstants.climbPID_Ki, ClimberConstants.climbPID_Kd);
-    climbPID.setIntegratorRange(ClimberConstants.climbPIDMinOutput, ClimberConstants.climbPIDMaxOutput);
+    // climbPID.setIntegratorRange(ClimberConstants.climbPIDMinOutput, ClimberConstants.climbPIDMaxOutput);
   }
 
   public double getAngle() {
