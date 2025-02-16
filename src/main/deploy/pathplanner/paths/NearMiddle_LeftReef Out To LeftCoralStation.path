@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.809016393442622,
-        "y": 1.7773053278688535
+        "x": 6.832991803278689,
+        "y": 1.573514344262295
       },
       "isLocked": false,
       "linkedName": "NearMiddle_LeftReef"
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 53.88065915052027
+    "rotation": 53.88065915052028
   },
   "reversed": false,
   "folder": "LeftCoralStation",
