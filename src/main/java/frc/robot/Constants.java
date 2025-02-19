@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
@@ -21,6 +23,8 @@ public final class Constants {
     public static final double kJoystickDeadBand = 0.1;
     public static final int kDriverControllerPort = 0;
     public static final int kOperatorControllerPort = 1;
+
+    public static boolean modeCoral = false;
   }
 
   public static double setMaxOutput(double output, double maxOutput){
@@ -293,13 +297,13 @@ public final class Constants {
     public static final double algaeProccesorPosition = 0;
   }
 
-  // public static class Mode{
-  //   public static BooleanSupplier changeModeFunc = () -> nowModeIsCoral();
-  //   public static String nowMode = "coralMode";
-  //   public static boolean nowModeIsCoral(){
-  //     return nowMode == "coral";
-  //   }
-  // }
+  public static class Mode{
+    public static BooleanSupplier changeModeFunc = () -> nowModeIsCoral();
+    public static String nowMode = "coralMode";
+    public static boolean nowModeIsCoral(){
+      return nowMode == "coralMode";
+    }
+  }
 
   public static class EndEffectorConstants {
     public static final int intakeWheel_ID = 1;
