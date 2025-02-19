@@ -119,9 +119,7 @@ public class RobotContainer {
     // driverController.x().whileTrue(new TrackCage(m_SwerveSubsystem, m_PhotonVisionSubsystem));
     // driverController.y().whileTrue(new TrackProcessor(m_SwerveSubsystem, m_PhotonVisionSubsystem));
     // driverController.pov(0).whileTrue(new TrackNet(m_SwerveSubsystem, m_PhotonVisionSubsystem));
-    driverController.a().and(Mode.changeModeFunc).toggleOnTrue(getAutonomousCommand());
 
-    driverController.b().toggleOnTrue()
 
 
     // operatorController.pov(90).whileTrue(new Coral_L1(m_ElevatorSubsystem, m_EffectorSubsystem));
