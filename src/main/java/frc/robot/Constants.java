@@ -265,6 +265,14 @@ public final class Constants {
     public static final double yPidSetPoint_Net_Back_ID21_ID10 = 0;
     public static final double rotationPidSetPoint_Net_Back_ID21_ID10 = 0;
 
+    public static final double arriveXPosition_Reef = 0;
+    public static final double arriveXPosition_Cage = 0;
+    public static final double arrivePosition_Net = 0;
+
+    public static final double tooClosePosition_Reef = 0;
+    public static final double tooClosePosition_Cage = 0;
+    public static final double tooClosePosition_Net = 0;
+
   }
 
   public class ElevatorConstants {

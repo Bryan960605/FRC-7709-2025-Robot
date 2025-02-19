@@ -5,6 +5,7 @@
 package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.EndEffectorConstants;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
@@ -14,6 +15,9 @@ public class IntakeAlgae_High extends Command {
   /** Creates a new IntakeAlgae_High_Elevator. */
   private final ElevatorSubsystem m_ElevatorSubsystem;
   private final EndEffectorSubsystem m_EndEffectorSubsystem;
+
+  private boolean arriveEndEffectorPrimition;
+
   public IntakeAlgae_High(ElevatorSubsystem ElevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_ElevatorSubsystem = ElevatorSubsystem;
@@ -25,9 +29,12 @@ public class IntakeAlgae_High extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_ElevatorSubsystem.intakeAlgae_High();
-    m_EndEffectorSubsystem.intakeAlgae_High_Arm();
-    m_EndEffectorSubsystem.intakeAlgae_High_Wheel();
+    // m_ElevatorSubsystem.intakeAlgae_High();
+    // m_EndEffectorSubsystem.intakeAlgae_High_Arm();
+    // m_EndEffectorSubsystem.intakeAlgae_High_Wheel();
+    m_EndEffectorSubsystem.primitiveArm();
+
+    arriveEndEffectorPrimition = false;
 
     LEDConstants.intakeGamePiece = true;
     LEDConstants.hasGamePiece = false;
@@ -37,6 +44,16 @@ public class IntakeAlgae_High extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(Math.abs(m_EndEffectorSubsystem.getAngle() - EndEffectorConstants.primitiveAngle) < 1) {
+      arriveEndEffectorPrimition = true;
+    }
+    if(arriveEndEffectorPrimition) {
+      m_ElevatorSubsystem.intakeAlgae_High();
+      if(Math.abs(m_ElevatorSubsystem.getCurrentPosition() - m_ElevatorSubsystem.getGoalPosition()) < 1) {
+        m_EndEffectorSubsystem.intakeAlgae_High_Arm();
+        m_EndEffectorSubsystem.intakeAlgae_High_Wheel();
+      }
+    }
     if(m_EndEffectorSubsystem.hasAlgae()) {
       LEDConstants.hasGamePiece = true;
       LEDConstants.LEDFlag = true;

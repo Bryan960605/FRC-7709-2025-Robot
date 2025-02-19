@@ -5,12 +5,13 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.ArmTest_IntakeAlgae_Floor;
-import frc.robot.commands.ArmTest_IntakeCoral;
+import frc.robot.Constants.PhotonConstants;
+// import frc.robot.commands.ArmTest_IntakeAlgae_Floor;
+// import frc.robot.commands.ArmTest_IntakeCoral;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.ManualDrive_Kraken;
 import frc.robot.commands.ManualDrive_Neo;
-import frc.robot.commands.IntakeCommands.Coral_L1;
+import frc.robot.commands.IntakeCommands.Coral_L1_Test;
 import frc.robot.commands.IntakeCommands.Coral_L2;
 import frc.robot.commands.IntakeCommands.Coral_L3;
 import frc.robot.commands.IntakeCommands.Coral_L4;
@@ -99,6 +100,7 @@ public class RobotContainer {
     // DoubleSupplier zSpeedFunc = ()-> driverController.getRawAxis(4);
 
     // BooleanSupplier isSlowFunc = ()-> driverController.getHID().getLeftBumperButton();
+       BooleanSupplier ifFeed = ()-> driverController.getHID().getLeftBumperButton();
 
     // driverController.b().whileTrue(
     //   Commands.runOnce(()->{
@@ -129,7 +131,7 @@ public class RobotContainer {
     // operatorController.x().whileTrue(new IntakeAlgae_Floor(m_ElevatorSubsystem, m_EffectorSubsystem));
     // operatorController.y().onTrue(new ClimbCommand(m_ClimberSubsystem));
 
-    driverController.rightBumper().whileTrue(new ArmTest_IntakeAlgae_Floor(m_EffectorSubsystem));
+    // driverController.rightBumper().whileTrue(new ArmTest_IntakeAlgae_Floor(m_EffectorSubsystem));
 
     // m_SwerveSubsystem.setDefaultCommand(new ManualDrive_Kraken(m_SwerveSubsystem, xSpeedFunc, ySpeedFunc, zSpeedFunc, isSlowFunc));
     // m_SwerveSubsystem_Neo.setDefaultCommand(new ManualDrive_Neo(m_SwerveSubsystem_Neo, xSpeedFunc, ySpeedFunc, zSpeedFunc, isSlowFunc));

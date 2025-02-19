@@ -4,7 +4,10 @@
 
 package frc.robot.commands.IntakeCommands;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.EndEffectorConstants;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
@@ -14,10 +17,17 @@ public class Coral_L3 extends Command {
   /** Creates a new Coral_L3_Elevator. */
   private final ElevatorSubsystem m_ElevatorSubsystem;
   private final EndEffectorSubsystem m_EndEffectorSubsystem;
-  public Coral_L3(ElevatorSubsystem elevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem) {
+
+  private final BooleanSupplier ifFeedFunc;
+
+  private boolean ifFeed;
+  private boolean arriveEndEffectorPrimition;
+  public Coral_L3(ElevatorSubsystem elevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem, BooleanSupplier ifFeed) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_ElevatorSubsystem = elevatorSubsystem;
     this.m_EndEffectorSubsystem = endEffectorSubsystem;
+
+    this.ifFeedFunc = ifFeed;
 
     addRequirements(m_ElevatorSubsystem, m_EndEffectorSubsystem);
   }
@@ -25,8 +35,11 @@ public class Coral_L3 extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_ElevatorSubsystem.outCoral_L3();
-    m_EndEffectorSubsystem.outCoral_L3_Arm();
+    // m_ElevatorSubsystem.outCoral_L3();
+    // m_EndEffectorSubsystem.outCoral_L3_Arm();
+    m_EndEffectorSubsystem.primitiveArm();
+
+    arriveEndEffectorPrimition = false;
 
     LEDConstants.intakeArriving = true;
     LEDConstants.arrivePosition_Intake = false;
@@ -36,7 +49,19 @@ public class Coral_L3 extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint()) {
+
+    if(Math.abs(m_EndEffectorSubsystem.getAngle() - EndEffectorConstants.primitiveAngle) <= 1) {
+      arriveEndEffectorPrimition = true;
+    }
+
+    if(arriveEndEffectorPrimition) {
+      m_ElevatorSubsystem.outCoral_L3();
+      if(Math.abs(m_ElevatorSubsystem.getCurrentPosition() - m_ElevatorSubsystem.getGoalPosition()) < 1) {
+        m_EndEffectorSubsystem.outCoral_L3_Arm();
+      }
+    }
+  
+    if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint() && ifFeed) {
       m_EndEffectorSubsystem.outCoral_L3_Wheel();
 
       LEDConstants.arrivePosition_Intake = true;

@@ -117,6 +117,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     return (Math.abs(goalPosition - getCurrentPosition()) <= 1);
   }
 
+  public double getGoalPosition() {
+    return goalPosition;
+  }
+
   @Override
   public void periodic() {
     elevator_FirstMotor.setControl(request_Elevator.withPosition(goalPosition));
