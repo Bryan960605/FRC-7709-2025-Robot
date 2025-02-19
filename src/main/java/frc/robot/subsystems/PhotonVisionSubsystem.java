@@ -70,9 +70,9 @@ public class PhotonVisionSubsystem extends SubsystemBase {
     frontLeftCamera = new PhotonCamera("OV9281_FrontLeft");
     backCamera = new PhotonCamera("OV9281_Back");
 
-    frontRightToRobot = new Transform3d(null, null, null, new Rotation3d(new Rotation2d(0)));
-    frontLeftToRobot = new Transform3d(null, null, null, new Rotation3d(new Rotation2d(0)));
-    backToRobot = new Transform3d(null, null, null, new Rotation3d(new Rotation2d(0)));
+    frontRightToRobot = new Transform3d(0, 0, 0, new Rotation3d(new Rotation2d(0)));
+    frontLeftToRobot = new Transform3d(0, 0, 0, new Rotation3d(new Rotation2d(0)));
+    backToRobot = new Transform3d(0, 0, 0, new Rotation3d(new Rotation2d(0)));
 
   }
 

@@ -5,6 +5,7 @@
 package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.LEDConstants;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 
@@ -27,11 +28,23 @@ public class IntakeCoral extends Command {
     m_ElevatorSubsystem.intakeCoral();
     m_EndEffectorSubsystem.intakeCoral_Arm();
     m_EndEffectorSubsystem.intakeCoral_Wheel();
+
+    LEDConstants.intakeGamePiece = true;
+    LEDConstants.hasGamePiece = false;
+    LEDConstants.LEDFlag = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    if(m_EndEffectorSubsystem.hasCoral()) {
+      LEDConstants.hasGamePiece = true;
+      LEDConstants.LEDFlag = true;
+    }else {
+      LEDConstants.hasGamePiece = false;
+      LEDConstants.LEDFlag = true;
+    }
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -39,11 +52,20 @@ public class IntakeCoral extends Command {
     m_ElevatorSubsystem.toPrimitive();
     m_EndEffectorSubsystem.primitiveArm();
     m_EndEffectorSubsystem.stopWheel();
+    if(m_EndEffectorSubsystem.hasCoral()) {
+      LEDConstants.hasGamePiece = true;
+      LEDConstants.intakeGamePiece = false;
+      LEDConstants.LEDFlag = true;
+    }else {
+      LEDConstants.hasGamePiece = false;
+      LEDConstants.intakeGamePiece = false;
+      LEDConstants.LEDFlag = true;
+    }
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_EndEffectorSubsystem.hasCoral();
+    return LEDConstants.hasGamePiece;
   }
 }

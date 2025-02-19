@@ -5,6 +5,7 @@
 package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.LEDConstants;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 
@@ -26,12 +27,22 @@ public class ShootNet extends Command {
   public void initialize() {
     m_ElevatorSubsystem.shootNet();
     m_EndEffectorSubsystem.shootNet_Arm();
+
+    LEDConstants.intakeArriving = true;
+    LEDConstants.arrivePosition_Intake = false;
+    LEDConstants.LEDFlag = true;
   }
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if (m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint()) {
       m_EndEffectorSubsystem.shootNet_Wheel();
+
+      LEDConstants.arrivePosition_Intake = true;
+      LEDConstants.LEDFlag = true;
+    }else {
+      LEDConstants.arrivePosition_Intake = false;
+      LEDConstants.LEDFlag = true;
     }
   }
 
@@ -41,6 +52,10 @@ public class ShootNet extends Command {
     m_ElevatorSubsystem.toPrimitive();
     m_EndEffectorSubsystem.primitiveArm();
     m_EndEffectorSubsystem.stopWheel();
+
+    LEDConstants.arrivePosition_Intake = false;
+    LEDConstants.intakeArriving = false;
+    LEDConstants.LEDFlag = true;
   }
 
   // Returns true when the command should end.

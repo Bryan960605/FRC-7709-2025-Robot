@@ -4,7 +4,10 @@
 
 package frc.robot.commands.IntakeCommands;
 
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveDrivetrainConstants;
+
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.LEDConstants;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 
@@ -27,11 +30,23 @@ public class IntakeAlgae_Floor extends Command {
     m_ElevatorSubsystem.intakeAlgae_Floor();
     m_EndEffectorSubsystem.intakeAlgae_Floor_Arm();
     m_EndEffectorSubsystem.intakeAlgae_Floor_Wheel();
+
+    LEDConstants.intakeGamePiece = true;
+    LEDConstants.hasGamePiece = false;
+    LEDConstants.LEDFlag = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    if(m_EndEffectorSubsystem.hasAlgae()) {
+      LEDConstants.hasGamePiece = true;
+      LEDConstants.LEDFlag = true;
+    }else {
+      LEDConstants.hasGamePiece = false;
+      LEDConstants.LEDFlag = true;
+    }
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -40,15 +55,21 @@ public class IntakeAlgae_Floor extends Command {
     m_EndEffectorSubsystem.primitiveArm();
 
     if (m_EndEffectorSubsystem.hasAlgae()) {
-      m_EndEffectorSubsystem.holdAlgae();      
+      m_EndEffectorSubsystem.holdAlgae(); 
+      LEDConstants.hasGamePiece = true;
+      LEDConstants.intakeGamePiece = false;
+      LEDConstants.LEDFlag = true;
     }else{
       m_EndEffectorSubsystem.stopWheel();
+      LEDConstants.hasGamePiece = false;
+      LEDConstants.intakeGamePiece = false;
+      LEDConstants.LEDFlag = true;
     }
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_EndEffectorSubsystem.hasAlgae();
+    return LEDConstants.hasGamePiece;
   }
 }

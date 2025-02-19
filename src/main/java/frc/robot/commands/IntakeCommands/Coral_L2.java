@@ -5,6 +5,7 @@
 package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.LEDConstants;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 
@@ -26,13 +27,23 @@ public class Coral_L2 extends Command {
   public void initialize() {
     m_ElevatorSubsystem.outCoral_L2();
     m_EndEffectorSubsystem.outCoral_L2_Arm();
+
+    LEDConstants.intakeArriving = true;
+    LEDConstants.arrivePosition_Intake = false;
+    LEDConstants.LEDFlag = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint()) {
+    if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint()) {
       m_EndEffectorSubsystem.outCoral_L2_Wheel();
+
+      LEDConstants.arrivePosition_Intake = true;
+      LEDConstants.LEDFlag = true;
+    }else {
+      LEDConstants.arrivePosition_Intake = false;
+      LEDConstants.LEDFlag = true;
     }
   }
 

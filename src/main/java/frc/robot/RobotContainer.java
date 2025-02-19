@@ -5,6 +5,8 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.ArmTest_IntakeAlgae_Floor;
+import frc.robot.commands.ArmTest_IntakeCoral;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.ManualDrive_Kraken;
 import frc.robot.commands.ManualDrive_Neo;
@@ -56,26 +58,26 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   // private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
-  private final PhotonVisionSubsystem m_PhotonVisionSubsystem = new PhotonVisionSubsystem();
-  private final SwerveSubsystem_Kraken m_SwerveSubsystem = new SwerveSubsystem_Kraken(m_PhotonVisionSubsystem);
-  private final SwerveSubsystem_Neo m_SwerveSubsystem_Neo = new SwerveSubsystem_Neo(m_PhotonVisionSubsystem);
+  // private final PhotonVisionSubsystem m_PhotonVisionSubsystem = new PhotonVisionSubsystem();
+  // private final SwerveSubsystem_Kraken m_SwerveSubsystem = new SwerveSubsystem_Kraken(m_PhotonVisionSubsystem);
+  // private final SwerveSubsystem_Neo m_SwerveSubsystem_Neo = new SwerveSubsystem_Neo(m_PhotonVisionSubsystem);
   // private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
-  // private final EndEffectorSubsystem m_EffectorSubsystem = new EndEffectorSubsystem();
+  private final EndEffectorSubsystem m_EffectorSubsystem = new EndEffectorSubsystem();
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  private final CommandXboxController driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private final CommandXboxController driverController = new CommandXboxController(1);
   // private final CommandXboxController operatorController = new CommandXboxController(OperatorConstants.kOperatorControllerPort);
 
-  private final SendableChooser<Command> autoChooser;
+  // private final SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
     // Configure the trigger bindings
-    autoChooser = AutoBuilder.buildAutoChooser();
+    // autoChooser = AutoBuilder.buildAutoChooser();
     configureBindings();
-    SmartDashboard.putData("Auto Mode", autoChooser);
+    // SmartDashboard.putData("Auto Mode", autoChooser);
   }
 
   /**
@@ -92,22 +94,22 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    DoubleSupplier xSpeedFunc = ()-> driverController.getRawAxis(1);
-    DoubleSupplier ySpeedFunc = ()-> driverController.getRawAxis(0);
-    DoubleSupplier zSpeedFunc = ()-> driverController.getRawAxis(4);
+    // DoubleSupplier xSpeedFunc = ()-> driverController.getRawAxis(1);
+    // DoubleSupplier ySpeedFunc = ()-> driverController.getRawAxis(0);
+    // DoubleSupplier zSpeedFunc = ()-> driverController.getRawAxis(4);
 
-    BooleanSupplier isSlowFunc = ()-> driverController.getHID().getLeftBumperButton();
+    // BooleanSupplier isSlowFunc = ()-> driverController.getHID().getLeftBumperButton();
 
-    driverController.b().whileTrue(
-      Commands.runOnce(()->{
-        m_SwerveSubsystem.resetGyro();
-      })
-    );
+    // driverController.b().whileTrue(
+    //   Commands.runOnce(()->{
+    //     m_SwerveSubsystem.resetGyro();
+    //   })
+    // );
 
-    driverController.rightBumper().whileTrue(new TrackRightReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
-    driverController.a().whileTrue(new AprilTagRotation(m_PhotonVisionSubsystem, m_SwerveSubsystem));
-    driverController.y().whileTrue(new AprilTagY(m_PhotonVisionSubsystem, m_SwerveSubsystem));
-    driverController.x().whileTrue(new AprilTagX(m_PhotonVisionSubsystem, m_SwerveSubsystem));
+    // driverController.rightBumper().whileTrue(new TrackRightReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
+    // driverController.a().whileTrue(new AprilTagRotation(m_PhotonVisionSubsystem, m_SwerveSubsystem));
+    // driverController.y().whileTrue(new AprilTagY(m_PhotonVisionSubsystem, m_SwerveSubsystem));
+    // driverController.x().whileTrue(new AprilTagX(m_PhotonVisionSubsystem, m_SwerveSubsystem));
 
     // driverController.rightBumper().whileTrue(new TrackCage(m_SwerveSubsystem, m_PhotonVisionSubsystem));
     // driverController.a().whileTrue(new TrackCoralStation(m_PhotonVisionSubsystem, m_SwerveSubsystem));
@@ -127,8 +129,10 @@ public class RobotContainer {
     // operatorController.x().whileTrue(new IntakeAlgae_Floor(m_ElevatorSubsystem, m_EffectorSubsystem));
     // operatorController.y().onTrue(new ClimbCommand(m_ClimberSubsystem));
 
-    m_SwerveSubsystem.setDefaultCommand(new ManualDrive_Kraken(m_SwerveSubsystem, xSpeedFunc, ySpeedFunc, zSpeedFunc, isSlowFunc));
-    m_SwerveSubsystem_Neo.setDefaultCommand(new ManualDrive_Neo(m_SwerveSubsystem_Neo, xSpeedFunc, ySpeedFunc, zSpeedFunc, isSlowFunc));
+    driverController.rightBumper().whileTrue(new ArmTest_IntakeAlgae_Floor(m_EffectorSubsystem));
+
+    // m_SwerveSubsystem.setDefaultCommand(new ManualDrive_Kraken(m_SwerveSubsystem, xSpeedFunc, ySpeedFunc, zSpeedFunc, isSlowFunc));
+    // m_SwerveSubsystem_Neo.setDefaultCommand(new ManualDrive_Neo(m_SwerveSubsystem_Neo, xSpeedFunc, ySpeedFunc, zSpeedFunc, isSlowFunc));
   }
 
   /**
@@ -138,6 +142,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return autoChooser.getSelected();
+    return null;
   }
 }
