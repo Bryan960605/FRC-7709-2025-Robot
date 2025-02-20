@@ -79,6 +79,10 @@ public class Coral_L3 extends Command {
     m_ElevatorSubsystem.toPrimitive();
     m_EndEffectorSubsystem.primitiveArm();
     m_EndEffectorSubsystem.stopWheel();
+
+    LEDConstants.intakeArriving = false;
+    LEDConstants.arrivePosition_Intake = false;
+    LEDConstants.LEDFlag = true;
   }
 
   // Returns true when the command should end.

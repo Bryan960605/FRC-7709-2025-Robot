@@ -4,6 +4,7 @@
 
 package frc.robot.commands.IntakeCommands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.EndEffectorConstants;
 import frc.robot.Constants.LEDConstants;
@@ -16,11 +17,16 @@ public class IntakeAlgae_Low extends Command {
   private final ElevatorSubsystem m_ElevatorSubsystem;
   private final EndEffectorSubsystem m_EndEffectorSubsystem;
 
+  private Timer timer;
+
   private boolean arriveEndEffectorPrimition;
+  private boolean hasAlgae;
   public IntakeAlgae_Low(ElevatorSubsystem ElevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_ElevatorSubsystem = ElevatorSubsystem;
     this.m_EndEffectorSubsystem = endEffectorSubsystem;
+
+    timer = new Timer();
 
     addRequirements(m_ElevatorSubsystem, m_EndEffectorSubsystem);
   }
@@ -54,8 +60,16 @@ public class IntakeAlgae_Low extends Command {
     }
 
     if(m_EndEffectorSubsystem.hasAlgae()) {
-      LEDConstants.hasGamePiece = true;
-      LEDConstants.LEDFlag = true;
+      timer.start();
+      if(timer.get() > 0.5 && m_EndEffectorSubsystem.hasAlgae()) {
+        hasAlgae = true;
+
+        LEDConstants.hasGamePiece = true;
+        LEDConstants.LEDFlag = true;
+      }else if(!m_EndEffectorSubsystem.hasAlgae()){
+        timer.reset();
+        timer.stop();
+      }
     }else {
       LEDConstants.hasGamePiece = false;
       LEDConstants.LEDFlag = true;
@@ -86,6 +100,6 @@ public class IntakeAlgae_Low extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return LEDConstants.hasGamePiece;
+    return hasAlgae;
   }
 }

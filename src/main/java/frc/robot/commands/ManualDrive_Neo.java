@@ -59,7 +59,7 @@ public class ManualDrive_Neo extends Command {
   public void execute() {
     this.xSpeed = -xSpeedFunc.getAsDouble();
     this.ySpeed = -ySpeedFunc.getAsDouble();
-    this.zSpeed = zSpeedFunc.getAsDouble();
+    this.zSpeed = -zSpeedFunc.getAsDouble();
 
     this.xSpeed = MathUtil.applyDeadband(this.xSpeed, OperatorConstants.kJoystickDeadBand);
     this.ySpeed = MathUtil.applyDeadband(this.ySpeed, OperatorConstants.kJoystickDeadBand);

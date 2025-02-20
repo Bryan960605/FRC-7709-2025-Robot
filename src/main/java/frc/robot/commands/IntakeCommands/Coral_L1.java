@@ -39,9 +39,9 @@ public class Coral_L1 extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // m_ElevatorSubsystem.outCoral_L1();
-    // m_EndEffectorSubsystem.outCoral_L1_Arm();
-    m_EndEffectorSubsystem.primitiveArm();
+    m_ElevatorSubsystem.outCoral_L1();
+    m_EndEffectorSubsystem.outCoral_L1_Arm();
+    // m_EndEffectorSubsystem.primitiveArm();
 
     arriveEndEffectorPrimition = false;
 
@@ -53,16 +53,17 @@ public class Coral_L1 extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    ifFeed = ifFeedFunc.getAsBoolean();
 
-    if(Math.abs(m_EndEffectorSubsystem.getAngle() - EndEffectorConstants.primitiveAngle) <= 1) {
-      arriveEndEffectorPrimition = true;
-    }
-    if(arriveEndEffectorPrimition) {
-      m_ElevatorSubsystem.outCoral_L1();
-      if(Math.abs(m_ElevatorSubsystem.getCurrentPosition() - m_ElevatorSubsystem.getGoalPosition()) < 1) {
-        m_EndEffectorSubsystem.outCoral_L1_Arm();
-      }
-    }
+    // if(Math.abs(m_EndEffectorSubsystem.getAngle() - EndEffectorConstants.primitiveAngle) <= 1) {
+    //   arriveEndEffectorPrimition = true;
+    // }
+    // if(arriveEndEffectorPrimition) {
+    //   m_ElevatorSubsystem.outCoral_L1();
+    //   if(Math.abs(m_ElevatorSubsystem.getCurrentPosition() - m_ElevatorSubsystem.getGoalPosition()) < 1) {
+    //     m_EndEffectorSubsystem.outCoral_L1_Arm();
+    //   }
+    // }
 
     if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint() && ifFeed) {
       m_EndEffectorSubsystem.outCoral_L1_Wheel();
