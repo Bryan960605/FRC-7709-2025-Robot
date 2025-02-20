@@ -19,6 +19,7 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -41,11 +42,15 @@ public class EndEffectorSubsystem extends SubsystemBase {
 
   private final PIDController armPID;
   private ArmFeedforward armFeedforward;
-  
-    private double pidOutput;
-    private double feedforwardOutput;
-    private double output;
-    private double arriveAngle;
+
+  private final Timer timer;
+
+  private double pidOutput;
+  private double feedforwardOutput;
+  private double output;
+  private double arriveAngle;
+  private double nowTime;
+  private boolean shouldStart;
   
     public EndEffectorSubsystem() {
       intakewheel = new TalonFX(EndEffectorConstants.intakeWheel_ID);
@@ -54,6 +59,8 @@ public class EndEffectorSubsystem extends SubsystemBase {
       irSensor_Coral = new DigitalInput(EndEffectorConstants.irSensor_Coral_ID);
       irSensor_Algae = new DigitalInput(EndEffectorConstants.irSensor_Algae_ID);
       arriveAngle = EndEffectorConstants.primitiveAngle;
+      timer = new Timer();
+      shouldStart = true;
   
       // Motor Configurations
       wheelConfig = new TalonFXConfiguration();
@@ -71,7 +78,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
       speedSlot0Configs.kS = 0;
       speedSlot0Configs.kV = 0;
       speedSlot0Configs.kA = 0;
-      speedSlot0Configs.kP = 0;
+      speedSlot0Configs.kP = 0.3;
       speedSlot0Configs.kI = 0;
       speedSlot0Configs.kD = 0;
   
@@ -101,8 +108,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
     }
   
     public void intakeCoral_Wheel() {
-      // intakewheel.setControl(request_EndEffectorSpeed.withVelocity(EndEffectorConstants.coralInSpeed_RotionPerSecond));
-      intakewheel.setVoltage(-1.4);
+      intakewheel.setControl(request_EndEffectorSpeed.withVelocity(EndEffectorConstants.coralInSpeed_RotionPerSecond));
     }
   
     public void outCoral_L1_Arm() {
@@ -186,8 +192,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
     }
   
     public void stopWheel() {
-      // intakewheel.setControl(request_EndEffectorSpeed.withVelocity(0));
-      intakewheel.setVoltage(0);
+      intakewheel.setControl(request_EndEffectorSpeed.withVelocity(0));
     }
   
     public double getPosition() {
@@ -210,8 +215,24 @@ public class EndEffectorSubsystem extends SubsystemBase {
       return Units.rotationsPerMinuteToRadiansPerSecond(armAbsolutedEncoder.getVelocity().getValueAsDouble()*60);
     }
   
-    public boolean hasCoral() {
+    public boolean sensorHasCoral() {
       return !irSensor_Coral.get();
+    }
+
+    public boolean hasCoral(){
+      nowTime = timer.get();
+      if (shouldStart && sensorHasCoral()) {
+        timer.reset();
+        timer.start();
+        shouldStart = false;
+      }
+      if (nowTime >= 0.02 && sensorHasCoral()) {
+        timer.stop();
+        return true;
+      }else{
+        shouldStart = true;
+        return false;
+      }
     }
   
     public boolean hasAlgae() {
@@ -219,12 +240,9 @@ public class EndEffectorSubsystem extends SubsystemBase {
     }
   
     public boolean arriveSetPoint() {
-      return (Math.abs(armPID.getError()) <= 1);
+      return (Math.abs(armPID.getError()) <= 1.5);
     }
   
-    public void setMode(){
-  
-    }
   
     @Override
     public void periodic() {
@@ -250,7 +268,8 @@ public class EndEffectorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("EndEffector/pidOutput", pidOutput);
     SmartDashboard.putNumber("EndEffector/feedforwardOutput", feedforwardOutput);
     SmartDashboard.putNumber("EndEffector/Output", output);
-    SmartDashboard.putBoolean("EndEffector/hasCoral", hasCoral());
+    SmartDashboard.putBoolean("EndEffector/arriveSetpoint", arriveSetPoint());
+    SmartDashboard.putBoolean("EndEffector/hasCoral", sensorHasCoral());
     SmartDashboard.putBoolean("EndEffector/hasAlgae", hasAlgae());
     SmartDashboard.putNumber("EndEffector/AbsolutedArmPosition", getAbsolutePosition());
     SmartDashboard.putNumber("EndEffector/ArmAngle", getAngle());

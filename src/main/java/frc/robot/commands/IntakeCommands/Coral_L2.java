@@ -6,6 +6,7 @@ package frc.robot.commands.IntakeCommands;
 
 import java.util.function.BooleanSupplier;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.EndEffectorConstants;
 import frc.robot.Constants.LEDConstants;
@@ -35,9 +36,9 @@ public class Coral_L2 extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // m_ElevatorSubsystem.outCoral_L2();
-    // m_EndEffectorSubsystem.outCoral_L2_Arm();
-    m_EndEffectorSubsystem.primitiveArm();
+    m_ElevatorSubsystem.outCoral_L2();
+    m_EndEffectorSubsystem.outCoral_L2_Arm();
+    // m_EndEffectorSubsystem.primitiveArm();
 
     arriveEndEffectorPrimition = false;
 
@@ -50,16 +51,18 @@ public class Coral_L2 extends Command {
   @Override
   public void execute() {
 
-    if(Math.abs(m_EndEffectorSubsystem.getAngle() - EndEffectorConstants.primitiveAngle) <= 1) {
-      arriveEndEffectorPrimition = true;
-    }
+    // if(Math.abs(m_EndEffectorSubsystem.getAngle() - EndEffectorConstants.primitiveAngle) <= 0.5) {
+    //   arriveEndEffectorPrimition = true;
+    // }
 
-    if(arriveEndEffectorPrimition) {
-      m_ElevatorSubsystem.outCoral_L2();
-      if(Math.abs(m_ElevatorSubsystem.getCurrentPosition() - m_ElevatorSubsystem.getGoalPosition()) < 1) {
-        m_EndEffectorSubsystem.outCoral_L2_Arm();
-      }
-    }
+    // if(arriveEndEffectorPrimition) {
+    //   m_ElevatorSubsystem.outCoral_L2();
+    //   if(Math.abs(m_ElevatorSubsystem.getCurrentPosition() - m_ElevatorSubsystem.getGoalPosition()) < 1) {
+    //     m_EndEffectorSubsystem.outCoral_L2_Arm();
+    //   }
+    // }
+
+    ifFeed = ifFeedFunc.getAsBoolean();
 
     if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint() && ifFeed) {
       m_EndEffectorSubsystem.outCoral_L2_Wheel();
@@ -69,7 +72,10 @@ public class Coral_L2 extends Command {
     }else {
       LEDConstants.arrivePosition_Intake = false;
       LEDConstants.LEDFlag = true;
+      m_EndEffectorSubsystem.stopWheel();
     }
+
+    SmartDashboard.putBoolean("ifFeed", ifFeed);
   }
 
   // Called once the command ends or is interrupted.
@@ -78,6 +84,7 @@ public class Coral_L2 extends Command {
     m_ElevatorSubsystem.toPrimitive();
     m_EndEffectorSubsystem.primitiveArm();
     m_EndEffectorSubsystem.stopWheel();
+    LEDConstants.intakeArriving = false;
   }
 
   // Returns true when the command should end.
