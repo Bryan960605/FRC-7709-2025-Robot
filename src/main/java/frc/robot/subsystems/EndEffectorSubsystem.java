@@ -101,7 +101,8 @@ public class EndEffectorSubsystem extends SubsystemBase {
     }
   
     public void intakeCoral_Wheel() {
-      intakewheel.setControl(request_EndEffectorSpeed.withVelocity(EndEffectorConstants.coralInSpeed_RotionPerSecond));
+      // intakewheel.setControl(request_EndEffectorSpeed.withVelocity(EndEffectorConstants.coralInSpeed_RotionPerSecond));
+      intakewheel.setVoltage(-1.4);
     }
   
     public void outCoral_L1_Arm() {
@@ -185,7 +186,8 @@ public class EndEffectorSubsystem extends SubsystemBase {
     }
   
     public void stopWheel() {
-      intakewheel.setControl(request_EndEffectorSpeed.withVelocity(0));
+      // intakewheel.setControl(request_EndEffectorSpeed.withVelocity(0));
+      intakewheel.setVoltage(0);
     }
   
     public double getPosition() {
@@ -249,7 +251,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("EndEffector/feedforwardOutput", feedforwardOutput);
     SmartDashboard.putNumber("EndEffector/Output", output);
     SmartDashboard.putBoolean("EndEffector/hasCoral", hasCoral());
-    // SmartDashboard.putBoolean("EndEffector/hasAlgae", hasAlgae());
+    SmartDashboard.putBoolean("EndEffector/hasAlgae", hasAlgae());
     SmartDashboard.putNumber("EndEffector/AbsolutedArmPosition", getAbsolutePosition());
     SmartDashboard.putNumber("EndEffector/ArmAngle", getAngle());
     SmartDashboard.putNumber("EndEffector/getPosition", getPosition());

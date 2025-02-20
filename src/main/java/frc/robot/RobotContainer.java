@@ -7,6 +7,10 @@ package frc.robot;
 import frc.robot.Constants.Mode;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.PhotonConstants;
+import frc.robot.commands.ArmTest_IntakeAlgae_Floor;
+import frc.robot.commands.ArmTest_IntakeAlgae_High;
+import frc.robot.commands.ArmTest_IntakeCoral;
+import frc.robot.commands.ArmTest_OutCoral;
 // import frc.robot.commands.ArmTest_IntakeAlgae_Floor;
 // import frc.robot.commands.ArmTest_IntakeCoral;
 import frc.robot.commands.ClimbCommand;
@@ -133,6 +137,10 @@ public class RobotContainer {
     // operatorController.y().onTrue(new ClimbCommand(m_ClimberSubsystem));
 
     // driverController.rightBumper().whileTrue(new ArmTest_IntakeAlgae_Floor(m_EffectorSubsystem));
+    driverController.leftBumper().whileTrue(new ArmTest_IntakeAlgae_Floor(m_EffectorSubsystem));
+    driverController.a().whileTrue(new ArmTest_IntakeCoral(m_EffectorSubsystem));
+    driverController.rightBumper().whileTrue(new ArmTest_IntakeAlgae_High(m_EffectorSubsystem));
+    driverController.b().whileTrue(new ArmTest_OutCoral(m_EffectorSubsystem));
 
     // m_SwerveSubsystem.setDefaultCommand(new ManualDrive_Kraken(m_SwerveSubsystem, xSpeedFunc, ySpeedFunc, zSpeedFunc, isSlowFunc));
     // m_SwerveSubsystem_Neo.setDefaultCommand(new ManualDrive_Neo(m_SwerveSubsystem_Neo, xSpeedFunc, ySpeedFunc, zSpeedFunc, isSlowFunc));
