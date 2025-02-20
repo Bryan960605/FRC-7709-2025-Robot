@@ -49,7 +49,7 @@ public class Coral_L3 extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+    ifFeed = ifFeedFunc.getAsBoolean();
     if(Math.abs(m_EndEffectorSubsystem.getAngle() - EndEffectorConstants.primitiveAngle) <= 1) {
       arriveEndEffectorPrimition = true;
     }
@@ -69,6 +69,7 @@ public class Coral_L3 extends Command {
     }else {
       LEDConstants.arrivePosition_Intake = false;
       LEDConstants.LEDFlag = true;
+      m_EndEffectorSubsystem.stopWheel();
     }
   }
 

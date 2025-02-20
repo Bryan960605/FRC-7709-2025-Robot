@@ -43,19 +43,19 @@ public class ElevatorSubsystem extends SubsystemBase {
     request_Elevator = new MotionMagicVoltage(goalPosition);
 
     elevatorSlot0Config.kS = 0;
-    elevatorSlot0Config.kG = 0;
+    elevatorSlot0Config.kG = 0.3;
     elevatorSlot0Config.kV = 0;
     elevatorSlot0Config.kA = 0;
-    elevatorSlot0Config.kP = 0;
+    elevatorSlot0Config.kP = 0.9;
     elevatorSlot0Config.kI = 0;
     elevatorSlot0Config.kD = 0;
 
-    elevatorMotionMagicConfig.MotionMagicCruiseVelocity = 0;
-    elevatorMotionMagicConfig.MotionMagicAcceleration = 0;
-    elevatorMotionMagicConfig.MotionMagicJerk = 0;
+    elevatorMotionMagicConfig.MotionMagicCruiseVelocity = 40;
+    elevatorMotionMagicConfig.MotionMagicAcceleration = 80;
+    elevatorMotionMagicConfig.MotionMagicJerk = 400;
 
     elevatorConfig.MotorOutput.withNeutralMode(NeutralModeValue.Brake);
-    elevatorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    elevatorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
     elevator_FirstMotor.getConfigurator().apply(elevatorConfig);
     elevator_SecondMotor.getConfigurator().apply(elevatorConfig);
@@ -126,6 +126,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevator_FirstMotor.setControl(request_Elevator.withPosition(goalPosition));
 
     //SmartDashboard
+    SmartDashboard.putNumber("Intake/GoalPosition", goalPosition);
     SmartDashboard.putNumber("Intake/CurrentPosition", getCurrentPosition());
     SmartDashboard.putBoolean("Intake/ArrivePosition", arriveSetPoint());
   }

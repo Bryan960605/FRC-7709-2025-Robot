@@ -17,6 +17,7 @@ import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.ManualDrive_Kraken;
 import frc.robot.commands.ManualDrive_Neo;
 import frc.robot.commands.IntakeCommands.Coral_L1_Test;
+import frc.robot.commands.IntakeCommands.Coral_L1;
 import frc.robot.commands.IntakeCommands.Coral_L2;
 import frc.robot.commands.IntakeCommands.Coral_L3;
 import frc.robot.commands.IntakeCommands.Coral_L4;
@@ -64,16 +65,16 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   // private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
-  // private final PhotonVisionSubsystem m_PhotonVisionSubsystem = new PhotonVisionSubsystem();
+  private final PhotonVisionSubsystem m_PhotonVisionSubsystem = new PhotonVisionSubsystem();
   // private final SwerveSubsystem_Kraken m_SwerveSubsystem = new SwerveSubsystem_Kraken(m_PhotonVisionSubsystem);
-  // private final SwerveSubsystem_Neo m_SwerveSubsystem_Neo = new SwerveSubsystem_Neo(m_PhotonVisionSubsystem);
-  // private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
+  private final SwerveSubsystem_Neo m_SwerveSubsystem_Neo = new SwerveSubsystem_Neo(m_PhotonVisionSubsystem);
+  private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   private final EndEffectorSubsystem m_EffectorSubsystem = new EndEffectorSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  private final CommandXboxController driverController = new CommandXboxController(1);
+  private final CommandXboxController driverController = new CommandXboxController(0);
   // private final CommandXboxController operatorController = new CommandXboxController(OperatorConstants.kOperatorControllerPort);
 
   // private final SendableChooser<Command> autoChooser;
@@ -99,18 +100,18 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    // DoubleSupplier xSpeedFunc = ()-> driverController.getRawAxis(1);
-    // DoubleSupplier ySpeedFunc = ()-> driverController.getRawAxis(0);
-    // DoubleSupplier zSpeedFunc = ()-> driverController.getRawAxis(4);
+    DoubleSupplier xSpeedFunc = ()-> driverController.getRawAxis(1);
+    DoubleSupplier ySpeedFunc = ()-> driverController.getRawAxis(0);
+    DoubleSupplier zSpeedFunc = ()-> driverController.getRawAxis(4);
 
-    // BooleanSupplier isSlowFunc = ()-> driverController.getHID().getLeftBumperButton();
-       BooleanSupplier ifFeed = ()-> driverController.getHID().getLeftBumperButton();
+    BooleanSupplier isSlowFunc = ()-> driverController.getHID().getLeftBumperButton();
+    BooleanSupplier ifFeed = ()-> driverController.getHID().getLeftBumperButton();
 
-    // driverController.b().whileTrue(
-    //   Commands.runOnce(()->{
-    //     m_SwerveSubsystem.resetGyro();
-    //   })
-    // );
+    driverController.x().whileTrue(
+      Commands.runOnce(()->{
+        m_SwerveSubsystem_Neo.resetGyro();
+      })
+    );
 
     // driverController.rightBumper().whileTrue(new TrackRightReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
     // driverController.a().whileTrue(new AprilTagRotation(m_PhotonVisionSubsystem, m_SwerveSubsystem));
@@ -125,25 +126,26 @@ public class RobotContainer {
 
 
 
-    // operatorController.pov(90).whileTrue(new Coral_L1(m_ElevatorSubsystem, m_EffectorSubsystem));
-    // operatorController.pov(270).whileTrue(new Coral_L3(m_ElevatorSubsystem, m_EffectorSubsystem));
-    // operatorController.pov(0).whileTrue(new IntakeAlgae_Low(m_ElevatorSubsystem, m_EffectorSubsystem));
-    // operatorController.pov(180).whileTrue(new IntakeAlgae_High(m_ElevatorSubsystem, m_EffectorSubsystem));
-    // operatorController.rightTrigger(0.4).whileTrue(new Coral_L4(m_ElevatorSubsystem, m_EffectorSubsystem));
-    // operatorController.leftTrigger(0.4).whileTrue(new ShootNet(m_ElevatorSubsystem, m_EffectorSubsystem));
-    // operatorController.leftBumper().whileTrue(new ShootProcessor(m_ElevatorSubsystem, m_EffectorSubsystem));
-    // operatorController.b().whileTrue(new IntakeCoral(m_ElevatorSubsystem, m_EffectorSubsystem));
-    // operatorController.x().whileTrue(new IntakeAlgae_Floor(m_ElevatorSubsystem, m_EffectorSubsystem));
+    driverController.a().toggleOnTrue(new Coral_L1(m_ElevatorSubsystem, m_EffectorSubsystem, ifFeed));
+    driverController.pov(270).toggleOnTrue(new Coral_L2(m_ElevatorSubsystem, m_EffectorSubsystem, ifFeed));
+    driverController.pov(90).toggleOnTrue(new Coral_L3(m_ElevatorSubsystem, m_EffectorSubsystem, ifFeed));
+    // driverController.pov(0).whileTrue(new IntakeAlgae_Low(m_ElevatorSubsystem, m_EffectorSubsystem));
+    // driverController.pov(180).whileTrue(new IntakeAlgae_High(m_ElevatorSubsystem, m_EffectorSubsystem));
+    driverController.rightTrigger(0.4).toggleOnTrue(new Coral_L4(m_ElevatorSubsystem, m_EffectorSubsystem, ifFeed));
+    // driverController.leftTrigger(0.4).whileTrue(new ShootNet(m_ElevatorSubsystem, m_EffectorSubsystem));
+    // driverController.leftBumper().whileTrue(new ShootProcessor(m_ElevatorSubsystem, m_EffectorSubsystem));
+    driverController.b().toggleOnTrue(new IntakeCoral(m_ElevatorSubsystem, m_EffectorSubsystem));
+    // driverController.x().whileTrue(new IntakeAlgae_Floor(m_ElevatorSubsystem, m_EffectorSubsystem));
     // operatorController.y().onTrue(new ClimbCommand(m_ClimberSubsystem));
 
     // driverController.rightBumper().whileTrue(new ArmTest_IntakeAlgae_Floor(m_EffectorSubsystem));
-    driverController.leftBumper().whileTrue(new ArmTest_IntakeAlgae_Floor(m_EffectorSubsystem));
-    driverController.a().whileTrue(new ArmTest_IntakeCoral(m_EffectorSubsystem));
-    driverController.rightBumper().whileTrue(new ArmTest_IntakeAlgae_High(m_EffectorSubsystem));
-    driverController.b().whileTrue(new ArmTest_OutCoral(m_EffectorSubsystem));
+    // driverController.leftBumper().whileTrue(new ArmTest_IntakeAlgae_Floor(m_EffectorSubsystem));
+    // driverController.a().whileTrue(new ArmTest_IntakeCoral(m_EffectorSubsystem));
+    // driverController.rightBumper().whileTrue(new ArmTest_IntakeAlgae_High(m_EffectorSubsystem));
+    // driverController.b().whileTrue(new ArmTest_OutCoral(m_EffectorSubsystem));
 
     // m_SwerveSubsystem.setDefaultCommand(new ManualDrive_Kraken(m_SwerveSubsystem, xSpeedFunc, ySpeedFunc, zSpeedFunc, isSlowFunc));
-    // m_SwerveSubsystem_Neo.setDefaultCommand(new ManualDrive_Neo(m_SwerveSubsystem_Neo, xSpeedFunc, ySpeedFunc, zSpeedFunc, isSlowFunc));
+    m_SwerveSubsystem_Neo.setDefaultCommand(new ManualDrive_Neo(m_SwerveSubsystem_Neo, xSpeedFunc, ySpeedFunc, zSpeedFunc, isSlowFunc));
   }
 
   /**

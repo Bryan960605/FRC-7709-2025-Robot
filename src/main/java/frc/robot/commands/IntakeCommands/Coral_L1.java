@@ -20,18 +20,16 @@ public class Coral_L1 extends Command {
   /** Creates a new Coral_L1. */
   private final ElevatorSubsystem m_ElevatorSubsystem;
   private final EndEffectorSubsystem m_EndEffectorSubsystem;
-  private final PhotonVisionSubsystem m_PhotonVisionSubsystem;
 
   private final BooleanSupplier ifFeedFunc;
 
   private boolean ifFeed;
   private boolean arriveEndEffectorPrimition;
   private boolean arriveElevatorPosition;
-  public Coral_L1(ElevatorSubsystem elevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem, PhotonVisionSubsystem photonVisionSubsystem, BooleanSupplier ifFeed) {
+  public Coral_L1(ElevatorSubsystem elevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem, BooleanSupplier ifFeed) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_ElevatorSubsystem = elevatorSubsystem;
     this.m_EndEffectorSubsystem = endEffectorSubsystem;
-    this.m_PhotonVisionSubsystem = photonVisionSubsystem;
 
     this.ifFeedFunc = ifFeed;
 
