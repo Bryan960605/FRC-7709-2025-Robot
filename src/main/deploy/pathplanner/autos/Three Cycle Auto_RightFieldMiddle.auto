@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightFieldMiddleStart Out To NearRight"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NearRight_RightReef Out To RightCoralStation"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightCoralStation Out To FarRight"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FarRight_LeftReef Out To RightCoralStatioin"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightCoralStation Out To FarRight"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

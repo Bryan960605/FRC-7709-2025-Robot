@@ -66,7 +66,6 @@ public class RobotContainer {
   // private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   private final EndEffectorSubsystem m_EffectorSubsystem = new EndEffectorSubsystem();
 
-
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
