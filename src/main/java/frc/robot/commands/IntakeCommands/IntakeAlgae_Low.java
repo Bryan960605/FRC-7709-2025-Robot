@@ -41,10 +41,10 @@ public class IntakeAlgae_Low extends Command {
   public void execute() {
     if(m_EndEffectorSubsystem.arriveSetPoint()) {
       m_ElevatorSubsystem.intakeAlgae_Low();
-      if(m_ElevatorSubsystem.arriveSetPoint()) {
-        m_EndEffectorSubsystem.intakeAlgae_Low_Arm();
-        m_EndEffectorSubsystem.intakeAlgae_Low_Wheel();
-      }
+    }
+    if(m_ElevatorSubsystem.arriveSetPoint()) {
+      m_EndEffectorSubsystem.intakeAlgae_Low_Arm();
+      m_EndEffectorSubsystem.intakeAlgae_Low_Wheel();
     }
 
     // if(m_EndEffectorSubsystem.hasAlgae()) {
