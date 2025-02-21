@@ -43,10 +43,11 @@ public class IntakeAlgae_High extends Command {
   public void execute() {
     if(m_EndEffectorSubsystem.arriveSetPoint()) {
       m_ElevatorSubsystem.intakeAlgae_High();
-    }
-    if(m_ElevatorSubsystem.arriveSetPoint()) {
-      m_EndEffectorSubsystem.intakeAlgae_High_Arm();
-      m_EndEffectorSubsystem.intakeAlgae_High_Wheel();
+
+      if(m_ElevatorSubsystem.arriveSetPoint()) {
+        m_EndEffectorSubsystem.intakeAlgae_High_Arm();
+        m_EndEffectorSubsystem.intakeAlgae_High_Wheel();
+      }
     }
     // if(m_EndEffectorSubsystem.hasAlgae()) {
     //   timer.start();

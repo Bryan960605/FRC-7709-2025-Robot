@@ -251,10 +251,10 @@ public class EndEffectorSubsystem extends SubsystemBase {
         timer_Algae.start();
         shouldStart_Algae = false;
       }
-      if (nowTime_Algae >= 0.02 && sensorHasAlgae()) {
+      if (nowTime_Algae >= 0.5 && sensorHasAlgae()) {
         timer_Algae.stop();
         return true;
-      }else{
+      }else {
         shouldStart_Algae = true;
         return false;
       }

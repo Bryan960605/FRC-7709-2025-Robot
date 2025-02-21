@@ -51,10 +51,10 @@ public class Coral_L4 extends Command {
     //   arriveEndEffectorPrimition = true;
     // }
     if(m_EndEffectorSubsystem.arriveSetPoint()) {
-      m_ElevatorSubsystem.outCoral_L4(); 
-    }
-    if(m_ElevatorSubsystem.arriveSetPoint()) {
-      m_EndEffectorSubsystem.outCoral_L4_Arm();
+      m_ElevatorSubsystem.outCoral_L4();    
+      if(m_ElevatorSubsystem.arriveSetPoint()) {
+        m_EndEffectorSubsystem.outCoral_L4_Arm();
+      }
     }
     if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint() && ifFeed) {
       m_EndEffectorSubsystem.outCoral_L4_Wheel();
