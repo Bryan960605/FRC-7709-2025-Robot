@@ -6,9 +6,7 @@ package frc.robot.commands.IntakeCommands;
 
 import java.util.function.BooleanSupplier;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.EndEffectorConstants;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
@@ -22,7 +20,6 @@ public class Coral_L2 extends Command {
   private final BooleanSupplier ifFeedFunc;
 
   private boolean ifFeed;
-  private boolean arriveEndEffectorPrimition;
   public Coral_L2(ElevatorSubsystem elevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem, BooleanSupplier ifFeed) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_ElevatorSubsystem = elevatorSubsystem;
@@ -40,7 +37,6 @@ public class Coral_L2 extends Command {
     m_EndEffectorSubsystem.outCoral_L2_Arm();
     // m_EndEffectorSubsystem.primitiveArm();
 
-    arriveEndEffectorPrimition = false;
 
     LEDConstants.intakeArriving = true;
     LEDConstants.arrivePosition_Intake = false;

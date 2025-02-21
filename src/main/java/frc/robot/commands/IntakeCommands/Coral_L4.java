@@ -7,7 +7,6 @@ package frc.robot.commands.IntakeCommands;
 import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.EndEffectorConstants;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
@@ -21,7 +20,6 @@ public class Coral_L4 extends Command {
   private final BooleanSupplier ifFeedFunc;
 
   private boolean ifFeed;
-  private boolean arriveEndEffectorPrimition;
   public Coral_L4(ElevatorSubsystem elevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem, BooleanSupplier ifFeed) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_ElevatorSubsystem = elevatorSubsystem;
@@ -39,7 +37,6 @@ public class Coral_L4 extends Command {
     // m_EndEffectorSubsystem.outCoral_L4_Arm();
     m_EndEffectorSubsystem.primitiveArm();
 
-    arriveEndEffectorPrimition = false;
 
     LEDConstants.intakeArriving = true;
     LEDConstants.arrivePosition_Intake = false;
@@ -50,14 +47,14 @@ public class Coral_L4 extends Command {
   @Override
   public void execute() {
     ifFeed = ifFeedFunc.getAsBoolean();
-    if(Math.abs(m_EndEffectorSubsystem.getAngle() - EndEffectorConstants.primitiveAngle) < 1) {
-      arriveEndEffectorPrimition = true;
+    // if(m_EndEffectorSubsystem.arriveSetPoint()) {
+    //   arriveEndEffectorPrimition = true;
+    // }
+    if(m_EndEffectorSubsystem.arriveSetPoint()) {
+      m_ElevatorSubsystem.outCoral_L4(); 
     }
-    if(arriveEndEffectorPrimition) {
-      m_ElevatorSubsystem.outCoral_L4();
-      if(Math.abs(m_ElevatorSubsystem.getCurrentPosition() - m_ElevatorSubsystem.getGoalPosition()) < 1) {
-        m_EndEffectorSubsystem.outCoral_L4_Arm();
-      }
+    if(m_ElevatorSubsystem.arriveSetPoint()) {
+      m_EndEffectorSubsystem.outCoral_L4_Arm();
     }
     if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint() && ifFeed) {
       m_EndEffectorSubsystem.outCoral_L4_Wheel();

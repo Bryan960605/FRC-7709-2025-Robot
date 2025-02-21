@@ -4,53 +4,23 @@
 
 package frc.robot;
 
-import frc.robot.Constants.Mode;
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.Constants.PhotonConstants;
-import frc.robot.commands.ArmTest_IntakeAlgae_Floor;
-import frc.robot.commands.ArmTest_IntakeAlgae_High;
-import frc.robot.commands.ArmTest_IntakeCoral;
-import frc.robot.commands.ArmTest_OutCoral;
+import frc.robot.commands.ChangeMode;
 // import frc.robot.commands.ArmTest_IntakeAlgae_Floor;
 // import frc.robot.commands.ArmTest_IntakeCoral;
-import frc.robot.commands.ClimbCommand;
-import frc.robot.commands.ManualDrive_Kraken;
 import frc.robot.commands.ManualDrive_Neo;
-import frc.robot.commands.IntakeCommands.Coral_L1_Test;
 import frc.robot.commands.IntakeCommands.Coral_L1;
 import frc.robot.commands.IntakeCommands.Coral_L2;
 import frc.robot.commands.IntakeCommands.Coral_L3;
 import frc.robot.commands.IntakeCommands.Coral_L4;
-import frc.robot.commands.IntakeCommands.IntakeAlgae_Floor;
-import frc.robot.commands.IntakeCommands.IntakeAlgae_High;
-import frc.robot.commands.IntakeCommands.IntakeAlgae_Low;
 import frc.robot.commands.IntakeCommands.IntakeCoral;
-import frc.robot.commands.IntakeCommands.ShootNet;
-import frc.robot.commands.IntakeCommands.ShootProcessor;
-import frc.robot.commands.TrackCommands.AprilTagRotation;
-import frc.robot.commands.TrackCommands.AprilTagX;
-import frc.robot.commands.TrackCommands.AprilTagY;
-import frc.robot.commands.TrackCommands.TrackCage;
-import frc.robot.commands.TrackCommands.TrackCoralStation;
-import frc.robot.commands.TrackCommands.TrackLeftReef;
-import frc.robot.commands.TrackCommands.TrackMiddleReef;
-import frc.robot.commands.TrackCommands.TrackNet;
-import frc.robot.commands.TrackCommands.TrackProcessor;
-import frc.robot.commands.TrackCommands.TrackRightReef;
-import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.PhotonVisionSubsystem;
-import frc.robot.subsystems.SwerveSubsystem_Kraken;
 import frc.robot.subsystems.SwerveSubsystem_Neo;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -135,6 +105,7 @@ public class RobotContainer {
     // driverController.leftTrigger(0.4).whileTrue(new ShootNet(m_ElevatorSubsystem, m_EffectorSubsystem));
     // driverController.leftBumper().whileTrue(new ShootProcessor(m_ElevatorSubsystem, m_EffectorSubsystem));
     driverController.b().toggleOnTrue(new IntakeCoral(m_ElevatorSubsystem, m_EffectorSubsystem));
+    driverController.y().whileTrue(new ChangeMode());
     // driverController.x().whileTrue(new IntakeAlgae_Floor(m_ElevatorSubsystem, m_EffectorSubsystem));
     // operatorController.y().onTrue(new ClimbCommand(m_ClimberSubsystem));
 
