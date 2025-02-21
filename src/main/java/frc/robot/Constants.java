@@ -23,8 +23,6 @@ public final class Constants {
     public static final double kJoystickDeadBand = 0.1;
     public static final int kDriverControllerPort = 0;
     public static final int kOperatorControllerPort = 1;
-
-    public static boolean modeCoral = false;
   }
 
   public static double setMaxOutput(double output, double maxOutput){
@@ -300,6 +298,15 @@ public final class Constants {
   public static class Mode{
     public static BooleanSupplier changeModeFunc = () -> nowModeIsCoral();
     public static String nowMode = "coralMode";
+
+    public static void changeMode(){
+      if (nowMode == "coralMode") {
+        nowMode = "algaeMode";
+      }else{
+        nowMode = "coralMode";
+      }
+    }
+
     public static boolean nowModeIsCoral(){
       return nowMode == "coralMode";
     }

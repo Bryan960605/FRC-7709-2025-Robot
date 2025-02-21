@@ -7,13 +7,9 @@ package frc.robot.commands.IntakeCommands;
 import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.ElevatorConstants;
-import frc.robot.Constants.EndEffectorConstants;
 import frc.robot.Constants.LEDConstants;
-import frc.robot.Constants.PhotonConstants;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
-import frc.robot.subsystems.PhotonVisionSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Coral_L1 extends Command {
@@ -24,8 +20,6 @@ public class Coral_L1 extends Command {
   private final BooleanSupplier ifFeedFunc;
 
   private boolean ifFeed;
-  private boolean arriveEndEffectorPrimition;
-  private boolean arriveElevatorPosition;
   public Coral_L1(ElevatorSubsystem elevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem, BooleanSupplier ifFeed) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_ElevatorSubsystem = elevatorSubsystem;
@@ -43,7 +37,6 @@ public class Coral_L1 extends Command {
     m_EndEffectorSubsystem.outCoral_L1_Arm();
     // m_EndEffectorSubsystem.primitiveArm();
 
-    arriveEndEffectorPrimition = false;
 
     LEDConstants.intakeArriving = true;
     LEDConstants.arrivePosition_Intake = false;

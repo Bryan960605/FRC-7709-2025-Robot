@@ -4,9 +4,7 @@
 
 package frc.robot.commands.IntakeCommands;
 
-import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveDrivetrainConstants;
-
-import edu.wpi.first.wpilibj.Timer;
+// import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -18,15 +16,15 @@ public class IntakeAlgae_Floor extends Command {
   private final ElevatorSubsystem m_ElevatorSubsystem;
   private final EndEffectorSubsystem m_EndEffectorSubsystem;
 
-  private Timer timer;
+  // private Timer timer;
 
-  private boolean hasAlgae;
+  // private boolean hasAlgae;
   public IntakeAlgae_Floor(ElevatorSubsystem ElevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_ElevatorSubsystem = ElevatorSubsystem;
     this.m_EndEffectorSubsystem = endEffectorSubsystem;
 
-    timer = new Timer();
+    // timer = new Timer();
 
     addRequirements(m_ElevatorSubsystem, m_EndEffectorSubsystem);
   }
@@ -38,31 +36,31 @@ public class IntakeAlgae_Floor extends Command {
     m_EndEffectorSubsystem.intakeAlgae_Floor_Arm();
     m_EndEffectorSubsystem.intakeAlgae_Floor_Wheel();
 
-    hasAlgae = false;
+    // hasAlgae = false;
 
-    LEDConstants.intakeGamePiece = true;
-    LEDConstants.hasGamePiece = false;
-    LEDConstants.LEDFlag = true;
+    // LEDConstants.intakeGamePiece = true;
+    // LEDConstants.hasGamePiece = false;
+    // LEDConstants.LEDFlag = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_EndEffectorSubsystem.hasAlgae()) {
-      timer.start();
-      if(timer.get() > 0.5 && m_EndEffectorSubsystem.hasAlgae()) {
-        hasAlgae = true;
+    // if(m_EndEffectorSubsystem.hasAlgae()) {
+    //   timer.start();
+    //   if(timer.get() > 0.5 && m_EndEffectorSubsystem.hasAlgae()) {
+    //     hasAlgae = true;
 
-        LEDConstants.hasGamePiece = true;
-        LEDConstants.LEDFlag = true;
-      }else if(!m_EndEffectorSubsystem.hasAlgae()){
-        timer.reset();
-        timer.stop();
-      }
-    }else {
-      LEDConstants.hasGamePiece = false;
-      LEDConstants.LEDFlag = true;
-    }
+    //     LEDConstants.hasGamePiece = true;
+    //     LEDConstants.LEDFlag = true;
+    //   }else if(!m_EndEffectorSubsystem.hasAlgae()){
+    //     timer.reset();
+    //     timer.stop();
+    //   }
+    // }else {
+    //   LEDConstants.hasGamePiece = false;
+    //   LEDConstants.LEDFlag = true;
+    // }
   }
 
   // Called once the command ends or is interrupted.
@@ -87,6 +85,6 @@ public class IntakeAlgae_Floor extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return hasAlgae;
+    return m_EndEffectorSubsystem.hasAlgae();
   }
 }

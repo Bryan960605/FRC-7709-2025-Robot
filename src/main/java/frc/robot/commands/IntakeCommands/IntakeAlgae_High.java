@@ -4,9 +4,7 @@
 
 package frc.robot.commands.IntakeCommands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.EndEffectorConstants;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
@@ -17,17 +15,10 @@ public class IntakeAlgae_High extends Command {
   private final ElevatorSubsystem m_ElevatorSubsystem;
   private final EndEffectorSubsystem m_EndEffectorSubsystem;
 
-  private Timer timer;
-
-  private boolean arriveEndEffectorPrimition;
-  private boolean hasAlgae;
-
   public IntakeAlgae_High(ElevatorSubsystem ElevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_ElevatorSubsystem = ElevatorSubsystem;
     this.m_EndEffectorSubsystem = endEffectorSubsystem;
-
-    timer = new Timer();
 
     addRequirements(m_ElevatorSubsystem, m_EndEffectorSubsystem);
   }
@@ -40,7 +31,7 @@ public class IntakeAlgae_High extends Command {
     // m_EndEffectorSubsystem.intakeAlgae_High_Wheel();
     m_EndEffectorSubsystem.primitiveArm();
 
-    arriveEndEffectorPrimition = false;
+    // arriveEndEffectorPrimition = false;
 
     LEDConstants.intakeGamePiece = true;
     LEDConstants.hasGamePiece = false;
@@ -50,31 +41,28 @@ public class IntakeAlgae_High extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Math.abs(m_EndEffectorSubsystem.getAngle() - EndEffectorConstants.primitiveAngle) < 1) {
-      arriveEndEffectorPrimition = true;
-    }
-    if(arriveEndEffectorPrimition) {
+    if(m_EndEffectorSubsystem.arriveSetPoint()) {
       m_ElevatorSubsystem.intakeAlgae_High();
-      if(Math.abs(m_ElevatorSubsystem.getCurrentPosition() - m_ElevatorSubsystem.getGoalPosition()) < 1) {
+      if(m_ElevatorSubsystem.arriveSetPoint()) {
         m_EndEffectorSubsystem.intakeAlgae_High_Arm();
         m_EndEffectorSubsystem.intakeAlgae_High_Wheel();
       }
     }
-    if(m_EndEffectorSubsystem.hasAlgae()) {
-      timer.start();
-      if(timer.get() > 0.5 && m_EndEffectorSubsystem.hasAlgae()) {
-        hasAlgae = true;
+    // if(m_EndEffectorSubsystem.hasAlgae()) {
+    //   timer.start();
+    //   if(timer.get() > 0.5 && m_EndEffectorSubsystem.hasAlgae()) {
+    //     hasAlgae = true;
 
-        LEDConstants.hasGamePiece = true;
-        LEDConstants.LEDFlag = true;
-      }else if(!m_EndEffectorSubsystem.hasAlgae()){
-        timer.reset();
-        timer.stop();
-      }
-    }else {
-      LEDConstants.hasGamePiece = false;
-      LEDConstants.LEDFlag = true;
-    }
+    //     LEDConstants.hasGamePiece = true;
+    //     LEDConstants.LEDFlag = true;
+    //   }else if(!m_EndEffectorSubsystem.hasAlgae()){
+    //     timer.reset();
+    //     timer.stop();
+    //   }
+    // }else {
+    //   LEDConstants.hasGamePiece = false;
+    //   LEDConstants.LEDFlag = true;
+    // }
   }
 
   // Called once the command ends or is interrupted.
@@ -101,6 +89,6 @@ public class IntakeAlgae_High extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return hasAlgae;
+    return m_EndEffectorSubsystem.hasAlgae();
   }
 }

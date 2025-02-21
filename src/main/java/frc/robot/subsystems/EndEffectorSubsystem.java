@@ -43,14 +43,17 @@ public class EndEffectorSubsystem extends SubsystemBase {
   private final PIDController armPID;
   private ArmFeedforward armFeedforward;
 
-  private final Timer timer;
+  private final Timer timer_Coral;
+  private final Timer timer_Algae;
 
   private double pidOutput;
   private double feedforwardOutput;
   private double output;
   private double arriveAngle;
-  private double nowTime;
-  private boolean shouldStart;
+  private double nowTime_Coral;
+  private double nowTime_Algae;
+  private boolean shouldStart_Coral;
+  private boolean shouldStart_Algae;
   
     public EndEffectorSubsystem() {
       intakewheel = new TalonFX(EndEffectorConstants.intakeWheel_ID);
@@ -59,8 +62,10 @@ public class EndEffectorSubsystem extends SubsystemBase {
       irSensor_Coral = new DigitalInput(EndEffectorConstants.irSensor_Coral_ID);
       irSensor_Algae = new DigitalInput(EndEffectorConstants.irSensor_Algae_ID);
       arriveAngle = EndEffectorConstants.primitiveAngle;
-      timer = new Timer();
-      shouldStart = true;
+      timer_Coral = new Timer();
+      timer_Algae = new Timer();
+      shouldStart_Coral = true;
+      shouldStart_Algae = true;
   
       // Motor Configurations
       wheelConfig = new TalonFXConfiguration();
@@ -220,23 +225,39 @@ public class EndEffectorSubsystem extends SubsystemBase {
     }
 
     public boolean hasCoral(){
-      nowTime = timer.get();
-      if (shouldStart && sensorHasCoral()) {
-        timer.reset();
-        timer.start();
-        shouldStart = false;
+      nowTime_Coral = timer_Coral.get();
+      if (shouldStart_Coral && sensorHasCoral()) {
+        timer_Coral.reset();
+        timer_Coral.start();
+        shouldStart_Coral = false;
       }
-      if (nowTime >= 0.02 && sensorHasCoral()) {
-        timer.stop();
+      if (nowTime_Coral >= 0.02 && sensorHasCoral()) {
+        timer_Coral.stop();
         return true;
       }else{
-        shouldStart = true;
+        shouldStart_Coral = true;
         return false;
       }
     }
   
-    public boolean hasAlgae() {
+    public boolean sensorHasAlgae() {
       return !irSensor_Algae.get();
+    }
+
+    public boolean hasAlgae(){
+      nowTime_Algae = timer_Algae.get();
+      if (shouldStart_Algae && sensorHasAlgae()) {
+        timer_Algae.reset();
+        timer_Algae.start();
+        shouldStart_Algae = false;
+      }
+      if (nowTime_Algae >= 0.02 && sensorHasAlgae()) {
+        timer_Algae.stop();
+        return true;
+      }else{
+        shouldStart_Algae = true;
+        return false;
+      }
     }
   
     public boolean arriveSetPoint() {
