@@ -60,7 +60,7 @@ public class SwerveModule_Neo extends SubsystemBase {
     cancoderConfig.MagnetSensor.MagnetOffset = offset;
 
     turningMotorConfig.inverted(true);
-    driveMotorConfig.inverted(false);
+    driveMotorConfig.inverted(true);
 
     turningMotorConfig.idleMode(IdleMode.kBrake);
     driveMotorConfig.idleMode(IdleMode.kBrake);

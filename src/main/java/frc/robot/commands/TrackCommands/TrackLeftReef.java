@@ -4,12 +4,18 @@
 
 package frc.robot.commands.TrackCommands;
 
+import java.util.function.DoubleSupplier;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Constants.LEDConstants;
+import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.PhotonConstants;
 import frc.robot.subsystems.PhotonVisionSubsystem;
+import frc.robot.subsystems.SwerveSubsystem_Kraken;
 import frc.robot.subsystems.SwerveSubsystem_Kraken;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -36,10 +42,20 @@ public class TrackLeftReef extends Command {
 
   private int fiducialId;
 
-  public TrackLeftReef(PhotonVisionSubsystem photonVisionSubsystem, SwerveSubsystem_Kraken swerveSubsystem) {
+  // private final DoubleSupplier xSpeedFunc;
+
+  // private final SlewRateLimiter xLimiter;
+
+  // private double xSpeed;
+
+  public TrackLeftReef(PhotonVisionSubsystem photonVisionSubsystem, SwerveSubsystem_Kraken swerveSubsystem, DoubleSupplier xSpeed) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_PhotonVisionSubsystem = photonVisionSubsystem;
     this.m_SwerveSubsystem = swerveSubsystem;
+
+    // xSpeedFunc = xSpeed;
+
+    // xLimiter = new SlewRateLimiter(4.6);
 
     addRequirements(m_PhotonVisionSubsystem, m_SwerveSubsystem);
     // PID
@@ -47,9 +63,9 @@ public class TrackLeftReef extends Command {
     yPidController = new PIDController(PhotonConstants.yPidController_Kp, PhotonConstants.yPidController_Ki, PhotonConstants.yPidController_Kd);
     rotationPidController = new PIDController(PhotonConstants.rotationPidController_Kp, PhotonConstants.rotationPidController_Ki, PhotonConstants.rotationPidController_Kd);
     // Set limits
-    xPidController.setIntegratorRange(PhotonConstants.xPidMinOutput_Reef, PhotonConstants.xPidMaxOutput_Reef);
-    yPidController.setIntegratorRange(PhotonConstants.yPidMaxOutput_Reef, PhotonConstants.yPidMaxOutput_Reef);
-    rotationPidController.setIntegratorRange(PhotonConstants.rotationPidMaxOutput_Reef, PhotonConstants.rotationPidMaxOutput_Reef);
+    // xPidController.setIntegratorRange(PhotonConstants.xPidMinOutput_Reef, PhotonConstants.xPidMaxOutput_Reef);
+    // yPidController.setIntegratorRange(PhotonConstants.yPidMaxOutput_Reef, PhotonConstants.yPidMaxOutput_Reef);
+    // rotationPidController.setIntegratorRange(PhotonConstants.rotationPidMaxOutput_Reef, PhotonConstants.rotationPidMaxOutput_Reef);
   }
 
   // Called when the command is initially scheduled.
@@ -65,6 +81,10 @@ public class TrackLeftReef extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // xSpeed = xSpeedFunc.getAsDouble() * 0.8;
+    // xSpeed = MathUtil.applyDeadband(xSpeed, OperatorConstants.kJoystickDeadBand);
+    // xSpeed = xLimiter.calculate(xSpeed);
+
     if(m_PhotonVisionSubsystem.hasFrontLeftTarget()) {
       // Rotation-PID calculations
       rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_FrontLeft();

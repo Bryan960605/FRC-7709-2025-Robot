@@ -98,7 +98,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void intakeAlgae_High() {
-    goalPosition = ElevatorConstants.coralL3Position;
+    goalPosition = ElevatorConstants.algaeL3Position;
   }
 
   public void intakeAlgae_Floor() {
@@ -117,6 +117,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     return (Math.abs(goalPosition - getCurrentPosition()) <= 1);
   }
 
+  public boolean arrivePrimition() {
+    return (Math.abs(ElevatorConstants.primitivePosition - getCurrentPosition()) <= 1);
+  }
+
   public double getGoalPosition() {
     return goalPosition;
   }
@@ -124,6 +128,12 @@ public class ElevatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     elevator_FirstMotor.setControl(request_Elevator.withPosition(goalPosition));
+
+    if (getCurrentPosition() <= 5) {
+      ElevatorConstants.arriveLow = true;
+    }else{
+      ElevatorConstants.arriveLow = false;
+    }
 
     //SmartDashboard
     SmartDashboard.putNumber("Intake/GoalPosition", goalPosition);

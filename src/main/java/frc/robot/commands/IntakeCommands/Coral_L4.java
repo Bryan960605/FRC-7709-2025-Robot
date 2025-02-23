@@ -35,7 +35,7 @@ public class Coral_L4 extends Command {
   public void initialize() {
     // m_ElevatorSubsystem.outCoral_L4();
     // m_EndEffectorSubsystem.outCoral_L4_Arm();
-    m_EndEffectorSubsystem.primitiveArm();
+    m_EndEffectorSubsystem.coralL4ToPrimitive_Arm();;
 
 
     LEDConstants.intakeArriving = true;
@@ -70,9 +70,18 @@ public class Coral_L4 extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_ElevatorSubsystem.toPrimitive();
-    m_EndEffectorSubsystem.primitiveArm();
-    m_EndEffectorSubsystem.stopWheel();
+    // m_ElevatorSubsystem.toPrimitive();
+    // m_EndEffectorSubsystem.primitiveArm();
+    // m_EndEffectorSubsystem.stopWheel();
+    m_EndEffectorSubsystem.coralL4ToPrimitive_Arm();
+    while(!m_ElevatorSubsystem.arrivePrimition()) {
+    if(m_EndEffectorSubsystem.arriveSetPoint()) {
+      m_ElevatorSubsystem.toPrimitive();
+      if(m_ElevatorSubsystem.arriveSetPoint()) {
+        m_EndEffectorSubsystem.primitiveArm();
+      }
+    }
+    }
 
     LEDConstants.intakeArriving = false;
     LEDConstants.arrivePosition_Intake = false;

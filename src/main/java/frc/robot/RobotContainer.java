@@ -4,20 +4,31 @@
 
 package frc.robot;
 
+import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.Mode;
 import frc.robot.commands.ChangeMode;
 // import frc.robot.commands.ArmTest_IntakeAlgae_Floor;
 // import frc.robot.commands.ArmTest_IntakeCoral;
 import frc.robot.commands.ManualDrive_Neo;
+import frc.robot.commands.IntakeCommands.CoralL4ToPrimitive;
 import frc.robot.commands.IntakeCommands.Coral_L1;
 import frc.robot.commands.IntakeCommands.Coral_L2;
 import frc.robot.commands.IntakeCommands.Coral_L3;
 import frc.robot.commands.IntakeCommands.Coral_L4;
+import frc.robot.commands.IntakeCommands.IntakeAlgae_Floor;
+import frc.robot.commands.IntakeCommands.IntakeAlgae_High;
+import frc.robot.commands.IntakeCommands.IntakeAlgae_Low;
 import frc.robot.commands.IntakeCommands.IntakeCoral;
+import frc.robot.commands.IntakeCommands.ShootProcessor;
+import frc.robot.commands.TrackCommands.TrackLeftReef;
+import frc.robot.commands.TrackCommands.TrackRightReef;
+import frc.robot.commands.TrackCommands.TrackLeftReef_Neo;
+import frc.robot.commands.TrackCommands.TrackRightReef_Neo;
+import frc.robot.commands.IntakeCommands.TurnMore;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.PhotonVisionSubsystem;
 import frc.robot.subsystems.SwerveSubsystem_Neo;
-
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
@@ -39,7 +50,7 @@ public class RobotContainer {
   // private final SwerveSubsystem_Kraken m_SwerveSubsystem = new SwerveSubsystem_Kraken(m_PhotonVisionSubsystem);
   private final SwerveSubsystem_Neo m_SwerveSubsystem_Neo = new SwerveSubsystem_Neo(m_PhotonVisionSubsystem);
   private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
-  private final EndEffectorSubsystem m_EffectorSubsystem = new EndEffectorSubsystem();
+  private final EndEffectorSubsystem m_EndEffectorSubsystem = new EndEffectorSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
@@ -74,14 +85,38 @@ public class RobotContainer {
     DoubleSupplier ySpeedFunc = ()-> driverController.getRawAxis(0);
     DoubleSupplier zSpeedFunc = ()-> driverController.getRawAxis(4);
 
-    BooleanSupplier isSlowFunc = ()-> driverController.getHID().getLeftBumperButton();
-    BooleanSupplier ifFeed = ()-> driverController.getHID().getLeftBumperButton();
+    BooleanSupplier isSlowFunc = ()-> driverController.getHID().getRightTriggerAxis() > 0.4;
+    // BooleanSupplier needSlow = ()-> ElevatorConstants.arriveLow;
+    BooleanSupplier ifFeed = ()-> driverController.getHID().getAButton();
 
-    driverController.x().whileTrue(
+    driverController.y().whileTrue(
       Commands.runOnce(()->{
         m_SwerveSubsystem_Neo.resetGyro();
       })
     );
+
+    driverController.leftBumper().whileTrue(new ChangeMode());
+
+    driverController.rightBumper().and(() -> Mode.nowModeIsCoral()).whileTrue(new TurnMore(m_EndEffectorSubsystem));
+
+    driverController.pov(0).and(()-> Mode.nowModeIsCoral()).toggleOnTrue(new Coral_L1(m_ElevatorSubsystem, m_EndEffectorSubsystem, ifFeed));
+    driverController.pov(270).and(()-> Mode.nowModeIsCoral()).toggleOnTrue(new Coral_L2(m_ElevatorSubsystem, m_EndEffectorSubsystem, ifFeed));
+    driverController.pov(90).and((()-> Mode.nowModeIsCoral())).toggleOnTrue(new Coral_L3(m_ElevatorSubsystem, m_EndEffectorSubsystem, ifFeed));
+    // driverController.pov(180).and(()-> Mode.nowModeIsCoral()).toggleOnTrue(new Coral_L4(m_ElevatorSubsystem, m_EndEffectorSubsystem, ifFeed));
+    // driverController.pov(180).and(()-> Mode.nowModeIsCoral()).onFalse(new CoralL4ToPrimitive(m_EndEffectorSubsystem, m_ElevatorSubsystem));
+
+    driverController.leftTrigger(0.4).toggleOnTrue(new IntakeCoral(m_ElevatorSubsystem, m_EndEffectorSubsystem));
+    
+
+    driverController.pov(180).and(()-> Mode.nowModeIsCoral() == false).toggleOnTrue(new IntakeAlgae_Low(m_ElevatorSubsystem, m_EndEffectorSubsystem));
+    driverController.pov(270).and(()-> Mode.nowModeIsCoral() == false).toggleOnTrue(new ShootProcessor(m_ElevatorSubsystem, m_EndEffectorSubsystem, ifFeed));
+    driverController.pov(0).and(()-> Mode.nowModeIsCoral() == false).toggleOnTrue(new IntakeAlgae_High(m_ElevatorSubsystem, m_EndEffectorSubsystem));
+    driverController.leftTrigger().and(()-> Mode.nowModeIsCoral() == false).whileTrue(new IntakeAlgae_Floor(m_ElevatorSubsystem, m_EndEffectorSubsystem));
+
+    driverController.b().whileTrue(new TrackRightReef_Neo(m_PhotonVisionSubsystem, m_SwerveSubsystem_Neo, xSpeedFunc));
+    driverController.x().whileTrue(new TrackLeftReef_Neo(m_PhotonVisionSubsystem, m_SwerveSubsystem_Neo, xSpeedFunc));
+
+    m_SwerveSubsystem_Neo.setDefaultCommand(new ManualDrive_Neo(m_SwerveSubsystem_Neo, xSpeedFunc, ySpeedFunc, zSpeedFunc, isSlowFunc));
 
     // driverController.rightBumper().whileTrue(new TrackRightReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
     // driverController.a().whileTrue(new AprilTagRotation(m_PhotonVisionSubsystem, m_SwerveSubsystem));
@@ -96,27 +131,29 @@ public class RobotContainer {
 
 
 
-    driverController.a().toggleOnTrue(new Coral_L1(m_ElevatorSubsystem, m_EffectorSubsystem, ifFeed));
-    driverController.pov(270).toggleOnTrue(new Coral_L2(m_ElevatorSubsystem, m_EffectorSubsystem, ifFeed));
-    driverController.pov(90).toggleOnTrue(new Coral_L3(m_ElevatorSubsystem, m_EffectorSubsystem, ifFeed));
-    // driverController.pov(0).whileTrue(new IntakeAlgae_Low(m_ElevatorSubsystem, m_EffectorSubsystem));
-    // driverController.pov(180).whileTrue(new IntakeAlgae_High(m_ElevatorSubsystem, m_EffectorSubsystem));
-    driverController.rightTrigger(0.4).toggleOnTrue(new Coral_L4(m_ElevatorSubsystem, m_EffectorSubsystem, ifFeed));
-    // driverController.leftTrigger(0.4).whileTrue(new ShootNet(m_ElevatorSubsystem, m_EffectorSubsystem));
-    // driverController.leftBumper().whileTrue(new ShootProcessor(m_ElevatorSubsystem, m_EffectorSubsystem));
-    driverController.b().toggleOnTrue(new IntakeCoral(m_ElevatorSubsystem, m_EffectorSubsystem));
-    driverController.y().whileTrue(new ChangeMode());
-    // driverController.x().whileTrue(new IntakeAlgae_Floor(m_ElevatorSubsystem, m_EffectorSubsystem));
+    // driverController.a().toggleOnTrue(new Coral_L1(m_ElevatorSubsystem, m_EndEffectorSubsystem, ifFeed));
+    // // driverController.x().toggleOnTrue(new Coral_L2(m_ElevatorSubsystem, m_EndEffectorSubsystem, ifFeed));
+    // driverController.leftTrigger(0.4).toggleOnTrue(new Coral_L3(m_ElevatorSubsystem, m_EndEffectorSubsystem, ifFeed));
+    // // // driverController.leftBumper().toggleOnTrue(new IntakeAlgae_Low(m_ElevatorSubsystem, m_EndEffectorSubsystem));
+    // // driverController.rightBumper().toggleOnTrue(new IntakeAlgae_High(m_ElevatorSubsystem, m_EndEffectorSubsystem));
+    // driverController.rightTrigger(0.4).toggleOnTrue(new Coral_L4(m_ElevatorSubsystem, m_EndEffectorSubsystem, ifFeed));
+    // // driverController.leftTrigger(0.4).whileTrue(new ShootNet(m_ElevatorSubsystem, m_EndEffectorSubsystem));
+    // // driverController.leftBumper().whileTrue(new ShootProcessor(m_ElevatorSubsystem, m_EndEffectorSubsystem));
+    // driverController.b().toggleOnTrue(new IntakeCoral(m_ElevatorSubsystem, m_EndEffectorSubsystem));
+    // driverController.y().whileTrue(new ChangeMode());
+    // driverController.x().whileTrue(new IntakeAlgae_Floor(m_ElevatorSubsystem, m_EndEffectorSubsystem));
     // operatorController.y().onTrue(new ClimbCommand(m_ClimberSubsystem));
 
-    // driverController.rightBumper().whileTrue(new ArmTest_IntakeAlgae_Floor(m_EffectorSubsystem));
-    // driverController.leftBumper().whileTrue(new ArmTest_IntakeAlgae_Floor(m_EffectorSubsystem));
-    // driverController.a().whileTrue(new ArmTest_IntakeCoral(m_EffectorSubsystem));
-    // driverController.rightBumper().whileTrue(new ArmTest_IntakeAlgae_High(m_EffectorSubsystem));
-    // driverController.b().whileTrue(new ArmTest_OutCoral(m_EffectorSubsystem));
+    // driverController.rightBumper().whileTrue(new ArmTest_IntakeAlgae_Floor(m_EndEffectorSubsystem));
+    // driverController.leftBumper().whileTrue(new ArmTest_IntakeAlgae_Floor(m_EndEffectorSubsystem));
+    // driverController.a().whileTrue(new ArmTest_IntakeCoral(m_EndEffectorSubsystem));
+    // driverController.rightBumper().whileTrue(new ArmTest_IntakeAlgae_High(m_EndEffectorSubsystem));
+    // driverController.b().whileTrue(new ArmTest_OutCoral(m_EndEffectorSubsystem));
+
+    // driverController.leftBumper().whileTrue(new TrackLeftReef(m_PhotonVisionSubsystem, m_SwerveSubsystem_Neo, xSpeedFunc));
+    // driverController.rightBumper().whileTrue(new TrackRightReef(m_PhotonVisionSubsystem, m_SwerveSubsystem_Neo, xSpeedFunc));
 
     // m_SwerveSubsystem.setDefaultCommand(new ManualDrive_Kraken(m_SwerveSubsystem, xSpeedFunc, ySpeedFunc, zSpeedFunc, isSlowFunc));
-    m_SwerveSubsystem_Neo.setDefaultCommand(new ManualDrive_Neo(m_SwerveSubsystem_Neo, xSpeedFunc, ySpeedFunc, zSpeedFunc, isSlowFunc));
   }
 
   /**

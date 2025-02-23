@@ -207,10 +207,8 @@ public class PhotonVisionSubsystem extends SubsystemBase {
       frontRightTarget_ID = frontRightTarget.getFiducialId();
       
 
-      SmartDashboard.putNumber("Photon/BotXMeasurements_FrontRight", botXMeasurements_FrontRight);
-      SmartDashboard.putNumber("Photon/BotYMeasurements_FrontRight", botYMeasurements_FrontRight);
-      SmartDashboard.putNumber("Photon/BotRotatioMeasurements_FrontRight", botRotationMeasurements_FrontRight);
-      SmartDashboard.putNumber("Photon/FrontRightTarget_ID", frontRightTarget_ID);
+      SmartDashboard.putNumber("Photon/yError", botYMeasurements_FrontRight);
+      SmartDashboard.putNumber("Photon/rotationError", botRotationMeasurements_FrontRight);
 
     }else {
       botXMeasurements_FrontRight = 0;
@@ -225,10 +223,10 @@ public class PhotonVisionSubsystem extends SubsystemBase {
       frontLeftTarget_ID = frontLeftTarget.getFiducialId();
       
 
-      // SmartDashboard.putNumber("Photon/BotXError_Front", botXMeasurements_FrontRight);
-      // SmartDashboard.putNumber("Photon/BotYError_Front", botYMeasurements_FrontRight);
-      // SmartDashboard.putNumber("Photon/BotRotationError_Front", botRotationMeasurements_FrontRight);
-      // SmartDashboard.putNumber("Photon/FrontTarget_ID", frontRightTarget_ID);
+      SmartDashboard.putNumber("Photon/BotXError_Front", botXMeasurements_FrontLeft);
+      SmartDashboard.putNumber("Photon/BotYError_Front", botYMeasurements_FrontLeft);
+      SmartDashboard.putNumber("Photon/BotRotationError_Front", botRotationMeasurements_FrontLeft);
+      SmartDashboard.putNumber("Photon/FrontTarget_ID", frontLeftTarget_ID);
 
     }else {
       botXMeasurements_FrontLeft = 0;

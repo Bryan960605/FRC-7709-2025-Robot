@@ -4,6 +4,7 @@
 
 package frc.robot.commands.IntakeCommands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -15,10 +16,22 @@ public class IntakeAlgae_High extends Command {
   private final ElevatorSubsystem m_ElevatorSubsystem;
   private final EndEffectorSubsystem m_EndEffectorSubsystem;
 
+  private Timer timer;
+
+  private boolean shouldHold;
+
+  private boolean hasAlgae;
+
   public IntakeAlgae_High(ElevatorSubsystem ElevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_ElevatorSubsystem = ElevatorSubsystem;
     this.m_EndEffectorSubsystem = endEffectorSubsystem;
+
+    timer = new Timer();
+
+    shouldHold = false;
+
+    hasAlgae = false;
 
     addRequirements(m_ElevatorSubsystem, m_EndEffectorSubsystem);
   }
@@ -30,6 +43,8 @@ public class IntakeAlgae_High extends Command {
     // m_EndEffectorSubsystem.intakeAlgae_High_Arm();
     // m_EndEffectorSubsystem.intakeAlgae_High_Wheel();
     m_EndEffectorSubsystem.primitiveArm();
+
+    hasAlgae = false;
 
     // arriveEndEffectorPrimition = false;
 
@@ -48,6 +63,23 @@ public class IntakeAlgae_High extends Command {
         m_EndEffectorSubsystem.intakeAlgae_High_Arm();
         m_EndEffectorSubsystem.intakeAlgae_High_Wheel();
       }
+    }
+
+    if(m_EndEffectorSubsystem.sensorHasAlgae()) {
+      timer.start();
+      if(timer.get() > 0.5) {
+        hasAlgae = true;
+
+        timer.reset();
+        timer.stop();
+      }
+    }
+    if (hasAlgae) {
+      m_EndEffectorSubsystem.primitiveArm();
+      shouldHold = true;
+    }
+    if (hasAlgae && shouldHold && m_EndEffectorSubsystem.arriveSetPoint()) {
+      m_EndEffectorSubsystem.holdAlgae();
     }
     // if(m_EndEffectorSubsystem.hasAlgae()) {
     //   timer.start();
@@ -71,8 +103,8 @@ public class IntakeAlgae_High extends Command {
   public void end(boolean interrupted) {
     m_ElevatorSubsystem.toPrimitive();
     m_EndEffectorSubsystem.primitiveArm();
-    
-    if (m_EndEffectorSubsystem.hasAlgae()) {
+    shouldHold = false;
+    if (hasAlgae) {
       m_EndEffectorSubsystem.holdAlgae();
 
       LEDConstants.hasGamePiece = true;
@@ -90,6 +122,6 @@ public class IntakeAlgae_High extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_EndEffectorSubsystem.hasAlgae();
+    return false;
   }
 }

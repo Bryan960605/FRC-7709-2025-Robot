@@ -22,6 +22,7 @@ public class ManualDrive_Kraken extends Command {
   private final DoubleSupplier ySpeedFunc;
   private final DoubleSupplier zSpeedFunc;
   private final BooleanSupplier isSlowFunc;
+  // private final BooleanSupplier needSlowFunc;
 
   private final SlewRateLimiter xLimiter;
   private final SlewRateLimiter yLimiter;
@@ -31,6 +32,7 @@ public class ManualDrive_Kraken extends Command {
   private double ySpeed;
   private double zSpeed;
   private boolean isSlow;
+  // private boolean needSlow;
   public ManualDrive_Kraken(SwerveSubsystem_Kraken swerveSubsystem, DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier zSpeed, BooleanSupplier isSlow) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_SwerveSubsystem_Kraken = swerveSubsystem;
@@ -38,6 +40,7 @@ public class ManualDrive_Kraken extends Command {
     this.ySpeedFunc = ySpeed;
     this.zSpeedFunc = zSpeed;
     this.isSlowFunc = isSlow;
+    // this.needSlowFunc = needSlow;
 
     this.xLimiter = new SlewRateLimiter(4.6);
     this.yLimiter = new SlewRateLimiter(4.6);
@@ -69,6 +72,7 @@ public class ManualDrive_Kraken extends Command {
     this.zSpeed = zLimiter.calculate(this.zSpeed);
 
     this.isSlow = isSlowFunc.getAsBoolean();
+    // this.needSlow = needSlowFunc.getAsBoolean();
 
     if(isSlow) {
       xSpeed = xSpeed*0.2;

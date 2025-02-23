@@ -7,8 +7,10 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -24,6 +26,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.EndEffectorConstants;
+import frc.robot.Constants.Mode;
 
 public class EndEffectorSubsystem extends SubsystemBase {
   /** Creates a new IntakeSubsystem. */
@@ -37,8 +40,12 @@ public class EndEffectorSubsystem extends SubsystemBase {
   private final TalonFXConfiguration armConfig;
   private final CANcoderConfiguration absolutedEncoderConfig;
   private final MotionMagicConfigs speedMotionMagicConfigs;
+  private final MotionMagicConfigs turnMotionMagicConfigs;
   private final Slot0Configs speedSlot0Configs;
+  private final Slot1Configs slot1Configs;
   private final MotionMagicVelocityVoltage request_EndEffectorSpeed;
+  private final MotionMagicVoltage m_request;
+  
 
   private final PIDController armPID;
   private ArmFeedforward armFeedforward;
@@ -54,6 +61,9 @@ public class EndEffectorSubsystem extends SubsystemBase {
   private double nowTime_Algae;
   private boolean shouldStart_Coral;
   private boolean shouldStart_Algae;
+  private boolean shouldMotorTurn_HasItem;
+  private boolean shouldMotorReset;
+  private double nowPosition;
   
     public EndEffectorSubsystem() {
       intakewheel = new TalonFX(EndEffectorConstants.intakeWheel_ID);
@@ -66,6 +76,9 @@ public class EndEffectorSubsystem extends SubsystemBase {
       timer_Algae = new Timer();
       shouldStart_Coral = true;
       shouldStart_Algae = true;
+      m_request = new MotionMagicVoltage(0);
+      slot1Configs = new Slot1Configs();
+      turnMotionMagicConfigs = new MotionMagicConfigs();
   
       // Motor Configurations
       wheelConfig = new TalonFXConfiguration();
@@ -87,7 +100,19 @@ public class EndEffectorSubsystem extends SubsystemBase {
       speedSlot0Configs.kI = 0;
       speedSlot0Configs.kD = 0;
   
+      slot1Configs.kG = 0;
+      slot1Configs.kS = 0;
+      slot1Configs.kV = 0;
+      slot1Configs.kA = 0;
+      slot1Configs.kP = 10;
+      slot1Configs.kI = 0;
+      slot1Configs.kD = 0;
       //MotioinMagic Config
+
+      turnMotionMagicConfigs.MotionMagicCruiseVelocity = 40;
+      turnMotionMagicConfigs.MotionMagicAcceleration = 80;
+      turnMotionMagicConfigs.MotionMagicJerk = 400;
+
       speedMotionMagicConfigs.MotionMagicAcceleration = 400;
       speedMotionMagicConfigs.MotionMagicJerk = 4000;
       // Absolute Encoder Configurations
@@ -130,6 +155,14 @@ public class EndEffectorSubsystem extends SubsystemBase {
   
     public void outCoral_L2_Wheel() {
       intakewheel.setVoltage(EndEffectorConstants.coralL2OutVol);
+    }
+
+    public void turnMore_Coral(){
+      intakewheel.setVoltage(EndEffectorConstants.coralTurnMore);
+    }
+
+    public void coralL4ToPrimitive_Arm(){
+      arriveAngle = EndEffectorConstants.coralL4UpAngle;
     }
   
     public void outCoral_L3_Arm() {
@@ -220,25 +253,26 @@ public class EndEffectorSubsystem extends SubsystemBase {
       return Units.rotationsPerMinuteToRadiansPerSecond(armAbsolutedEncoder.getVelocity().getValueAsDouble()*60);
     }
   
-    public boolean sensorHasCoral() {
+    public boolean hasCoral() {
       return !irSensor_Coral.get();
     }
 
-    public boolean hasCoral(){
-      nowTime_Coral = timer_Coral.get();
-      if (shouldStart_Coral && sensorHasCoral()) {
-        timer_Coral.reset();
-        timer_Coral.start();
-        shouldStart_Coral = false;
-      }
-      if (nowTime_Coral >= 0.02 && sensorHasCoral()) {
-        timer_Coral.stop();
-        return true;
-      }else{
-        shouldStart_Coral = true;
-        return false;
-      }
-    }
+    // public boolean hasCoral(){
+    //   nowTime_Coral = timer_Coral.get();
+    //   if (shouldStart_Coral && sensorHasCoral()) {
+    //     timer_Coral.reset();
+    //     timer_Coral.start();
+    //     shouldStart_Coral = false;
+    //   }
+    //   if (nowTime_Coral >= 0.02 && sensorHasCoral()) {
+    //     timer_Coral.stop();
+    //     shouldStart_Coral = false;
+    //     return true;
+    //   }else{
+    //     shouldStart_Coral = false;
+    //     return false;
+    //   }
+    // }
   
     public boolean sensorHasAlgae() {
       return !irSensor_Algae.get();
@@ -253,9 +287,10 @@ public class EndEffectorSubsystem extends SubsystemBase {
       }
       if (nowTime_Algae >= 0.5 && sensorHasAlgae()) {
         timer_Algae.stop();
+        shouldStart_Algae = true;
         return true;
       }else {
-        shouldStart_Algae = true;
+        shouldStart_Algae = false;
         return false;
       }
     }
@@ -264,9 +299,27 @@ public class EndEffectorSubsystem extends SubsystemBase {
       return (Math.abs(armPID.getError()) <= 1.5);
     }
   
+    public void setNeedMotorTurn(boolean needTurn){
+      shouldMotorTurn_HasItem = needTurn;
+      shouldMotorReset = needTurn;
+      intakewheel.getConfigurator().apply(turnMotionMagicConfigs);
+      intakewheel.getConfigurator().apply(slot1Configs);
+    }
   
     @Override
     public void periodic() {
+      if (shouldMotorReset) {
+        nowPosition = intakewheel.getPosition().getValueAsDouble();
+        shouldMotorReset = false;
+      }
+      if (shouldMotorTurn_HasItem) {
+        intakewheel.setControl(m_request.withPosition(nowPosition + 0.65));
+        if (intakewheel.getPosition().getValueAsDouble() >= nowPosition + 0.65) {
+          shouldMotorTurn_HasItem = false;
+          intakewheel.getConfigurator().apply(speedMotionMagicConfigs);
+          intakewheel.getConfigurator().apply(speedSlot0Configs);
+        }
+      }
       // Arm
       if(85 >= getAngle() && getAngle() > 80 || 75 >= getAngle() && getAngle() > 70) {
         armFeedforward = new ArmFeedforward(EndEffectorConstants.armFeedforward_Ks, EndEffectorConstants.armFeedforward_Kg, EndEffectorConstants.armFeedforward_Kv);
@@ -290,10 +343,12 @@ public class EndEffectorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("EndEffector/feedforwardOutput", feedforwardOutput);
     SmartDashboard.putNumber("EndEffector/Output", output);
     SmartDashboard.putBoolean("EndEffector/arriveSetpoint", arriveSetPoint());
-    SmartDashboard.putBoolean("EndEffector/hasCoral", sensorHasCoral());
+    SmartDashboard.putBoolean("EndEffector/hasCoral", hasCoral());
     SmartDashboard.putBoolean("EndEffector/hasAlgae", hasAlgae());
+    SmartDashboard.putBoolean("EndEffector/HasSensorAlgae", sensorHasAlgae());
     SmartDashboard.putNumber("EndEffector/AbsolutedArmPosition", getAbsolutePosition());
     SmartDashboard.putNumber("EndEffector/ArmAngle", getAngle());
     SmartDashboard.putNumber("EndEffector/getPosition", getPosition());
+    SmartDashboard.putString("Mode", Mode.nowMode);
   }
 }

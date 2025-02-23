@@ -34,7 +34,7 @@ public class ShootProcessor extends Command {
   @Override
   public void initialize() {
     m_ElevatorSubsystem.shootProcessor();
-    m_EndEffectorSubsystem.shootNet_Arm();
+    m_EndEffectorSubsystem.shootProcessor_Arm();
 
     LEDConstants.intakeArriving = true;
     LEDConstants.arrivePosition_Intake = false;
@@ -46,15 +46,19 @@ public class ShootProcessor extends Command {
   public void execute() {
     ifFeed = ifFeedFunc.getAsBoolean();
 
-    if (m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint() && ifFeed) {
+    if(m_EndEffectorSubsystem.arriveSetPoint()) {
       m_EndEffectorSubsystem.shootProcessor_Wheel();
-
-      LEDConstants.arrivePosition_Intake = true;
-      LEDConstants.LEDFlag = true;
-    }else {
-      LEDConstants.arrivePosition_Intake = false;
-      LEDConstants.LEDFlag = true;
     }
+
+    // if (m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint() && ifFeed) {
+    //   m_EndEffectorSubsystem.shootProcessor_Wheel();
+
+    //   LEDConstants.arrivePosition_Intake = true;
+    //   LEDConstants.LEDFlag = true;
+    // }else {
+    //   LEDConstants.arrivePosition_Intake = false;
+    //   LEDConstants.LEDFlag = true;
+    // }
   }
 
   // Called once the command ends or is interrupted.

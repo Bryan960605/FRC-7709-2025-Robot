@@ -153,11 +153,11 @@ public final class Constants {
     public static final double xPidController_Ki = 0;
     public static final double xPidController_Kd = 0;
 
-    public static final double yPidController_Kp = 0.4;
+    public static final double yPidController_Kp = 0.85;
     public static final double yPidController_Ki = 0;
     public static final double yPidController_Kd = 0;
 
-    public static final double rotationPidController_Kp = 0.005;
+    public static final double rotationPidController_Kp = 0.004;
     public static final double rotationPidController_Ki = 0;
     public static final double rotationPidController_Kd = 0;
 
@@ -204,16 +204,16 @@ public final class Constants {
     public static final double rotationPidMaxOutput_Processor = 0.2;
 
     public static final double xPidSetPoint_RightReef = 0.445; 
-    public static final double yPidSetPoint_RightReef = 0.144;
-    public static final double rotationPidSetPoint_RightReef = 225;
+    public static final double yPidSetPoint_RightReef = -0.118;
+    public static final double rotationPidSetPoint_RightReef = 180.4;
 
     public static final double xPidSetPoint_LeftReef = 0;
-    public static final double yPidSetPoint_LeftReef = 0;
-    public static final double rotationPidSetPoint_LeftReef = 0;
+    public static final double yPidSetPoint_LeftReef = 0.09;
+    public static final double rotationPidSetPoint_LeftReef = 183.6;
 
-    public static final double xPidSetPoint_MiddleReef_FrontRight = 0.5;
+    public static final double xPidSetPoint_MiddleReef_FrontRight = 0;
     public static final double yPidSetPoint_MiddleReef_FrontRight = 0;
-    public static final double rotationPidSetPoint_MiddleReef_FrontRight = 180;
+    public static final double rotationPidSetPoint_MiddleReef_FrontRight = 182;
 
     public static final double xPidSetPoint_MiddleReef_FrontLeft = 0;
     public static final double yPidSetPoint_MiddleReef_FrontLeft = 0;
@@ -281,18 +281,20 @@ public final class Constants {
     public static final int elevator_FirstMotor_ID = 6;
     public static final int elevator_SecondMotor_ID = 7;
 
-    public static final double primitivePosition = 0;
-    public static final double coralL1Position = 4;
-    public static final double coralL2Position = 9;
-    public static final double coralL3Position = 20.3;
-    public static final double coralL4Position = 37.8;
-    public static final double coralStationPosition = 0;
+    public static final double primitivePosition = 0.12;
+    public static final double coralL1Position = 3.72;
+    public static final double coralL2Position = 9.72;
+    public static final double coralL3Position = 21.02;
+    public static final double coralL4Position = 42.52;
+    public static final double coralStationPosition = 0.12;
 
-    public static final double algaeFloorPosition = 0;
-    public static final double algaeNetPosition = 0;
-    public static final double algaeL2Position = 3.6;
-    public static final double algaeL3Position = 15.16;
-    public static final double algaeProccesorPosition = 0;
+    public static final double algaeFloorPosition = 0.12;
+    public static final double algaeNetPosition = 0.12;
+    public static final double algaeL2Position = 3.82;
+    public static final double algaeL3Position = 15.82;
+    public static final double algaeProccesorPosition = 0.12;
+
+    public static boolean arriveLow = false;
   }
 
   public static class Mode{
@@ -309,6 +311,10 @@ public final class Constants {
 
     public static boolean nowModeIsCoral(){
       return nowMode == "coralMode";
+    }
+
+    public static boolean nowModeIsAlgae() {
+      return nowMode == "algaeMode";
     }
   }
 
@@ -345,28 +351,31 @@ public final class Constants {
     public static final double armFeedforward_Kv4 = 0;
 
     public static final double primitiveAngle = 80;
-    public static final double coralL1Angle = 80;
+    public static final double coralL1Angle = 85;
     public static final double coralL2Angle = 80;
     public static final double coralL3Angle = 83;
     public static final double coralL4Angle = 80;//not yet
     public static final double coralStationAngle = 80;
+    public static final double coralL4UpAngle = 67.4;
     public static final double algaeFloorAngle = 7.2;
     public static final double algaeNetAngle = 80;//not yet
     public static final double algaeLowInAngle = 64;
     public static final double algaeHighInAngle = 64;
     public static final double algaeProccesorAngle = 80;//not yet
+    
 
-    public static final double coralL1OutVol = -2;
-    public static final double coralL2OutVol = -2;
-    public static final double coralL3OutVol = -2;
+    public static final double coralL1OutVol = -1.5;
+    public static final double coralL2OutVol = -2.3;
+    public static final double coralL3OutVol = -2.3;
     public static final double coralL4OutVol = 0;
-    public static final double coralInSpeed_RotionPerSecond = -25;
+    public static final double coralTurnMore = -0.5;
+    public static final double coralInSpeed_RotionPerSecond = -29;
     public static final double algaeFloorInVol = -4;
     public static final double algaeShootNetVol = -4;
     public static final double algaeLowInVol = -4;
     public static final double algaeHighInVol = -4;
-    public static final double algaeShootProcessorVol = 0;
-    public static final double algaeHoldVol = -0.5;   
+    public static final double algaeShootProcessorVol = 6;
+    public static final double algaeHoldVol = -1.5;   
   }
 
   public static class ClimberConstants {
@@ -444,15 +453,15 @@ public final class Constants {
   }
 
   public class Swerve_NeoConstants {
-    public static final int rightFrontDrive_ID = 18;
+    public static final int rightFrontDrive_ID = 8;
     public static final int rightBackDrive_ID = 13;
     public static final int leftFrontDrive_ID = 1;
     public static final int leftBackDrive_ID = 19;
 
-    public static final int rightFrontTurning_ID = 29;
+    public static final int rightFrontTurning_ID = 16;
     public static final int rightBackTurning_ID = 26;
-    public static final int leftFrontTurning_ID = 3;
-    public static final int leftBackTurning_ID = 4;
+    public static final int leftFrontTurning_ID = 7;
+    public static final int leftBackTurning_ID = 29;
 
     public static final int rightFrontAbsolutedEncoder_ID = 41;
     public static final int rightBackAbsolutedEncoder_ID = 42;
@@ -460,7 +469,7 @@ public final class Constants {
     public static final int leftBackAbsolutedEncoder_ID = 44;
 
     public static final double leftFrontOffset = -0.106689;
-    public static final double leftBackOffset = 0.373535;
+    public static final double leftBackOffset = 0.380371;
     public static final double rightFrontOffset = -0.058837;
     public static final double rightBackOffset = 0.416503;
 

@@ -11,6 +11,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.SwerveSubsystem_Kraken;
 import frc.robot.subsystems.SwerveSubsystem_Neo;
@@ -23,6 +24,7 @@ public class ManualDrive_Neo extends Command {
   private final DoubleSupplier ySpeedFunc;
   private final DoubleSupplier zSpeedFunc;
   private final BooleanSupplier isSlowFunc;
+  // private final BooleanSupplier needSlowFunc;
 
   private final SlewRateLimiter xLimiter;
   private final SlewRateLimiter yLimiter;
@@ -32,6 +34,7 @@ public class ManualDrive_Neo extends Command {
   private double ySpeed;
   private double zSpeed;
   private boolean isSlow;
+  // private boolean needSlow;
   public ManualDrive_Neo(SwerveSubsystem_Neo swerveSubsystem_Neo, DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier zSpeed, BooleanSupplier isSlow) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_SwerveSubsystem_Neo = swerveSubsystem_Neo;
@@ -39,6 +42,7 @@ public class ManualDrive_Neo extends Command {
     this.ySpeedFunc = ySpeed;
     this.zSpeedFunc = zSpeed;
     this.isSlowFunc = isSlow;
+    // this.needSlowFunc = needSlow;
 
     this.xLimiter = new SlewRateLimiter(4.6);
     this.yLimiter = new SlewRateLimiter(4.6);
@@ -70,15 +74,16 @@ public class ManualDrive_Neo extends Command {
     this.zSpeed = zLimiter.calculate(this.zSpeed);
 
     this.isSlow = isSlowFunc.getAsBoolean();
+    // this.needSlow = needSlowFunc.getAsBoolean();
 
-    if(isSlow) {
+    if(isSlow || ElevatorConstants.arriveLow == false) {
       xSpeed = xSpeed*0.2;
       ySpeed = ySpeed*0.2;
       zSpeed = zSpeed*0.2;
     }else {
-      xSpeed = xSpeed*0.8;
-      ySpeed = ySpeed*0.8;
-      zSpeed = zSpeed*0.8;
+      xSpeed = xSpeed*0.6;
+      ySpeed = ySpeed*0.6;
+      zSpeed = zSpeed*0.6;
     }
 
     SmartDashboard.putNumber("ManualDrive/Xspeed", xSpeed);
