@@ -12,13 +12,18 @@ import org.photonvision.targeting.MultiTargetPNPResult;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.numbers.N8;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -29,9 +34,9 @@ public class PhotonVisionSubsystem extends SubsystemBase {
   private final PhotonCamera frontLeftCamera;
   private final PhotonCamera backCamera;
 
-  private final Transform3d frontRightToRobot;
-  private final Transform3d frontLeftToRobot;
-  private final Transform3d backToRobot;
+  private final Transform3d robotToFrontRight;
+  private final Transform3d robotToFrontLeft;
+  private final Transform3d robotToBack;
 
 
   private PhotonPipelineResult frontRightResult;
@@ -44,6 +49,8 @@ public class PhotonVisionSubsystem extends SubsystemBase {
   private List<PhotonTrackedTarget> frontRightTargets;
   private List<PhotonTrackedTarget> frontLeftTargets;
   private List<PhotonTrackedTarget> backTargets;
+
+  private AprilTagFieldLayout aprilTagFieldLayout;
 
   private int frontRightTarget_ID;
   private int frontLeftTarget_ID;
@@ -66,9 +73,11 @@ public class PhotonVisionSubsystem extends SubsystemBase {
     frontLeftCamera = new PhotonCamera("OV9281_FrontLeft");
     backCamera = new PhotonCamera("OV9281_Back");
 
-    frontRightToRobot = new Transform3d(0, 0, 0, new Rotation3d(new Rotation2d(0)));
-    frontLeftToRobot = new Transform3d(0, 0, 0, new Rotation3d(new Rotation2d(0)));
-    backToRobot = new Transform3d(0, 0, 0, new Rotation3d(new Rotation2d(0)));
+    robotToFrontRight = new Transform3d(0.2555, -0.221, 0.21, new Rotation3d(0, 0, Math.toRadians(-48.964)));
+    robotToFrontLeft = new Transform3d(-0.2555, -0.221, 0.21, new Rotation3d(new Rotation2d(Units.degreesToRadians(48.964))));
+    robotToBack = new Transform3d(0, 0, 0, new Rotation3d(new Rotation2d(0)));
+
+    aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
 
   }
 
@@ -119,15 +128,16 @@ public class PhotonVisionSubsystem extends SubsystemBase {
   }
 
   public Transform3d getRobotToTargetPose_FrontRight() {
-    return frontRightTarget.getBestCameraToTarget().plus(frontRightToRobot);
+    // return frontRightTarget.getBestCameraToTarget().plus(frontRightToRobot);
+    return frontRightTarget.getBestCameraToTarget();
   }
 
   public Transform3d getRobotToTargetPose_FrontLeft() {
-    return frontLeftTarget.getBestCameraToTarget().plus(frontLeftToRobot);
+    return frontLeftTarget.getBestCameraToTarget();
   }
 
   public Transform3d getRobotToTargetPose_Back() {
-    return backTarget.getBestCameraToTarget().plus(backToRobot);
+    return backTarget.getBestCameraToTarget();
   }
 
   public Optional<Matrix<N3, N3>> getCameraMatrix(String camera) {
@@ -187,6 +197,18 @@ public class PhotonVisionSubsystem extends SubsystemBase {
     return null;
   }
 
+  public static Translation3d rotateTranslation(Translation3d translation, double yaw) {
+    double cosYaw = Math.cos(yaw);
+    double sinYaw = Math.sin(yaw);
+
+    // 旋轉 X, Y 坐標
+    double newX = translation.getX() * cosYaw - translation.getY() * sinYaw;
+    double newY = translation.getX() * sinYaw + translation.getY() * cosYaw;
+    double newZ = translation.getZ(); // Z 不受影響
+
+    return new Translation3d(newX, newY, newZ);
+}
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -200,15 +222,48 @@ public class PhotonVisionSubsystem extends SubsystemBase {
     backTarget = backResult.getBestTarget();
     // backTargets = backResult.getTargets();
     if(hasFrontRightTarget()) {
-      botXMeasurements_FrontRight = getRobotToTargetPose_FrontRight().getX();
-      botYMeasurements_FrontRight = getRobotToTargetPose_FrontRight().getY();
+      botXMeasurements_FrontRight = getRobotToTargetPose_FrontRight().getTranslation().getX();
+      botYMeasurements_FrontRight = getRobotToTargetPose_FrontRight().getTranslation().getY();
       botRotationMeasurements_FrontRight = Math.toDegrees(getRobotToTargetPose_FrontRight().getRotation().getAngle());
+
+      // Translation3d botTranslation_FrontRight = getRobotToTargetPose_FrontRight().getTranslation();
+      // Rotation3d botRotation_FrontRight = getRobotToTargetPose_FrontRight().getRotation();
+      // Pose3d CameraToTag_FrontRight = new Pose3d(botTranslation_FrontRight, botRotation_FrontRight);
+      // Translation3d robotToFrontRight_Translation3d = robotToFrontRight.getTranslation();
+      // Rotation3d robotToFrontRight_Rotation3d = robotToFrontRight.getRotation();
+      // Pose3d robotToFrontRightPose = new Pose3d(robotToFrontRight_Translation3d, robotToFrontRight_Rotation3d);
+
+      // int frontRightTag_ID = frontRightTarget.getFiducialId();
+
+      // Pose3d tagPose = aprilTagFieldLayout.getTagPose(frontRightTag_ID).get();
+
+      // Pose3d robotPose_FrontRight = robotToFrontRightPose.transformBy(getFrontRightTargetPose());
+
+      // botXMeasurements_FrontRight = robotPose_FrontRight.getTranslation().getX();
+      // botYMeasurements_FrontRight = robotPose_FrontRight.getTranslation().getY();
+      // botRotationMeasurements_FrontRight = Math.toDegrees(robotPose_FrontRight.getRotation().getAngle());
+
+
+      // Translation3d rotatedTranslation = rotateTranslation(getRobotToTargetPose_FrontRight().getTranslation(), robotToFrontRight.getRotation().getZ());
+      // Translation3d robotToTagTranslation = rotatedTranslation.plus(robotToFrontRight.getTranslation());
+      // Rotation3d robotToTagRotation = new Rotation3d(
+      // getRobotToTargetPose_FrontRight().getRotation().getX() + robotToFrontRight.getRotation().getX(),
+      // getRobotToTargetPose_FrontRight().getRotation().getY() + robotToFrontRight.getRotation().getY(),
+      // getRobotToTargetPose_FrontRight().getRotation().getZ() + robotToFrontRight.getRotation().getZ()
+      // );
+
+      // botXMeasurements_FrontRight = robotToTagTranslation.getX();
+      // botYMeasurements_FrontRight = robotToTagTranslation.getY();
+      // botRotationMeasurements_FrontRight = Math.toDegrees(robotToTagRotation.getAngle());
+      
 
       frontRightTarget_ID = frontRightTarget.getFiducialId();
       
 
-      SmartDashboard.putNumber("Photon/yError", botYMeasurements_FrontRight);
-      SmartDashboard.putNumber("Photon/rotationError", botRotationMeasurements_FrontRight);
+      SmartDashboard.putNumber("Photon/botXMeasurements_FrontRight", botXMeasurements_FrontRight);
+      SmartDashboard.putNumber("Photon/botYMeasurements_FrontRight", botYMeasurements_FrontRight);
+      SmartDashboard.putNumber("Photon/botRotationMeasurements_FrontRight", botRotationMeasurements_FrontRight);
+      SmartDashboard.putNumber("Photon/FrontRightTarget_ID", frontRightTarget_ID);
 
     }else {
       botXMeasurements_FrontRight = 0;

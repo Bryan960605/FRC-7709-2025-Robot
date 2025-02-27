@@ -7,6 +7,7 @@ package frc.robot.commands.TrackCommands;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.Constants.PhotonConstants;
 import frc.robot.subsystems.PhotonVisionSubsystem;
@@ -123,9 +124,14 @@ public class TrackCoralStation extends Command {
     && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_CoralStation_Back)) {
         LEDConstants.arrivePosition_Base = true;
         LEDConstants.LEDFlag = true;
-      }
-      // impl
-      m_SwerveSubsystem.drive(xPidOutput, yPidOutput, rotationPidOutput, false);
+    }
+    // impl
+    if(ElevatorConstants.arriveLow == false) {
+      xPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.xPidMaxOutput_NeedSlow_CoralStation);
+      yPidOutput = Constants.setMaxOutput(yPidOutput, PhotonConstants.yPidMaxOutput_NeedSlow_CoralStation);
+      rotationPidOutput = Constants.setMaxOutput(rotationPidOutput, PhotonConstants.rotationPidMaxOutput_NeedSlow_CoralStation);
+    }
+    m_SwerveSubsystem.drive(xPidOutput, yPidOutput, rotationPidOutput, false);
   }
 
   // Called once the command ends or is interrupted.

@@ -13,6 +13,7 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.PhotonConstants;
@@ -45,7 +46,7 @@ public class TrackRightReef extends Command {
   private boolean rotationReady;
   private boolean yReady;
 
-  public TrackRightReef(PhotonVisionSubsystem photonVisionSubsystem, SwerveSubsystem_Kraken swerveSubsystem, DoubleSupplier xSpeed) {
+  public TrackRightReef(PhotonVisionSubsystem photonVisionSubsystem, SwerveSubsystem_Kraken swerveSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_PhotonVisionSubsystem = photonVisionSubsystem;
     this.m_SwerveSubsystem = swerveSubsystem;
@@ -82,9 +83,9 @@ public class TrackRightReef extends Command {
     // xSpeed = MathUtil.applyDeadband(xSpeed, OperatorConstants.kJoystickDeadBand);
     // xSpeed = xLimiter.calculate(xSpeed);
 
-    if(m_PhotonVisionSubsystem.hasFrontRightTarget()) {
+    if(m_PhotonVisionSubsystem.hasFrontLeftTarget()) {
       // Rotation-PID calculations
-      rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_FrontRight();
+      rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_FrontLeft();
       rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.rotationPidSetPoint_RightReef);
       rotationPidMeasurements = (rotationPidError > 0.5) ? rotationPidMeasurements : PhotonConstants.rotationPidSetPoint_RightReef;
       if(rotationPidError < 0.5) {
@@ -93,7 +94,7 @@ public class TrackRightReef extends Command {
       rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_RightReef);
       rotationPidOutput = Constants.setMaxOutput(rotationPidOutput, PhotonConstants.rotationPidMaxOutput_Reef);
       // Y-PID calculations
-      yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_FrontRight();
+      yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_FrontLeft();
       yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_RightReef);
       yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_RightReef;
       yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_RightReef);
@@ -103,7 +104,7 @@ public class TrackRightReef extends Command {
       }
       // X-PID calculations
       if(rotationReady && yReady) {
-      xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontRight();
+      xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontLeft();
       xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_RightReef);
       xPidMeasurements = (xPidError > 0.05) ? xPidMeasurements : PhotonConstants.xPidSetPoint_RightReef;
       xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_RightReef);
@@ -130,6 +131,12 @@ public class TrackRightReef extends Command {
     SmartDashboard.putNumber("TrackRightReef/xPidError", xPidError);
     SmartDashboard.putNumber("TrackRightReef/yPidError", yPidError);
     SmartDashboard.putNumber("TrackRightReef/rotationPidError", rotationPidError);
+
+    if(ElevatorConstants.arriveLow == false) {
+      xPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.xPidMaxOutput_NeedSlow_Reef);
+      yPidOutput = Constants.setMaxOutput(yPidOutput, PhotonConstants.yPidMaxOutput_NeedSlow_Reef);
+      rotationPidOutput = Constants.setMaxOutput(rotationPidOutput, PhotonConstants.rotationPidMaxOutput_NeedSlow_Reef);
+    }
     
     m_SwerveSubsystem.drive(xPidOutput, yPidOutput, rotationPidOutput, false);
   }

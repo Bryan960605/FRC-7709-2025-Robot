@@ -54,13 +54,13 @@ public class LEDSubsystem extends SubsystemBase {
   public void tracking() {
     ledAnimation = new StrobeAnimation(ledNum, ledNum, ledNum);
     candle.animate(ledAnimation);
-    candle.setLEDs(ledNum, ledNum, ledNum, ledNum, ledNum, ledNum);
+    candle.setLEDs(0, 0, 255, 0, 0, ledNum);
     LEDConstants.LEDFlag = false;
   }
 
   public void arrivePosition_Base() {
     candle.animate(null);
-    candle.setLEDs(ledNum, ledNum, ledNum, ledNum, ledNum, ledNum);
+    candle.setLEDs(0, 0, 255, 0, 0, ledNum);
     LEDConstants.LEDFlag = false;
   }
 
@@ -73,7 +73,7 @@ public class LEDSubsystem extends SubsystemBase {
 
   public void arrivePosition_Intake() {
     candle.animate(null);
-    candle.setLEDs(0, 0, 255, 0, 0, ledNum);
+    candle.setLEDs(255, 192, 0, 0, 0, ledNum);
     LEDConstants.LEDFlag = false;
   }
 
@@ -87,20 +87,20 @@ public class LEDSubsystem extends SubsystemBase {
   public void shootGamePiece() {
     ledAnimation = new StrobeAnimation(ledNum, ledNum, ledNum);
     candle.animate(ledAnimation);
-    candle.setLEDs(ledNum, ledNum, ledNum, ledNum, ledNum, ledNum);
+    candle.setLEDs(255, 192, 0, 0, 0, ledNum);
     LEDConstants.LEDFlag = false;
   }
 
   public void climbing() {
     ledAnimation = new StrobeAnimation(ledNum, ledNum, ledNum);
     candle.animate(ledAnimation);
-    candle.setLEDs(ledNum, ledNum, ledNum, ledNum, ledNum, ledNum);
+    candle.setLEDs(255, 255, 0, 0, 0, ledNum);
     LEDConstants.LEDFlag = false;
   }
 
   public void onCage() {
     candle.animate(null);
-    candle.setLEDs(ledNum, ledNum, ledNum, ledNum, ledNum, ledNum);
+    candle.setLEDs(255, 255, 0, 0, 0, ledNum);
     LEDConstants.LEDFlag = false;
   }
 
@@ -111,10 +111,10 @@ public class LEDSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     if(LEDConstants.LEDFlag) {
-      if(LEDConstants.arrivePosition_Intake) arrivePosition_Intake();
-      else if(LEDConstants.intakeArriving) intakeArriving();
-      else if(LEDConstants.arrivePosition_Base) arrivePosition_Base();
+      if(LEDConstants.arrivePosition_Base) arrivePosition_Base();
       else if(LEDConstants.tracking) tracking();
+      else if(LEDConstants.arrivePosition_Intake) arrivePosition_Intake();
+      else if(LEDConstants.intakeArriving) intakeArriving();
       else if(LEDConstants.hasGamePiece) hasGamePiece();
       else if(LEDConstants.hasGamePiece) intakeGamePiece();
       else if(LEDConstants.onCage) onCage();

@@ -37,7 +37,7 @@ public class ShootNet extends Command {
   public void initialize() {
     // m_ElevatorSubsystem.shootNet();
     // m_EndEffectorSubsystem.shootNet_Arm();
-    m_EndEffectorSubsystem.primitiveArm();
+    m_EndEffectorSubsystem.netPrimitive_Arm();
 
     LEDConstants.intakeArriving = true;
     LEDConstants.arrivePosition_Intake = false;
@@ -47,7 +47,7 @@ public class ShootNet extends Command {
   @Override
   public void execute() {
     ifFeed = ifFeedFunc.getAsBoolean();
-    if(Math.abs(m_EndEffectorSubsystem.getAngle() - EndEffectorConstants.primitiveAngle) < 1) {
+    if(Math.abs(m_EndEffectorSubsystem.getAngle() - EndEffectorConstants.netUpAngle) < 1) {
       arriveEndEffectorPrimition = true;
     }
     if(arriveEndEffectorPrimition) {

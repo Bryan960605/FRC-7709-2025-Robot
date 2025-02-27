@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.PhotonVisionSubsystem;
 import frc.robot.subsystems.SwerveSubsystem_Kraken;
 import frc.robot.Constants;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.Constants.PhotonConstants;
 
@@ -110,23 +111,29 @@ public class TrackMiddleReef extends Command {
       rotationPidOutput = 0;
     }
 
-    // if((xPidMeasurements == PhotonConstants.xPidSetPoint_MiddleReef_FrontRight 
-    // && yPidMeasurements == PhotonConstants.yPidSetPoint_MiddleReef_FrontRight
-    // && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_MiddleReef_FrontRight)) {
-    // // || (xPidMeasurements == PhotonConstants.xPidSetPoint_MiddleReef_FrontLeft
-    // // && yPidMeasurements == PhotonConstants.yPidSetPoint_MiddleReef_FrontLeft
-    // // && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_MiddleReef_FrontLeft)) {
-    //     LEDConstants.arrivePosition_Base = true;
-    //     LEDConstants.LEDFlag = true;
-    //   }
-      // impl
+    if((xPidMeasurements == PhotonConstants.xPidSetPoint_MiddleReef_FrontRight 
+    && yPidMeasurements == PhotonConstants.yPidSetPoint_MiddleReef_FrontRight
+    && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_MiddleReef_FrontRight)
+    || (xPidMeasurements == PhotonConstants.xPidSetPoint_MiddleReef_FrontLeft
+    && yPidMeasurements == PhotonConstants.yPidSetPoint_MiddleReef_FrontLeft
+    && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_MiddleReef_FrontLeft)) {
+        LEDConstants.arrivePosition_Base = true;
+        LEDConstants.LEDFlag = true;
+      }
+    // impl
 
-    // SmartDashboard.putBoolean("isFinish", LEDConstants.arrivePosition_Base);
-    // SmartDashboard.putNumber("TrackMiddle/xPidOutput", xPidOutput);
-    // SmartDashboard.putNumber("TrackMiddle/yPidOutput", yPidOutput);
-    // SmartDashboard.putNumber("TrackMiddle/rotationPidOutput", rotationPidOutput);
-    // SmartDashboard.putNumber("TrackMiddle/xPidError", xPidError);
-    // SmartDashboard.putNumber("TrackMiddle/yPidError", yPidError);
+    SmartDashboard.putBoolean("isFinish", LEDConstants.arrivePosition_Base);
+    SmartDashboard.putNumber("TrackMiddle/xPidOutput", xPidOutput);
+    SmartDashboard.putNumber("TrackMiddle/yPidOutput", yPidOutput);
+    SmartDashboard.putNumber("TrackMiddle/rotationPidOutput", rotationPidOutput);
+    SmartDashboard.putNumber("TrackMiddle/xPidError", xPidError);
+    SmartDashboard.putNumber("TrackMiddle/yPidError", yPidError);
+
+    if(ElevatorConstants.arriveLow == false) {
+      xPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.xPidMaxOutput_NeedSlow_Reef);
+      yPidOutput = Constants.setMaxOutput(yPidOutput, PhotonConstants.yPidMaxOutput_NeedSlow_Reef);
+      rotationPidOutput = Constants.setMaxOutput(rotationPidOutput, PhotonConstants.rotationPidMaxOutput_NeedSlow_Reef);
+    }
 
     m_SwerveSubsystem.drive(xPidOutput, yPidOutput, rotationPidOutput, false);
       

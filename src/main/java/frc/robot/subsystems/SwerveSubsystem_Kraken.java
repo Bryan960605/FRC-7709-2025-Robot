@@ -36,6 +36,7 @@ import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -48,6 +49,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.numbers.N8;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -148,7 +150,7 @@ public class SwerveSubsystem_Kraken extends SubsystemBase {
      // All other subsystem initialization
     // ...
     //vision
-    robotToFrontRightCamera = new Transform3d(new Translation3d(0, 0, 0), new Rotation3d(getRotation()));
+    robotToFrontRightCamera = new Transform3d(0.2555, -0.221, 0.21, new Rotation3d(0, 0, Math.toRadians(-48.964)));
     robotToFrontLeftCamera = new Transform3d(new Translation3d(0, 0, 0), new Rotation3d(getRotation()));
     robotToBackCamera = new Transform3d(new Translation3d(0, 0, 0), new Rotation3d(getRotation()));
 
@@ -325,6 +327,26 @@ public class SwerveSubsystem_Kraken extends SubsystemBase {
     var frontLeftRobotEstimatedPose = getEstimatedPose(prevRobotEstimatedPose, frontLeftCameraEstimator, frontLeftCameraMatrix, frontLeftCameraDistCoeffs, frontLeftCameraResult);
     var backRobotEstimatedPose = getEstimatedPose(prevRobotEstimatedPose, backCameraEstimator, backCameraMatrix, backCameraDistCoeffs, backCameraResult);
     bestEstimatedPose2d =  chooseBestPose(frontRightRobotEstimatedPose, frontLeftRobotEstimatedPose, backRobotEstimatedPose);
+    double frontRightRobotRotation = 0;
+    double frontRightRobotX = 0;
+    double frontRightRobotY = 0;
+
+    //--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    if(frontRightRobotEstimatedPose.isPresent()) {
+      var frontRightRobotPose = frontRightRobotEstimatedPose.get().estimatedPose;
+      frontRightRobotRotation = Math.toDegrees(frontRightRobotEstimatedPose.get().estimatedPose.getRotation().getAngle());
+      frontRightRobotX = frontRightRobotEstimatedPose.get().estimatedPose.getTranslation().getX();
+      frontRightRobotY = frontRightRobotEstimatedPose.get().estimatedPose.getTranslation().getY();
+    }
+
+
+    SmartDashboard.putNumber("Swerve/FrontRightRobotRotation", frontRightRobotRotation);
+    SmartDashboard.putNumber("Swerve/FrontRightRobotX", frontRightRobotX);
+    SmartDashboard.putNumber("Swerve/FrontRightRobotY", frontRightRobotY);
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
     odometry.update(getRotation(), getModulesPosition());
     swerveDrivePoseEstimator.update(getRotation(), getModulesPosition());

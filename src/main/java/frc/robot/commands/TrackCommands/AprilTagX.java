@@ -7,7 +7,10 @@ package frc.robot.commands.TrackCommands;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.PhotonConstants;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PhotonVisionSubsystem;
 import frc.robot.subsystems.SwerveSubsystem_Kraken;
 
@@ -31,8 +34,6 @@ public class AprilTagX extends Command {
     addRequirements(m_PhotonVisionSubsystem, m_SwerveSubsystem);
     // PID
     xPidController = new PIDController(PhotonConstants.xPidController_Kp, PhotonConstants.xPidController_Ki, PhotonConstants.xPidController_Kd);
-    //set limit
-    xPidController.setIntegratorRange(PhotonConstants.xPidMinOutput, PhotonConstants.xPidMaxOutput);
   }
 
   // Called when the command is initially scheduled.
@@ -48,12 +49,16 @@ public class AprilTagX extends Command {
     if(m_PhotonVisionSubsystem.hasFrontRightTarget()) {
       xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontRight();
       xPidMeasurements = Math.abs(xPidMeasurements - 1) > 0.05 ? xPidMeasurements : 1;
-      xPidOutput = -Math.min(PhotonConstants.xPidMaxOutput, Math.max(PhotonConstants.xPidMinOutput, xPidController.calculate(xPidMeasurements, 1)));
+      xPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.xPidMaxOutput);
     }else {
       xPidOutput = 0;
     }
 
     SmartDashboard.putNumber("AprilTagX/ pidOutput", xPidOutput);
+
+    if(ElevatorConstants.arriveLow == false) {
+      Constants.setMaxOutput(xPidOutput, PhotonConstants.xPidMaxOutput_NeedSlow);
+    }
 
     m_SwerveSubsystem.drive(xPidOutput, 0, 0, false);
   }

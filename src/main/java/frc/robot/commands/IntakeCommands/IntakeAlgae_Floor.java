@@ -49,14 +49,14 @@ public class IntakeAlgae_Floor extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_EndEffectorSubsystem.hasAlgae()) {
+    if(m_EndEffectorSubsystem.sensorHasAlgae()) {
       timer.start();
-      if(timer.get() > 0.5 && m_EndEffectorSubsystem.hasAlgae()) {
+      if(timer.get() > 0.5 && m_EndEffectorSubsystem.sensorHasAlgae()) {
         hasAlgae = true;
 
         LEDConstants.hasGamePiece = true;
         LEDConstants.LEDFlag = true;
-      }else if(!m_EndEffectorSubsystem.hasAlgae()){
+      }else if(!m_EndEffectorSubsystem.sensorHasAlgae()){
         timer.reset();
         timer.stop();
       }

@@ -7,6 +7,7 @@ package frc.robot.commands.TrackCommands;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.Constants.PhotonConstants;
 import frc.robot.subsystems.PhotonVisionSubsystem;
@@ -44,10 +45,6 @@ public class TrackProcessor extends Command {
     xPidController = new PIDController(PhotonConstants.xPidController_Kp, PhotonConstants.xPidController_Ki, PhotonConstants.xPidController_Kd);
     yPidController = new PIDController(PhotonConstants.yPidController_Kp, PhotonConstants.yPidController_Ki, PhotonConstants.yPidController_Kd);
     rotationPidController = new PIDController(PhotonConstants.rotationPidController_Kp, PhotonConstants.rotationPidController_Ki, PhotonConstants.rotationPidController_Kd);
-    // Set limits
-    xPidController.setIntegratorRange(PhotonConstants.xPidMinOutput_Processor, PhotonConstants.xPidMaxOutput_Processor);
-    yPidController.setIntegratorRange(PhotonConstants.yPidMaxOutput_Processor, PhotonConstants.yPidMaxOutput_Processor);
-    rotationPidController.setIntegratorRange(PhotonConstants.rotationPidMaxOutput_Processor, PhotonConstants.rotationPidMaxOutput_Processor);
   }
 
   // Called when the command is initially scheduled.
@@ -116,8 +113,13 @@ public class TrackProcessor extends Command {
     && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_Processor_FrontLeft)) {
           LEDConstants.arrivePosition_Base = true;
           LEDConstants.LEDFlag = true;
-        }
-      // impl
+    }
+    // impl
+    if(ElevatorConstants.arriveLow == false) {
+      xPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.xPidMaxOutput_NeedSlow_Processor);
+      yPidOutput = Constants.setMaxOutput(yPidOutput, PhotonConstants.yPidMaxOutput_NeedSlow_Processor);
+      rotationPidOutput = Constants.setMaxOutput(rotationPidOutput, PhotonConstants.rotationPidMaxOutput_NeedSlow_Processor);
+    }
     m_SwerveSubsystem.drive(xPidOutput, yPidOutput, rotationPidOutput, false);
   }
 

@@ -7,6 +7,7 @@ package frc.robot.commands.TrackCommands;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.Constants.PhotonConstants;
 import frc.robot.subsystems.PhotonVisionSubsystem;
@@ -46,10 +47,6 @@ public class TrackNet extends Command {
     xPidController = new PIDController(PhotonConstants.xPidController_Kp, PhotonConstants.xPidController_Ki, PhotonConstants.xPidController_Kd);
     yPidController = new PIDController(PhotonConstants.yPidController_Kp, PhotonConstants.yPidController_Ki, PhotonConstants.yPidController_Kd);
     rotationPidController = new PIDController(PhotonConstants.rotationPidController_Kp, PhotonConstants.rotationPidController_Ki, PhotonConstants.rotationPidController_Kd);
-    // Set limits
-    xPidController.setIntegratorRange(PhotonConstants.xPidMinOutput_Net, PhotonConstants.xPidMaxOutput_Net);
-    yPidController.setIntegratorRange(PhotonConstants.yPidMaxOutput_Net, PhotonConstants.yPidMaxOutput_Net);
-    rotationPidController.setIntegratorRange(PhotonConstants.rotationPidMaxOutput_Net, PhotonConstants.rotationPidMaxOutput_Net);
   }
 
   // Called when the command is initially scheduled.
@@ -166,7 +163,12 @@ public class TrackNet extends Command {
       LEDConstants.LEDFlag = true;
       LEDConstants.arrivePosition_Base = true;
       }
-    // impl
+  // impl
+  if(ElevatorConstants.arriveLow == false) {
+    xPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.xPidMaxOutput_NeedSlow_Net);
+    yPidOutput = Constants.setMaxOutput(yPidOutput, PhotonConstants.yPidMaxOutput_NeedSlow_Net);
+    rotationPidOutput = Constants.setMaxOutput(rotationPidOutput, PhotonConstants.rotationPidMaxOutput_NeedSlow_Net);
+  }
     m_SwerveSubsystem.drive(xPidOutput, yPidOutput, rotationPidOutput, false);
   }
 
@@ -183,6 +185,6 @@ public class TrackNet extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return LEDConstants.arrivePosition_Base;
+    return false;
   }
 }

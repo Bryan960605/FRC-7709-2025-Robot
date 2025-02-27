@@ -6,6 +6,8 @@ package frc.robot.commands.TrackCommands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.PhotonConstants;
 import frc.robot.subsystems.PhotonVisionSubsystem;
 import frc.robot.subsystems.SwerveSubsystem_Kraken;
@@ -29,8 +31,6 @@ public class AprilTagRotation extends Command {
     addRequirements(m_PhotonVisionSubsystem, m_SwerveSubsystem);
     // PID
     rotationPidController = new PIDController(PhotonConstants.rotationPidController_Kp, PhotonConstants.rotationPidController_Ki, PhotonConstants.rotationPidController_Kd);
-    // set limits
-    rotationPidController.setIntegratorRange(PhotonConstants.rotationPidMinOutput, PhotonConstants.rotationPidMaxOutput);
   }
 
   // Called when the command is initially scheduled.
@@ -46,8 +46,13 @@ public class AprilTagRotation extends Command {
       rotationMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_FrontRight();
       rotationMeasurements = Math.abs(rotationMeasurements - 180) > 1.5 ? rotationMeasurements : 180;
       rotationPidOutput = rotationPidController.calculate(rotationMeasurements, 180);
+      rotationPidOutput = Constants.setMaxOutput(rotationPidOutput, PhotonConstants.rotationPidMaxOutput);
    }else {
       rotationPidOutput = 0;
+   }
+
+   if(ElevatorConstants.arriveLow == false) {
+    Constants.setMaxOutput(rotationPidOutput, PhotonConstants.rotationPidMaxOutput_NeedSlow);
    }
 
     m_SwerveSubsystem.drive(0, 0, rotationPidOutput, false);

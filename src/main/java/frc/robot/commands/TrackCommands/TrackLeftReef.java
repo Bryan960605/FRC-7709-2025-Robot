@@ -11,6 +11,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.PhotonConstants;
@@ -42,20 +43,10 @@ public class TrackLeftReef extends Command {
 
   private int fiducialId;
 
-  // private final DoubleSupplier xSpeedFunc;
-
-  // private final SlewRateLimiter xLimiter;
-
-  // private double xSpeed;
-
-  public TrackLeftReef(PhotonVisionSubsystem photonVisionSubsystem, SwerveSubsystem_Kraken swerveSubsystem, DoubleSupplier xSpeed) {
+  public TrackLeftReef(PhotonVisionSubsystem photonVisionSubsystem, SwerveSubsystem_Kraken swerveSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_PhotonVisionSubsystem = photonVisionSubsystem;
     this.m_SwerveSubsystem = swerveSubsystem;
-
-    // xSpeedFunc = xSpeed;
-
-    // xLimiter = new SlewRateLimiter(4.6);
 
     addRequirements(m_PhotonVisionSubsystem, m_SwerveSubsystem);
     // PID
@@ -85,21 +76,21 @@ public class TrackLeftReef extends Command {
     // xSpeed = MathUtil.applyDeadband(xSpeed, OperatorConstants.kJoystickDeadBand);
     // xSpeed = xLimiter.calculate(xSpeed);
 
-    if(m_PhotonVisionSubsystem.hasFrontLeftTarget()) {
+    if(m_PhotonVisionSubsystem.hasFrontRightTarget()) {
       // Rotation-PID calculations
-      rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_FrontLeft();
+      rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_FrontRight();
       rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.rotationPidSetPoint_LeftReef);
       rotationPidMeasurements = (rotationPidError > 0.5) ? rotationPidMeasurements : PhotonConstants.rotationPidSetPoint_LeftReef;
       rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_LeftReef);
       rotationPidOutput = Constants.setMaxOutput(rotationPidOutput, PhotonConstants.rotationPidMaxOutput_Reef);
       // Y-PID calculations
-      yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_FrontLeft();
+      yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_FrontRight();
       yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_LeftReef);
       yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_LeftReef;
       yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_LeftReef);
       yPidOutput = Constants.setMaxOutput(yPidOutput, PhotonConstants.yPidMaxOutput_Reef);
       // X-PID calculations
-      xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontLeft();
+      xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontRight();
       xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_LeftReef);
       xPidMeasurements = (xPidError > 0.05) ? xPidMeasurements : PhotonConstants.xPidSetPoint_LeftReef;
       xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_LeftReef);
@@ -116,8 +107,12 @@ public class TrackLeftReef extends Command {
       LEDConstants.LEDFlag = true;
     }
 
-      // impl
-
+    // impl
+    if(ElevatorConstants.arriveLow == false) {
+      xPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.xPidMaxOutput_NeedSlow_Reef);
+      yPidOutput = Constants.setMaxOutput(yPidOutput, PhotonConstants.yPidMaxOutput_NeedSlow_Reef);
+      rotationPidOutput = Constants.setMaxOutput(rotationPidOutput, PhotonConstants.rotationPidMaxOutput_NeedSlow_Reef);
+    }
       m_SwerveSubsystem.drive(xPidOutput, yPidOutput, rotationPidOutput, false);
       
   }

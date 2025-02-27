@@ -161,47 +161,47 @@ public final class Constants {
     public static final double rotationPidController_Ki = 0;
     public static final double rotationPidController_Kd = 0;
 
-    public static final double xPidMinOutput = -0.2;
-    public static final double xPidMaxOutput = 0.2;
-    public static final double yPidMinOutput = -0.2;
-    public static final double yPidMaxOutput = 0.2;
-    public static final double rotationPidMinOutput = -0.2;
-    public static final double rotationPidMaxOutput = 0.2;
+    public static final double xPidMaxOutput = 0.4;
+    public static final double yPidMaxOutput = 0.4;
+    public static final double rotationPidMaxOutput = 0.4;
+    public static final double xPidMaxOutput_NeedSlow = 0.2;
+    public static final double yPidMaxOutput_NeedSlow = 0.2;
+    public static final double rotationPidMaxOutput_NeedSlow = 0.2;
 
-    public static final double xPidMinOutput_Reef = -0.2;
-    public static final double xPidMaxOutput_Reef = 0.2;
-    public static final double yPidMinOutput_Reef = -0.2;
-    public static final double yPidMaxOutput_Reef = 0.2;
-    public static final double rotationPidMinOutput_Reef = -0.2;
-    public static final double rotationPidMaxOutput_Reef = 0.2;
+    public static final double xPidMaxOutput_Reef = 0.4;
+    public static final double yPidMaxOutput_Reef = 0.4;
+    public static final double rotationPidMaxOutput_Reef = 0.4;
+    public static final double xPidMaxOutput_NeedSlow_Reef= 0.2;
+    public static final double yPidMaxOutput_NeedSlow_Reef = 0.2;
+    public static final double rotationPidMaxOutput_NeedSlow_Reef = 0.2;
 
-    public static final double xPidMinOutput_CoralStation = -0.2;
-    public static final double xPidMaxOutput_CoralStation = 0.2;
-    public static final double yPidMinOutput_CoralStation = -0.2;
-    public static final double yPidMaxOutput_CoralStation = 0.2;
-    public static final double rotationPidMinOutput_CoralStation = -0.2;
-    public static final double rotationPidMaxOutput_CoralStation = 0.2;
+    public static final double xPidMaxOutput_CoralStation = 0.4;
+    public static final double yPidMaxOutput_CoralStation = 0.4;
+    public static final double rotationPidMaxOutput_CoralStation = 0.4;
+    public static final double xPidMaxOutput_NeedSlow_CoralStation = 0.2;
+    public static final double yPidMaxOutput_NeedSlow_CoralStation = 0.2;
+    public static final double rotationPidMaxOutput_NeedSlow_CoralStation = 0.2;
 
-    public static final double xPidMinOutput_Cage = -0.2;
-    public static final double xPidMaxOutput_Cage = 0.2;
-    public static final double yPidMinOutput_Cage = -0.2;
-    public static final double yPidMaxOutput_Cage = 0.2;
-    public static final double rotationPidMinOutput_Cage = -0.2;
-    public static final double rotationPidMaxOutput_Cage = 0.2;
+    public static final double xPidMaxOutput_Cage = 0.4;
+    public static final double yPidMaxOutput_Cage = 0.4;
+    public static final double rotationPidMaxOutput_Cage = 0.4;
+    public static final double xPidMaxOutput_NeedSlow_Cage = 0.2;
+    public static final double yPidMaxOutput_NeedSlow_Cage = 0.2;
+    public static final double rotationPidMaxOutput_NeedSlow_Cage = 0.2;
 
-    public static final double xPidMinOutput_Net = -0.2;
-    public static final double xPidMaxOutput_Net = 0.2;
-    public static final double yPidMinOutput_Net = -0.2;
-    public static final double yPidMaxOutput_Net = 0.2;
-    public static final double rotationPidMinOutput_Net = -0.2;
-    public static final double rotationPidMaxOutput_Net = 0.2;
+    public static final double xPidMaxOutput_Net = 0.4;
+    public static final double yPidMaxOutput_Net = 0.4;
+    public static final double rotationPidMaxOutput_Net = 0.4;
+    public static final double xPidMaxOutput_NeedSlow_Net = 0.2;
+    public static final double yPidMaxOutput_NeedSlow_Net = 0.2;
+    public static final double rotationPidMaxOutput_NeedSlow_Net = 0.2;
 
-    public static final double xPidMinOutput_Processor = -0.2;
-    public static final double xPidMaxOutput_Processor = 0.2;
-    public static final double yPidMinOutput_Processor = -0.2;
-    public static final double yPidMaxOutput_Processor = 0.2;
-    public static final double rotationPidMinOutput_Processor = -0.2;
-    public static final double rotationPidMaxOutput_Processor = 0.2;
+    public static final double xPidMaxOutput_Processor = 0.4;
+    public static final double yPidMaxOutput_Processor = 0.4;
+    public static final double rotationPidMaxOutput_Processor = 0.4;
+    public static final double xPidMaxOutput_NeedSlow_Processor = 0.2;
+    public static final double yPidMaxOutput_NeedSlow_Processor = 0.2;
+    public static final double rotationPidMaxOutput_NeedSlow_Processor = 0.2;
 
     public static final double xPidSetPoint_RightReef = 0.445; 
     public static final double yPidSetPoint_RightReef = -0.118;
@@ -359,6 +359,7 @@ public final class Constants {
     public static final double coralL4UpAngle = 67.4;
     public static final double algaeFloorAngle = 7.2;
     public static final double algaeNetAngle = 80;//not yet
+    public static final double netUpAngle = 80;
     public static final double algaeLowInAngle = 64;
     public static final double algaeHighInAngle = 64;
     public static final double algaeProccesorAngle = 80;//not yet
@@ -375,7 +376,8 @@ public final class Constants {
     public static final double algaeLowInVol = -4;
     public static final double algaeHighInVol = -4;
     public static final double algaeShootProcessorVol = 6;
-    public static final double algaeHoldVol = -1.5;   
+    public static final double algaeHoldVol = -1.5;  
+    public static final double algaeOutVol = 6; 
   }
 
   public static class ClimberConstants {

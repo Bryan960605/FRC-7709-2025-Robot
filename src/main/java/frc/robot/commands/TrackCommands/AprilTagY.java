@@ -6,6 +6,8 @@ package frc.robot.commands.TrackCommands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.PhotonConstants;
 import frc.robot.subsystems.PhotonVisionSubsystem;
 import frc.robot.subsystems.SwerveSubsystem_Kraken;
@@ -29,8 +31,6 @@ public class AprilTagY extends Command {
     addRequirements(m_PhotonVisionSubsystem, m_SwerveSubsystem);
     // PID
     yPidController = new PIDController(PhotonConstants.yPidController_Kp, PhotonConstants.yPidController_Ki, PhotonConstants.yPidController_Kd);
-    //set limit
-    yPidController.setIntegratorRange(PhotonConstants.yPidMinOutput, PhotonConstants.yPidMaxOutput);
   }
 
   // Called when the command is initially scheduled.
@@ -45,11 +45,13 @@ public class AprilTagY extends Command {
     if(m_PhotonVisionSubsystem.hasFrontRightTarget()) {
       yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_FrontRight();
       yPidMeasurements = Math.abs(yPidMeasurements) > 0.05 ? yPidMeasurements : 0;
-      yPidOutput = -yPidController.calculate(yPidMeasurements, 0);
+      yPidOutput = Constants.setMaxOutput(yPidOutput, PhotonConstants.yPidMaxOutput);
     }else {
       yPidOutput = 0;
     }
-
+    if(ElevatorConstants.arriveLow == false) {
+      Constants.setMaxOutput(yPidOutput, PhotonConstants.yPidMaxOutput_NeedSlow);
+    }
     m_SwerveSubsystem.drive(0, yPidOutput, 0, false);
   }
 

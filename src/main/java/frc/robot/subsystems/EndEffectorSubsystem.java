@@ -160,10 +160,6 @@ public class EndEffectorSubsystem extends SubsystemBase {
     public void turnMore_Coral(){
       intakewheel.setVoltage(EndEffectorConstants.coralTurnMore);
     }
-
-    public void coralL4ToPrimitive_Arm(){
-      arriveAngle = EndEffectorConstants.coralL4UpAngle;
-    }
   
     public void outCoral_L3_Arm() {
       arriveAngle = EndEffectorConstants.coralL3Angle;
@@ -176,6 +172,10 @@ public class EndEffectorSubsystem extends SubsystemBase {
     public void outCoral_L4_Arm() {
       arriveAngle = EndEffectorConstants.coralL4Angle;
     }
+
+    public void coralL4Primitive_Arm(){
+      arriveAngle = EndEffectorConstants.coralL4UpAngle;
+    }
   
     public void outCoral_L4_Wheel() {
       intakewheel.setVoltage(EndEffectorConstants.coralL4OutVol);
@@ -183,6 +183,10 @@ public class EndEffectorSubsystem extends SubsystemBase {
   
     public void shootNet_Arm() {
       arriveAngle = EndEffectorConstants.algaeNetAngle;
+    }
+
+    public void netPrimitive_Arm(){
+      arriveAngle = EndEffectorConstants.netUpAngle;
     }
   
     public void shootNet_Wheel() {
@@ -219,6 +223,10 @@ public class EndEffectorSubsystem extends SubsystemBase {
   
     public void intakeAlgae_Floor_Wheel() {
       intakewheel.setVoltage(EndEffectorConstants.algaeFloorInVol);
+    }
+
+    public void outAlgae() {
+      intakewheel.setVoltage(EndEffectorConstants.algaeOutVol);
     }
   
     public void primitiveArm() {
