@@ -12,11 +12,20 @@ import frc.robot.commands.ManualDrive_Kraken;
 // import frc.robot.commands.ArmTest_IntakeAlgae_Floor;
 // import frc.robot.commands.ArmTest_IntakeCoral;
 import frc.robot.commands.ManualDrive_Neo;
+import frc.robot.commands.AutoCommand.Coral_L3_Auto_LeftReef;
+import frc.robot.commands.AutoCommand.Coral_L3_Auto_RightReef;
+import frc.robot.commands.AutoCommand.Coral_L4_Auto_LeftReef;
+import frc.robot.commands.AutoCommand.Coral_L4_Auto_RightReef;
+import frc.robot.commands.AutoCommand.FeedCoral_Auto;
 import frc.robot.commands.IntakeCommands.CoralL4ToPrimitive;
 import frc.robot.commands.IntakeCommands.Coral_L1;
+import frc.robot.commands.IntakeCommands.Coral_L1_Auto;
 import frc.robot.commands.IntakeCommands.Coral_L2;
+import frc.robot.commands.IntakeCommands.Coral_L2_Auto;
 import frc.robot.commands.IntakeCommands.Coral_L3;
+import frc.robot.commands.IntakeCommands.Coral_L3_Auto;
 import frc.robot.commands.IntakeCommands.Coral_L4;
+import frc.robot.commands.IntakeCommands.Coral_L4_Auto;
 import frc.robot.commands.IntakeCommands.IntakeAlgae_Floor;
 import frc.robot.commands.IntakeCommands.IntakeAlgae_High;
 import frc.robot.commands.IntakeCommands.IntakeAlgae_Low;
@@ -41,6 +50,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -77,6 +87,16 @@ public class RobotContainer {
     autoChooser = AutoBuilder.buildAutoChooser();
     configureBindings();
     SmartDashboard.putData("Auto Mode", autoChooser);
+
+    NamedCommands.registerCommand("Coral_L3_Left", new Coral_L3_Auto_LeftReef(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem));
+    NamedCommands.registerCommand("Coral_L3_Right", new Coral_L3_Auto_RightReef(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem));
+    NamedCommands.registerCommand("Coral_L4_Left", new Coral_L4_Auto_LeftReef(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem));
+    NamedCommands.registerCommand("Coral_L4_RightReef", new Coral_L4_Auto_RightReef(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem));
+    NamedCommands.registerCommand("PrimitiveIntake", new PrimitiveIntake(m_ElevatorSubsystem, m_EndEffectorSubsystem));
+    // NamedCommands.registerCommand("TrackLeftReef", new TrackLeftReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
+    // NamedCommands.registerCommand("TrackRightReef", new TrackRightReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
+    // NamedCommands.registerCommand("TrackMiddleReef", new TrackMiddleReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
+    NamedCommands.registerCommand("FeedCoral", new FeedCoral_Auto(m_EndEffectorSubsystem).withTimeout(2));
   }
 
   /**

@@ -281,18 +281,18 @@ public final class Constants {
     public static final int elevator_FirstMotor_ID = 6;
     public static final int elevator_SecondMotor_ID = 7;
 
-    public static final double primitivePosition = 0.12;
-    public static final double coralL1Position = 3.72;
-    public static final double coralL2Position = 9.72;
-    public static final double coralL3Position = 21.02;
-    public static final double coralL4Position = 42.52;
-    public static final double coralStationPosition = 0.12;
+    public static final double primitivePosition = 0;//0.12
+    public static final double coralL1Position = 0;//3.72
+    public static final double coralL2Position = 0;//7.42
+    public static final double coralL3Position = 0;//21.42
+    public static final double coralL4Position = 0;//42.52
+    public static final double coralStationPosition = 0;//0.12
 
-    public static final double algaeFloorPosition = 0.12;
-    public static final double algaeNetPosition = 0.12;
-    public static final double algaeL2Position = 3.82;
-    public static final double algaeL3Position = 15.82;
-    public static final double algaeProccesorPosition = 0.12;
+    public static final double algaeFloorPosition = 0;//0.12
+    public static final double algaeNetPosition = 0;//0.12
+    public static final double algaeL2Position = 0;//3.82
+    public static final double algaeL3Position = 0;//15.82
+    public static final double algaeProccesorPosition = 0;//0.12
 
     public static boolean arriveLow = false;
   }
@@ -327,30 +327,31 @@ public final class Constants {
 
     public static final double absolutedEncoderOffset = 0.35693;
 
-    public static final double armPID_Kp = 0.0048;
+    public static final double armPID_Kp = 0;//0.0048
     public static final double armPID_Ki = 0;
-    public static final double armPID_Kd = 0.0001;
+    public static final double armPID_Kd = 0;//0.0001
     public static final double armPIDMinOutput = 0;
     public static final double armPIDMaxOutput = 0.1;
 
     public static final double armFeedforward_Ks = 0;
-    public static final double armFeedforward_Kg = 0.5;
+    public static final double armFeedforward_Kg = 0;//0.5
     public static final double armFeedforward_Kv = 0;
     
 
     public static final double armFeedforward_Ks2 = 0;
-    public static final double armFeedforward_Kg2 = 0.4;
+    public static final double armFeedforward_Kg2 = 0;//0.4
     public static final double armFeedforward_Kv2 = 0;
 
     public static final double armFeedforward_Ks3 = 0;
-    public static final double armFeedforward_Kg3 = 0.3;
+    public static final double armFeedforward_Kg3 = 0;//0.3
     public static final double armFeedforward_Kv3 = 0;
 
     public static final double armFeedforward_Ks4 = 0;
-    public static final double armFeedforward_Kg4 = 0.6;
+    public static final double armFeedforward_Kg4 = 0;//0.6
     public static final double armFeedforward_Kv4 = 0;
 
     public static final double primitiveAngle = 80;
+    public static final double primitiveAngle_HasCoral = 80;
     public static final double coralL1Angle = 85;
     public static final double coralL2Angle = 80;
     public static final double coralL3Angle = 83;

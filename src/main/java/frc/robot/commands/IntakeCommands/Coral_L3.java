@@ -56,9 +56,9 @@ public class Coral_L3 extends Command {
 
     if(arriveEndEffectorPrimition) {
       m_ElevatorSubsystem.outCoral_L3();
-    }
-    if(m_ElevatorSubsystem.arriveSetPoint()) {
-      m_EndEffectorSubsystem.outCoral_L3_Arm();
+      if(m_ElevatorSubsystem.arriveSetPoint()) {
+        m_EndEffectorSubsystem.outCoral_L3_Arm();
+      } 
     }
   
     if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint() && ifFeed) {
@@ -76,13 +76,13 @@ public class Coral_L3 extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_ElevatorSubsystem.toPrimitive();
-    m_EndEffectorSubsystem.primitiveArm();
-    m_EndEffectorSubsystem.stopWheel();
+    // m_ElevatorSubsystem.toPrimitive();
+    // m_EndEffectorSubsystem.primitiveArm();
+    // m_EndEffectorSubsystem.stopWheel();
 
-    LEDConstants.intakeArriving = false;
-    LEDConstants.arrivePosition_Intake = false;
-    LEDConstants.LEDFlag = true;
+    // LEDConstants.intakeArriving = false;
+    // LEDConstants.arrivePosition_Intake = false;
+    // LEDConstants.LEDFlag = true;
   }
 
   // Returns true when the command should end.

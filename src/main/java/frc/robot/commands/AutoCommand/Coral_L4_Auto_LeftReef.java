@@ -2,26 +2,27 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.TrackCommands;
+package frc.robot.commands.AutoCommand;
 
-import java.util.function.DoubleSupplier;
+import java.util.function.BooleanSupplier;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.EndEffectorConstants;
 import frc.robot.Constants.LEDConstants;
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.PhotonConstants;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.PhotonVisionSubsystem;
-import frc.robot.subsystems.SwerveSubsystem_Kraken;
 import frc.robot.subsystems.SwerveSubsystem_Kraken;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class TrackLeftReef extends Command {
-  /** Creates a new TrackReef. */
+public class Coral_L4_Auto_LeftReef extends Command {
+  /** Creates a new Coral_L3_Auto. */
+  private final ElevatorSubsystem m_ElevatorSubsystem;
+  private final EndEffectorSubsystem m_EndEffectorSubsystem;
   private final PhotonVisionSubsystem m_PhotonVisionSubsystem;
   private final SwerveSubsystem_Kraken m_SwerveSubsystem;
 
@@ -42,39 +43,49 @@ public class TrackLeftReef extends Command {
   private double rotationPidOutput;
 
   private int fiducialId;
-
-  public TrackLeftReef(PhotonVisionSubsystem photonVisionSubsystem, SwerveSubsystem_Kraken swerveSubsystem) {
+  public Coral_L4_Auto_LeftReef(ElevatorSubsystem elevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem, SwerveSubsystem_Kraken swerveSubsystem, PhotonVisionSubsystem photonVisionSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.m_PhotonVisionSubsystem = photonVisionSubsystem;
+    this.m_ElevatorSubsystem = elevatorSubsystem;
+    this.m_EndEffectorSubsystem = endEffectorSubsystem;
     this.m_SwerveSubsystem = swerveSubsystem;
+    this.m_PhotonVisionSubsystem = photonVisionSubsystem;
 
-    addRequirements(m_PhotonVisionSubsystem, m_SwerveSubsystem);
-    // PID
-    xPidController = new PIDController(PhotonConstants.xPidController_Kp, PhotonConstants.xPidController_Ki, PhotonConstants.xPidController_Kd);
-    yPidController = new PIDController(PhotonConstants.yPidController_Kp, PhotonConstants.yPidController_Ki, PhotonConstants.yPidController_Kd);
-    rotationPidController = new PIDController(PhotonConstants.rotationPidController_Kp, PhotonConstants.rotationPidController_Ki, PhotonConstants.rotationPidController_Kd);
-    // Set limits
-    // xPidController.setIntegratorRange(PhotonConstants.xPidMinOutput_Reef, PhotonConstants.xPidMaxOutput_Reef);
-    // yPidController.setIntegratorRange(PhotonConstants.yPidMaxOutput_Reef, PhotonConstants.yPidMaxOutput_Reef);
-    // rotationPidController.setIntegratorRange(PhotonConstants.rotationPidMaxOutput_Reef, PhotonConstants.rotationPidMaxOutput_Reef);
+    addRequirements(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+
+    m_EndEffectorSubsystem.coralL4Primitive_Arm();
     m_SwerveSubsystem.drive(0, 0, 0, false);
 
     LEDConstants.tracking = true;
     LEDConstants.arrivePosition_Base = true;
+    LEDConstants.LEDFlag = true;
+    LEDConstants.intakeArriving = true;
+    LEDConstants.arrivePosition_Intake = false;
     LEDConstants.LEDFlag = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // xSpeed = xSpeedFunc.getAsDouble() * 0.8;
-    // xSpeed = MathUtil.applyDeadband(xSpeed, OperatorConstants.kJoystickDeadBand);
-    // xSpeed = xLimiter.calculate(xSpeed);
+    if(m_EndEffectorSubsystem.arriveSetPoint()) {
+      m_ElevatorSubsystem.outCoral_L4();    
+      if(m_ElevatorSubsystem.arriveSetPoint()) {
+        m_EndEffectorSubsystem.outCoral_L4_Arm();
+      }
+    }
+    if(m_ElevatorSubsystem.arriveSetPoint() && Math.abs(m_EndEffectorSubsystem.getAngle() - EndEffectorConstants.coralL4Angle) <= 1) {
+      m_EndEffectorSubsystem.outCoral_L4_Wheel();
+
+      LEDConstants.arrivePosition_Intake = true;
+      LEDConstants.LEDFlag = true;
+    }else {
+      LEDConstants.arrivePosition_Intake = false;
+      LEDConstants.LEDFlag = true;
+    }
 
     if(m_PhotonVisionSubsystem.hasFrontRightTarget()) {
       // Rotation-PID calculations
@@ -107,14 +118,12 @@ public class TrackLeftReef extends Command {
       LEDConstants.LEDFlag = true;
     }
 
-    // impl
     if(ElevatorConstants.arriveLow == false) {
       xPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.xPidMaxOutput_NeedSlow_Reef);
       yPidOutput = Constants.setMaxOutput(yPidOutput, PhotonConstants.yPidMaxOutput_NeedSlow_Reef);
       rotationPidOutput = Constants.setMaxOutput(rotationPidOutput, PhotonConstants.rotationPidMaxOutput_NeedSlow_Reef);
     }
     m_SwerveSubsystem.drive(xPidOutput, yPidOutput, rotationPidOutput, false);
-      
   }
 
   // Called once the command ends or is interrupted.
@@ -130,7 +139,6 @@ public class TrackLeftReef extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return LEDConstants.arrivePosition_Base;
+    return false;
   }
-
 }

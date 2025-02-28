@@ -9,6 +9,12 @@
           "data": {
             "pathName": "LeftFieldMiddleStart Out To NearLeft"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Coral_L4_LeftReef"
+          }
         }
       ]
     }

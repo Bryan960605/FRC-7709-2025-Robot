@@ -232,6 +232,10 @@ public class EndEffectorSubsystem extends SubsystemBase {
     public void primitiveArm() {
       arriveAngle = EndEffectorConstants.primitiveAngle;
     }
+
+    public void primitiveArm_HasCoral(){
+      arriveAngle = EndEffectorConstants.primitiveAngle_HasCoral;
+    }
   
     public void holdAlgae(){
       intakewheel.setVoltage(EndEffectorConstants.algaeHoldVol);

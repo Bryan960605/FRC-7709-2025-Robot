@@ -7,7 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "RightFieldRightStart Out To NearRight"
+            "pathName": "RightFieldMiddleStart Out To NearRight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Coral_L4_RightReef"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FeedCoral"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         },
         {
@@ -17,9 +35,33 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.5
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "RightCoralStation Out To FarRight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Coral_L4_RightReef"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FeedCoral"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         }
       ]

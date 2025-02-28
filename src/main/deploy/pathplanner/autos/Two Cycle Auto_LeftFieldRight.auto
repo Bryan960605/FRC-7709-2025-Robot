@@ -11,15 +11,51 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Coral_L4_RightReef"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FeedCoral"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "NearLeft_LeftReef Out To LeftCoralStation"
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.5
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "LeftCoralStation Out To FarLeft"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Coral_L4_RightReef"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FeedCoral"
           }
         }
       ]
