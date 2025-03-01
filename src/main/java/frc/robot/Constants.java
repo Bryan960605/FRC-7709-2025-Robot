@@ -86,25 +86,25 @@ public final class Constants {
   }
 
   public class Swerve_KrakenConstants {
-    public static final int leftFrontDrive_ID = 4;
-    public static final int leftBackDrive_ID = 3;
-    public static final int rightFrontDrive_ID = 1;
-    public static final int rightBackDrive_ID = 2;
+    public static final int leftFrontDrive_ID = 2;
+    public static final int leftBackDrive_ID = 1;
+    public static final int rightFrontDrive_ID = 3;
+    public static final int rightBackDrive_ID = 4;
 
-    public static final int leftFrontTurning_ID = 8;
-    public static final int leftBackTurning_ID = 7;
-    public static final int rightFrontTurning_ID = 5;
-    public static final int rightBackTurning_ID = 6;
+    public static final int leftFrontTurning_ID = 15;
+    public static final int leftBackTurning_ID = 5;
+    public static final int rightFrontTurning_ID = 16;
+    public static final int rightBackTurning_ID = 17;
 
-    public static final int leftFrontAbsolutedEncoder_ID = 44;
-    public static final int leftBackAbsolutedEncoder_ID = 43;
-    public static final int rightFrontAbsolutedEncoder_ID = 41;
-    public static final int rightBackAbsolutedEncoder_ID = 42;
+    public static final int leftFrontAbsolutedEncoder_ID = 42;
+    public static final int leftBackAbsolutedEncoder_ID = 41;
+    public static final int rightFrontAbsolutedEncoder_ID = 43;
+    public static final int rightBackAbsolutedEncoder_ID = 44;
 
-    public static final double leftFrontOffset = -0.34326171;
-    public static final double leftBackOffset = 0.22436523;
-    public static final double rightFrontOffset = -0.34301757;
-    public static final double rightBackOffset = 0.15209960;
+    public static final double leftFrontOffset = -0.348632;
+    public static final double leftBackOffset = 0.143310;
+    public static final double rightFrontOffset = -0.289794;
+    public static final double rightBackOffset = 0.1726074;
 
     public static final int gyro_ID = 56;
 
@@ -281,17 +281,17 @@ public final class Constants {
     public static final int elevator_FirstMotor_ID = 6;
     public static final int elevator_SecondMotor_ID = 7;
 
-    public static final double primitivePosition = 0;//0.12
-    public static final double coralL1Position = 0;//3.72
-    public static final double coralL2Position = 0;//7.42
-    public static final double coralL3Position = 0;//21.42
-    public static final double coralL4Position = 0;//42.52
-    public static final double coralStationPosition = 0;//0.12
+    public static final double primitivePosition = -0.2;//-0.14
+    public static final double coralL1Position = 3.8;//3.72
+    public static final double coralL2Position = 11.3;//7.42
+    public static final double coralL3Position = 21.4;//21.42
+    public static final double coralL4Position = 43.2;//42.52
+    public static final double coralStationPosition = -0.13;//0.12
 
     public static final double algaeFloorPosition = 0;//0.12
-    public static final double algaeNetPosition = 0;//0.12
-    public static final double algaeL2Position = 0;//3.82
-    public static final double algaeL3Position = 0;//15.82
+    public static final double algaeNetPosition = 44;//0.12
+    public static final double algaeL2Position = 2.7;//3.82
+    public static final double algaeL3Position = 17.85;//15.82
     public static final double algaeProccesorPosition = 0;//0.12
 
     public static boolean arriveLow = false;
@@ -319,61 +319,61 @@ public final class Constants {
   }
 
   public static class EndEffectorConstants {
-    public static final int intakeWheel_ID = 1;
-    public static final int intakeArm_ID = 2;
+    public static final int intakeWheel_ID = 13;
+    public static final int intakeArm_ID = 14;
     public static final int armAbsolutedEncoder_ID = 45;
-    public static final int irSensor_Coral_ID = 0;
-    public static final int irSensor_Algae_ID = 1;
+    public static final int irSensor_Coral_ID = 1;
+    public static final int irSensor_Algae_ID = 0;
 
-    public static final double absolutedEncoderOffset = 0.35693;
+    public static final double absolutedEncoderOffset = 0.140625;
 
-    public static final double armPID_Kp = 0;//0.0048
+    public static final double armPID_Kp = 0.0051;//0.0048
     public static final double armPID_Ki = 0;
-    public static final double armPID_Kd = 0;//0.0001
+    public static final double armPID_Kd = 0.0001;//0.0001
     public static final double armPIDMinOutput = 0;
     public static final double armPIDMaxOutput = 0.1;
 
     public static final double armFeedforward_Ks = 0;
-    public static final double armFeedforward_Kg = 0;//0.5
+    public static final double armFeedforward_Kg = 0.6;//
     public static final double armFeedforward_Kv = 0;
     
 
     public static final double armFeedforward_Ks2 = 0;
-    public static final double armFeedforward_Kg2 = 0;//0.4
+    public static final double armFeedforward_Kg2 = 0.4;//0.4
     public static final double armFeedforward_Kv2 = 0;
 
     public static final double armFeedforward_Ks3 = 0;
-    public static final double armFeedforward_Kg3 = 0;//0.3
+    public static final double armFeedforward_Kg3 = 0.3;//0.3
     public static final double armFeedforward_Kv3 = 0;
 
     public static final double armFeedforward_Ks4 = 0;
-    public static final double armFeedforward_Kg4 = 0;//0.6
+    public static final double armFeedforward_Kg4 = 0.6;//0.6
     public static final double armFeedforward_Kv4 = 0;
 
-    public static final double primitiveAngle = 80;
-    public static final double primitiveAngle_HasCoral = 80;
-    public static final double coralL1Angle = 85;
-    public static final double coralL2Angle = 80;
-    public static final double coralL3Angle = 83;
-    public static final double coralL4Angle = 80;//not yet
-    public static final double coralStationAngle = 80;
-    public static final double coralL4UpAngle = 67.4;
-    public static final double algaeFloorAngle = 7.2;
-    public static final double algaeNetAngle = 80;//not yet
-    public static final double netUpAngle = 80;
+    public static final double primitiveAngle = 82;
+    public static final double primitiveAngle_HasCoral = 82;
+    public static final double coralL1Angle = 82;
+    public static final double coralL2Angle = 75;
+    public static final double coralL3Angle = 82;
+    public static final double coralL4Angle = 56;//not yet
+    public static final double coralStationAngle = 79;
+    public static final double coralL4UpAngle = 70;
+    public static final double algaeFloorAngle = 7;
+    public static final double algaeNetAngle = 100;//not yet
+    public static final double netUpAngle = 82;
     public static final double algaeLowInAngle = 64;
     public static final double algaeHighInAngle = 64;
-    public static final double algaeProccesorAngle = 80;//not yet
+    public static final double algaeProccesorAngle = 9.4;//not yet
     
 
     public static final double coralL1OutVol = -1.5;
-    public static final double coralL2OutVol = -2.3;
-    public static final double coralL3OutVol = -2.3;
-    public static final double coralL4OutVol = 0;
+    public static final double coralL2OutVol = -3;
+    public static final double coralL3OutVol = -3;
+    public static final double coralL4OutVol = -2;
     public static final double coralTurnMore = -0.5;
-    public static final double coralInSpeed_RotionPerSecond = -29;
+    public static final double coralInSpeed_RotionPerSecond = -31;
     public static final double algaeFloorInVol = -4;
-    public static final double algaeShootNetVol = -4;
+    public static final double algaeShootNetVol = 6;
     public static final double algaeLowInVol = -4;
     public static final double algaeHighInVol = -4;
     public static final double algaeShootProcessorVol = 6;

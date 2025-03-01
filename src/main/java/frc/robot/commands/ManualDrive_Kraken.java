@@ -78,11 +78,11 @@ public class ManualDrive_Kraken extends Command {
     if(isSlow || ElevatorConstants.arriveLow == false) {
       xSpeed = xSpeed*0.2;
       ySpeed = ySpeed*0.2;
-      zSpeed = zSpeed*0.2;
+      zSpeed = zSpeed*0.1;
     }else {
       xSpeed = xSpeed*0.8;
       ySpeed = ySpeed*0.8;
-      zSpeed = zSpeed*0.8;
+      zSpeed = zSpeed*0.4;
     }
 
     SmartDashboard.putNumber("ManualDrive/Xspeed", xSpeed);

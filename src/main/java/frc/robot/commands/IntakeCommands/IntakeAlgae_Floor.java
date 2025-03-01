@@ -72,17 +72,17 @@ public class IntakeAlgae_Floor extends Command {
     m_ElevatorSubsystem.toPrimitive();
     m_EndEffectorSubsystem.primitiveArm();
 
-    if (hasAlgae) {
+    // if (hasAlgae) {
       m_EndEffectorSubsystem.holdAlgae(); 
       LEDConstants.hasGamePiece = true;
       LEDConstants.intakeGamePiece = false;
       LEDConstants.LEDFlag = true;
-    }else{
-      m_EndEffectorSubsystem.stopWheel();
-      LEDConstants.hasGamePiece = false;
-      LEDConstants.intakeGamePiece = false;
-      LEDConstants.LEDFlag = true;
-    }
+    // }else{
+    //   m_EndEffectorSubsystem.stopWheel();
+    //   LEDConstants.hasGamePiece = false;
+    //   LEDConstants.intakeGamePiece = false;
+    //   LEDConstants.LEDFlag = true;
+    // }
   }
 
   // Returns true when the command should end.

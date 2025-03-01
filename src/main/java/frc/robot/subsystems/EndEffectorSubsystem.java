@@ -117,7 +117,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
       speedMotionMagicConfigs.MotionMagicJerk = 4000;
       // Absolute Encoder Configurations
       absolutedEncoderConfig = new CANcoderConfiguration();
-      absolutedEncoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+      absolutedEncoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
       absolutedEncoderConfig.MagnetSensor.MagnetOffset = EndEffectorConstants.absolutedEncoderOffset;
       armAbsolutedEncoder.getConfigurator().apply(absolutedEncoderConfig);
   
@@ -308,32 +308,32 @@ public class EndEffectorSubsystem extends SubsystemBase {
     }
   
     public boolean arriveSetPoint() {
-      return (Math.abs(armPID.getError()) <= 1.5);
+      return (Math.abs(armPID.getError()) <= 2);
     }
   
-    public void setNeedMotorTurn(boolean needTurn){
-      shouldMotorTurn_HasItem = needTurn;
-      shouldMotorReset = needTurn;
-      intakewheel.getConfigurator().apply(turnMotionMagicConfigs);
-      intakewheel.getConfigurator().apply(slot1Configs);
-    }
+    // public void setNeedMotorTurn(boolean needTurn){
+    //   shouldMotorTurn_HasItem = needTurn;
+    //   shouldMotorReset = needTurn;
+    //   intakewheel.getConfigurator().apply(turnMotionMagicConfigs);
+    //   intakewheel.getConfigurator().apply(slot1Configs);
+    // }
   
     @Override
     public void periodic() {
-      if (shouldMotorReset) {
-        nowPosition = intakewheel.getPosition().getValueAsDouble();
-        shouldMotorReset = false;
-      }
-      if (shouldMotorTurn_HasItem) {
-        intakewheel.setControl(m_request.withPosition(nowPosition + 0.65));
-        if (intakewheel.getPosition().getValueAsDouble() >= nowPosition + 0.65) {
-          shouldMotorTurn_HasItem = false;
-          intakewheel.getConfigurator().apply(speedMotionMagicConfigs);
-          intakewheel.getConfigurator().apply(speedSlot0Configs);
-        }
-      }
+      // if (shouldMotorReset) {
+      //   nowPosition = intakewheel.getPosition().getValueAsDouble();
+      //   shouldMotorReset = false;
+      // }
+      // if (shouldMotorTurn_HasItem) {
+      //   intakewheel.setControl(m_request.withPosition(nowPosition + 0.65));
+      //   if (intakewheel.getPosition().getValueAsDouble() >= nowPosition + 0.65) {
+      //     shouldMotorTurn_HasItem = false;
+      //     intakewheel.getConfigurator().apply(speedMotionMagicConfigs);
+      //     intakewheel.getConfigurator().apply(speedSlot0Configs);
+      //   }
+      // }
       // Arm
-      if(85 >= getAngle() && getAngle() > 80 || 75 >= getAngle() && getAngle() > 70) {
+      if(90 >= getAngle() && getAngle() > 80 || 75 >= getAngle() && getAngle() > 70) {
         armFeedforward = new ArmFeedforward(EndEffectorConstants.armFeedforward_Ks, EndEffectorConstants.armFeedforward_Kg, EndEffectorConstants.armFeedforward_Kv);
       }else if(80 >= getAngle() && getAngle() > 75) {
         armFeedforward = new ArmFeedforward(EndEffectorConstants.armFeedforward_Ks4, EndEffectorConstants.armFeedforward_Kg4, EndEffectorConstants.armFeedforward_Kv4);

@@ -70,7 +70,7 @@ public class RobotContainer {
   // private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
   private final PhotonVisionSubsystem m_PhotonVisionSubsystem = new PhotonVisionSubsystem();
   private final SwerveSubsystem_Kraken m_SwerveSubsystem = new SwerveSubsystem_Kraken(m_PhotonVisionSubsystem);
-  private final SwerveSubsystem_Neo m_SwerveSubsystem_Neo = new SwerveSubsystem_Neo(m_PhotonVisionSubsystem);
+  // private final SwerveSubsystem_Neo m_SwerveSubsystem_Neo = new SwerveSubsystem_Neo(m_PhotonVisionSubsystem);
   private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   private final EndEffectorSubsystem m_EndEffectorSubsystem = new EndEffectorSubsystem();
 
@@ -80,23 +80,23 @@ public class RobotContainer {
   private final CommandXboxController driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private final CommandXboxController operatorController = new CommandXboxController(OperatorConstants.kOperatorControllerPort);
 
-  private final SendableChooser<Command> autoChooser;
+  // private final SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
     // Configure the trigger bindings
-    autoChooser = AutoBuilder.buildAutoChooser();
+    // autoChooser = AutoBuilder.buildAutoChooser();
     configureBindings();
-    SmartDashboard.putData("Auto Mode", autoChooser);
+    // SmartDashboard.putData("Auto Mode", autoChooser);
 
-    NamedCommands.registerCommand("Coral_L3_Left", new Coral_L3_Auto_LeftReef(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem));
-    NamedCommands.registerCommand("Coral_L3_Right", new Coral_L3_Auto_RightReef(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem));
-    NamedCommands.registerCommand("Coral_L4_Left", new Coral_L4_Auto_LeftReef(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem));
-    NamedCommands.registerCommand("Coral_L4_RightReef", new Coral_L4_Auto_RightReef(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem));
-    NamedCommands.registerCommand("PrimitiveIntake", new PrimitiveIntake(m_ElevatorSubsystem, m_EndEffectorSubsystem));
-    // NamedCommands.registerCommand("TrackLeftReef", new TrackLeftReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
-    // NamedCommands.registerCommand("TrackRightReef", new TrackRightReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
-    // NamedCommands.registerCommand("TrackMiddleReef", new TrackMiddleReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
-    NamedCommands.registerCommand("FeedCoral", new FeedCoral_Auto(m_EndEffectorSubsystem).withTimeout(2));
+    // NamedCommands.registerCommand("Coral_L3_Left", new Coral_L3_Auto_LeftReef(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem));
+    // NamedCommands.registerCommand("Coral_L3_Right", new Coral_L3_Auto_RightReef(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem));
+    // NamedCommands.registerCommand("Coral_L4_Left", new Coral_L4_Auto_LeftReef(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem));
+    // NamedCommands.registerCommand("Coral_L4_RightReef", new Coral_L4_Auto_RightReef(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem));
+    // NamedCommands.registerCommand("PrimitiveIntake", new PrimitiveIntake(m_ElevatorSubsystem, m_EndEffectorSubsystem));
+    // // NamedCommands.registerCommand("TrackLeftReef", new TrackLeftReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
+    // // NamedCommands.registerCommand("TrackRightReef", new TrackRightReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
+    // // NamedCommands.registerCommand("TrackMiddleReef", new TrackMiddleReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
+    // NamedCommands.registerCommand("FeedCoral", new FeedCoral_Auto(m_EndEffectorSubsystem).withTimeout(2));
   }
 
   /**
@@ -121,10 +121,10 @@ public class RobotContainer {
     BooleanSupplier needSlow = ()-> ElevatorConstants.arriveLow;
     BooleanSupplier ifFeed = ()-> operatorController.getHID().getXButton();
 
-    driverController.leftBumper().toggleOnTrue(new TrackLeftReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
-    driverController.leftTrigger(0.4).toggleOnTrue(new TrackMiddleReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
-    driverController.rightBumper().toggleOnTrue(new TrackRightReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
-    driverController.a().toggleOnTrue(new TrackCage(m_SwerveSubsystem, m_PhotonVisionSubsystem));
+    // driverController.leftBumper().toggleOnTrue(new TrackLeftReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
+    // driverController.leftTrigger(0.4).toggleOnTrue(new TrackMiddleReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
+    // driverController.rightBumper().toggleOnTrue(new TrackRightReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
+    // driverController.a().toggleOnTrue(new TrackCage(m_SwerveSubsystem, m_PhotonVisionSubsystem));
 
     driverController.y().whileTrue(
       Commands.runOnce(()->{
@@ -143,7 +143,8 @@ public class RobotContainer {
     operatorController.a().toggleOnTrue(new PrimitiveIntake(m_ElevatorSubsystem, m_EndEffectorSubsystem));
     operatorController.b().toggleOnTrue(new IntakeCoral(m_ElevatorSubsystem, m_EndEffectorSubsystem));
     operatorController.y().toggleOnTrue(new ShootNet(m_ElevatorSubsystem, m_EndEffectorSubsystem, ifFeed));
-    operatorController.axisGreaterThan(1, 0.4).whileTrue(new OutAlgae(m_EndEffectorSubsystem));
+    // operatorController.axisGreaterThan(1, 0.4).whileTrue(new OutAlgae(m_EndEffectorSubsystem));
+    operatorController.axisGreaterThan(5, 0.4).whileTrue(new TurnMore(m_EndEffectorSubsystem));
 
 
     m_SwerveSubsystem.setDefaultCommand(new ManualDrive_Kraken(m_SwerveSubsystem, xSpeedFunc, ySpeedFunc, zSpeedFunc, isSlowFunc));
@@ -156,6 +157,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return autoChooser.getSelected();
+    return null;
   }
 }

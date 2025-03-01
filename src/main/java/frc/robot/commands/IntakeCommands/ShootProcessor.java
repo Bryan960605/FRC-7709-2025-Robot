@@ -46,7 +46,7 @@ public class ShootProcessor extends Command {
   public void execute() {
     ifFeed = ifFeedFunc.getAsBoolean();
 
-    if(m_EndEffectorSubsystem.arriveSetPoint()) {
+    if(m_EndEffectorSubsystem.arriveSetPoint() && ifFeed) {
       m_EndEffectorSubsystem.shootProcessor_Wheel();
     }
 

@@ -47,16 +47,16 @@ public class ShootNet extends Command {
   @Override
   public void execute() {
     ifFeed = ifFeedFunc.getAsBoolean();
-    if(Math.abs(m_EndEffectorSubsystem.getAngle() - EndEffectorConstants.netUpAngle) < 1) {
+    if(m_EndEffectorSubsystem.arriveSetPoint()) {
       arriveEndEffectorPrimition = true;
     }
     if(arriveEndEffectorPrimition) {
       m_ElevatorSubsystem.shootNet();
-      if(Math.abs(m_ElevatorSubsystem.getCurrentPosition() - m_ElevatorSubsystem.getGoalPosition()) < 1) {
+      if(Math.abs(m_ElevatorSubsystem.getCurrentPosition() - m_ElevatorSubsystem.getGoalPosition()) < 2) {
         m_EndEffectorSubsystem.shootNet_Arm();
       }
     }
-    if (m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint() && ifFeed) {
+    if (m_ElevatorSubsystem.arriveSetPoint() && ifFeed) {
       m_EndEffectorSubsystem.shootNet_Wheel();
 
       LEDConstants.arrivePosition_Intake = true;
@@ -70,13 +70,6 @@ public class ShootNet extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_ElevatorSubsystem.toPrimitive();
-    m_EndEffectorSubsystem.primitiveArm();
-    m_EndEffectorSubsystem.stopWheel();
-
-    LEDConstants.arrivePosition_Intake = false;
-    LEDConstants.intakeArriving = false;
-    LEDConstants.LEDFlag = true;
   }
 
   // Returns true when the command should end.

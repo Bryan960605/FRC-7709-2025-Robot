@@ -100,19 +100,19 @@ public class IntakeAlgae_Low extends Command {
     m_EndEffectorSubsystem.primitiveArm();
     shouldHold = false;
 
-    if(hasAlgae) {
+    // if(hasAlgae) {
       m_EndEffectorSubsystem.holdAlgae();
 
       LEDConstants.hasGamePiece = true;
       LEDConstants.intakeGamePiece = false;
       LEDConstants.LEDFlag = true;
-    }else{
-      m_EndEffectorSubsystem.stopWheel();
+    // }else{
+    //   m_EndEffectorSubsystem.stopWheel();
 
-      LEDConstants.hasGamePiece = false;
-      LEDConstants.intakeGamePiece = false;
-      LEDConstants.LEDFlag = true;
-    }
+    //   LEDConstants.hasGamePiece = false;
+    //   LEDConstants.intakeGamePiece = false;
+    //   LEDConstants.LEDFlag = true;
+    // }
   }
 
   // Returns true when the command should end.

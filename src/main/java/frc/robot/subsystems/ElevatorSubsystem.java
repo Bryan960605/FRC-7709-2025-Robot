@@ -29,6 +29,10 @@ public class ElevatorSubsystem extends SubsystemBase {
   private final MotionMagicVoltage request_Elevator;
 
   private double goalPosition;
+  private double lastPosition;
+  
+  private boolean ifChange_High;
+  private boolean ifChange_Low;
 
   public ElevatorSubsystem() {
     elevator_FirstMotor = new TalonFX(ElevatorConstants.elevator_FirstMotor_ID);
@@ -43,10 +47,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     request_Elevator = new MotionMagicVoltage(goalPosition);
 
     elevatorSlot0Config.kS = 0;
-    elevatorSlot0Config.kG = 0.3;
+    elevatorSlot0Config.kG = 0.44;
     elevatorSlot0Config.kV = 0;
     elevatorSlot0Config.kA = 0;
-    elevatorSlot0Config.kP = 0.9;
+    elevatorSlot0Config.kP = 0.5;
     elevatorSlot0Config.kI = 0;
     elevatorSlot0Config.kD = 0;
 
@@ -55,7 +59,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevatorMotionMagicConfig.MotionMagicJerk = 400;
 
     elevatorConfig.MotorOutput.withNeutralMode(NeutralModeValue.Brake);
-    elevatorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    elevatorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
     elevator_FirstMotor.getConfigurator().apply(elevatorConfig);
     elevator_SecondMotor.getConfigurator().apply(elevatorConfig);
@@ -63,6 +67,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevator_SecondMotor.getConfigurator().apply(elevatorSlot0Config);
     elevator_FirstMotor.getConfigurator().apply(elevatorMotionMagicConfig);
     elevator_SecondMotor.getConfigurator().apply(elevatorMotionMagicConfig);
+
+    ifChange_High = false;
+    ifChange_Low = false;
   }
 
   public void intakeCoral() {
@@ -114,7 +121,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public boolean arriveSetPoint() {
-    return (Math.abs(goalPosition - getCurrentPosition()) <= 1);
+    return (Math.abs(goalPosition - getCurrentPosition()) <= 2);
   }
 
   public boolean arrivePrimition() {
@@ -129,11 +136,48 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void periodic() {
     elevator_FirstMotor.setControl(request_Elevator.withPosition(goalPosition));
 
-    if (getCurrentPosition() <= 5) {
+    if (getCurrentPosition() <= 20) {
       ElevatorConstants.arriveLow = true;
     }else{
       ElevatorConstants.arriveLow = false;
     }
+
+    if ((getCurrentPosition() < 3 && lastPosition > 3)) {
+      ifChange_Low = true;
+    }else if((getCurrentPosition() > 3 && lastPosition < 3)){
+      ifChange_High = true;
+    }
+
+    if(ifChange_Low) {
+      elevatorSlot0Config.kS = 0;
+      elevatorSlot0Config.kG = 0.28;
+      elevatorSlot0Config.kV = 0;
+      elevatorSlot0Config.kA = 0;
+      elevatorSlot0Config.kP = 0.5;
+      elevatorSlot0Config.kI = 0;
+      elevatorSlot0Config.kD = 0;
+
+      elevator_FirstMotor.getConfigurator().apply(elevatorSlot0Config);
+      elevator_SecondMotor.getConfigurator().apply(elevatorSlot0Config);
+      System.out.println("setlow");
+      ifChange_Low = false;
+    }else if(ifChange_High) {
+      elevatorSlot0Config.kS = 0;
+      elevatorSlot0Config.kG = 0.44;
+      elevatorSlot0Config.kV = 0;
+      elevatorSlot0Config.kA = 0;
+      elevatorSlot0Config.kP = 0.5;
+      elevatorSlot0Config.kI = 0;
+      elevatorSlot0Config.kD = 0;
+
+      elevator_FirstMotor.getConfigurator().apply(elevatorSlot0Config);
+      elevator_SecondMotor.getConfigurator().apply(elevatorSlot0Config);
+
+      ifChange_High = false;
+      System.out.println("sethigh");
+    }
+
+    lastPosition = getCurrentPosition();
 
     //SmartDashboard
     SmartDashboard.putNumber("Intake/GoalPosition", goalPosition);

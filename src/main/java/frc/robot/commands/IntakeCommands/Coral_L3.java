@@ -50,7 +50,7 @@ public class Coral_L3 extends Command {
   @Override
   public void execute() {
     ifFeed = ifFeedFunc.getAsBoolean();
-    if(Math.abs(m_EndEffectorSubsystem.getAngle() - EndEffectorConstants.primitiveAngle) <= 1) {
+    if(Math.abs(m_EndEffectorSubsystem.getAngle() - EndEffectorConstants.primitiveAngle) <= 2) {
       arriveEndEffectorPrimition = true;
     }
 
@@ -61,7 +61,7 @@ public class Coral_L3 extends Command {
       } 
     }
   
-    if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint() && ifFeed) {
+    if(m_ElevatorSubsystem.arriveSetPoint() && ifFeed) {
       m_EndEffectorSubsystem.outCoral_L3_Wheel();
 
       LEDConstants.arrivePosition_Intake = true;

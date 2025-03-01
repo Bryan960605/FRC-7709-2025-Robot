@@ -74,13 +74,13 @@ public class IntakeAlgae_High extends Command {
         timer.stop();
       }
     }
-    if (hasAlgae) {
+    // if (hasAlgae) {
       m_EndEffectorSubsystem.primitiveArm();
       shouldHold = true;
-    }
-    if (hasAlgae && shouldHold && m_EndEffectorSubsystem.arriveSetPoint()) {
-      m_EndEffectorSubsystem.holdAlgae();
-    }
+    // }
+    // if (hasAlgae && shouldHold && m_EndEffectorSubsystem.arriveSetPoint()) {
+    //   m_EndEffectorSubsystem.holdAlgae();
+    // }
     // if(m_EndEffectorSubsystem.hasAlgae()) {
     //   timer.start();
     //   if(timer.get() > 0.5 && m_EndEffectorSubsystem.hasAlgae()) {
