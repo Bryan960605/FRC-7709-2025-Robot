@@ -105,6 +105,8 @@ public class SwerveSubsystem_Kraken extends SubsystemBase {
 
   private final PhotonVisionSubsystem m_PhotonVisionSubsystem;
 
+  private double zSpeed;
+
   
   /**
    * 
@@ -293,6 +295,7 @@ public class SwerveSubsystem_Kraken extends SubsystemBase {
     xSpeed = xSpeed * Swerve_KrakenConstants.maxDriveSpeed_MeterPerSecond;
     ySpeed = ySpeed * Swerve_KrakenConstants.maxDriveSpeed_MeterPerSecond;
     zSpeed = zSpeed * Math.toRadians(Swerve_KrakenConstants.maxAngularVelocity_Angle);
+    this.zSpeed = zSpeed;
     if(fieldOrient) {
       state = Swerve_KrakenConstants.swerveKinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, zSpeed, getRotation()));//之後要處理MaxSpeedPerSecond跟MaxRadianPerSecond的問題
     }else{
@@ -352,10 +355,10 @@ public class SwerveSubsystem_Kraken extends SubsystemBase {
     swerveDrivePoseEstimator.update(getRotation(), getModulesPosition());
     // swerveDrivePoseEstimator.updateWithTime(currentTime, getRotation(), getModulesPosition());
 
-    if(!(bestEstimatedPose2d == null)) {
-      currentTime = MathSharedStore.getTimestamp();
-      swerveDrivePoseEstimator.addVisionMeasurement(bestEstimatedPose2d, currentTime, stdDevs);
-    }
+    // if(!(bestEstimatedPose2d == null)) {
+    //   currentTime = MathSharedStore.getTimestamp();
+    //   swerveDrivePoseEstimator.addVisionMeasurement(bestEstimatedPose2d, currentTime, stdDevs);
+    // }
 
     field.setRobotPose(swerveDrivePoseEstimator.getEstimatedPosition());
     field.setRobotPose(odometry.getPoseMeters());
@@ -378,5 +381,6 @@ public class SwerveSubsystem_Kraken extends SubsystemBase {
     SmartDashboard.putNumber("Swerve/rightBackDrivingMotorPosition", rightBack.getDrivePosition());
 
     SmartDashboard.putNumber("Swerve/leftFrontVelocity", leftFront.getDriveVelocity());
+    SmartDashboard.putNumber("Swerve/zSpeed", zSpeed);
   }
 }

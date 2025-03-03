@@ -59,7 +59,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevatorMotionMagicConfig.MotionMagicJerk = 400;
 
     elevatorConfig.MotorOutput.withNeutralMode(NeutralModeValue.Brake);
-    elevatorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    elevatorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
     elevator_FirstMotor.getConfigurator().apply(elevatorConfig);
     elevator_SecondMotor.getConfigurator().apply(elevatorConfig);

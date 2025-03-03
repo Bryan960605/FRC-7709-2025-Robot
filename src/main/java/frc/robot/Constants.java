@@ -101,11 +101,10 @@ public final class Constants {
     public static final int rightFrontAbsolutedEncoder_ID = 43;
     public static final int rightBackAbsolutedEncoder_ID = 44;
 
-    public static final double leftFrontOffset = -0.348632;
-    public static final double leftBackOffset = 0.143310;
-    public static final double rightFrontOffset = -0.289794;
-    public static final double rightBackOffset = 0.1726074;
-
+    public static final double leftFrontOffset = -0.33349;
+    public static final double leftBackOffset = 0.138671;
+    public static final double rightFrontOffset = -0.25075;
+    public static final double rightBackOffset = 0.156494;
     public static final int gyro_ID = 56;
 
     public static final double wheelDiameterMeters = Units.inchesToMeters(4);
@@ -149,13 +148,13 @@ public final class Constants {
   }
 
   public class PhotonConstants {
-    public static final double xPidController_Kp = 0.4;
+    public static final double xPidController_Kp = 0.6;
     public static final double xPidController_Ki = 0;
     public static final double xPidController_Kd = 0;
 
-    public static final double yPidController_Kp = 0.85;
+    public static final double yPidController_Kp = 0.6;
     public static final double yPidController_Ki = 0;
-    public static final double yPidController_Kd = 0;
+    public static final double yPidController_Kd = 0.001;
 
     public static final double rotationPidController_Kp = 0.004;
     public static final double rotationPidController_Ki = 0;
@@ -203,13 +202,13 @@ public final class Constants {
     public static final double yPidMaxOutput_NeedSlow_Processor = 0.2;
     public static final double rotationPidMaxOutput_NeedSlow_Processor = 0.2;
 
-    public static final double xPidSetPoint_RightReef = 0.445; 
-    public static final double yPidSetPoint_RightReef = -0.118;
-    public static final double rotationPidSetPoint_RightReef = 180.4;
+    public static final double xPidSetPoint_RightReef = 0.45; 
+    public static final double yPidSetPoint_RightReef = -0.14;
+    public static final double rotationPidSetPoint_RightReef = 183;
 
-    public static final double xPidSetPoint_LeftReef = 0;
-    public static final double yPidSetPoint_LeftReef = 0.09;
-    public static final double rotationPidSetPoint_LeftReef = 183.6;
+    public static final double xPidSetPoint_LeftReef = 0.446;
+    public static final double yPidSetPoint_LeftReef = 0.1102;
+    public static final double rotationPidSetPoint_LeftReef = 183.4;
 
     public static final double xPidSetPoint_MiddleReef_FrontRight = 0;
     public static final double yPidSetPoint_MiddleReef_FrontRight = 0;
@@ -281,18 +280,18 @@ public final class Constants {
     public static final int elevator_FirstMotor_ID = 6;
     public static final int elevator_SecondMotor_ID = 7;
 
-    public static final double primitivePosition = -0.2;//-0.14
-    public static final double coralL1Position = 3.8;//3.72
-    public static final double coralL2Position = 11.3;//7.42
-    public static final double coralL3Position = 21.4;//21.42
-    public static final double coralL4Position = 43.2;//42.52
-    public static final double coralStationPosition = -0.13;//0.12
+    public static final double primitivePosition = 0.13;//-0.14
+    public static final double coralL1Position = 4.24;//3.72
+    public static final double coralL2Position = 11.74;//7.42
+    public static final double coralL3Position = 21.84;//21.42
+    public static final double coralL4Position = 43.64;//42.52
+    public static final double coralStationPosition = 0.13;//0.12
 
-    public static final double algaeFloorPosition = 0;//0.12
-    public static final double algaeNetPosition = 44;//0.12
-    public static final double algaeL2Position = 2.7;//3.82
-    public static final double algaeL3Position = 17.85;//15.82
-    public static final double algaeProccesorPosition = 0;//0.12
+    public static final double algaeFloorPosition = 0.13;//0.12
+    public static final double algaeNetPosition = 46;//0.12
+    public static final double algaeL2Position = 3.14;//3.82
+    public static final double algaeL3Position = 16.29;//15.82
+    public static final double algaeProccesorPosition = 0.13;//0.12
 
     public static boolean arriveLow = false;
   }
@@ -363,7 +362,7 @@ public final class Constants {
     public static final double netUpAngle = 82;
     public static final double algaeLowInAngle = 64;
     public static final double algaeHighInAngle = 64;
-    public static final double algaeProccesorAngle = 9.4;//not yet
+    public static final double algaeProccesorAngle = 11;//not yet
     
 
     public static final double coralL1OutVol = -1.5;
@@ -371,12 +370,12 @@ public final class Constants {
     public static final double coralL3OutVol = -3;
     public static final double coralL4OutVol = -2;
     public static final double coralTurnMore = -0.5;
-    public static final double coralInSpeed_RotionPerSecond = -31;
+    public static final double coralInSpeed_RotionPerSecond = -32;
     public static final double algaeFloorInVol = -4;
     public static final double algaeShootNetVol = 6;
     public static final double algaeLowInVol = -4;
     public static final double algaeHighInVol = -4;
-    public static final double algaeShootProcessorVol = 6;
+    public static final double algaeShootProcessorVol = 3;
     public static final double algaeHoldVol = -1.5;  
     public static final double algaeOutVol = 6; 
   }

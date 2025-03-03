@@ -15,6 +15,18 @@
           "data": {
             "name": "Coral_L4_RightReef"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NearRight_RightReef Out To Down"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PrimitiveIntake"
+          }
         }
       ]
     }

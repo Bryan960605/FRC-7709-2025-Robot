@@ -41,8 +41,8 @@ public class EndEffectorSubsystem extends SubsystemBase {
   private final CANcoderConfiguration absolutedEncoderConfig;
   private final MotionMagicConfigs speedMotionMagicConfigs;
   private final MotionMagicConfigs turnMotionMagicConfigs;
-  private final Slot0Configs speedSlot0Configs;
-  private final Slot1Configs slot1Configs;
+  private final Slot0Configs wheelMotor_Slot0;
+  private final Slot1Configs wheelMotor_Slot1;
   private final MotionMagicVelocityVoltage request_EndEffectorSpeed;
   private final MotionMagicVoltage m_request;
   
@@ -77,14 +77,14 @@ public class EndEffectorSubsystem extends SubsystemBase {
       shouldStart_Coral = true;
       shouldStart_Algae = true;
       m_request = new MotionMagicVoltage(0);
-      slot1Configs = new Slot1Configs();
       turnMotionMagicConfigs = new MotionMagicConfigs();
   
       // Motor Configurations
       wheelConfig = new TalonFXConfiguration();
       armConfig = new TalonFXConfiguration();
       speedMotionMagicConfigs = new MotionMagicConfigs();
-      speedSlot0Configs = wheelConfig.Slot0;
+      wheelMotor_Slot0 = wheelConfig.Slot0;
+      wheelMotor_Slot1 = new Slot1Configs();
       request_EndEffectorSpeed = new MotionMagicVelocityVoltage(0);
   
       wheelConfig.MotorOutput.withNeutralMode(NeutralModeValue.Brake);
@@ -93,20 +93,20 @@ public class EndEffectorSubsystem extends SubsystemBase {
       armConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
       
       //slot0
-      speedSlot0Configs.kS = 0;
-      speedSlot0Configs.kV = 0;
-      speedSlot0Configs.kA = 0;
-      speedSlot0Configs.kP = 0.3;
-      speedSlot0Configs.kI = 0;
-      speedSlot0Configs.kD = 0;
+      wheelMotor_Slot0.kS = 0;
+      wheelMotor_Slot0.kV = 0;
+      wheelMotor_Slot0.kA = 0;
+      wheelMotor_Slot0.kP = 0.3;
+      wheelMotor_Slot0.kI = 0;
+      wheelMotor_Slot0.kD = 0;
   
-      slot1Configs.kG = 0;
-      slot1Configs.kS = 0;
-      slot1Configs.kV = 0;
-      slot1Configs.kA = 0;
-      slot1Configs.kP = 10;
-      slot1Configs.kI = 0;
-      slot1Configs.kD = 0;
+      wheelMotor_Slot1.kG = 0;
+      wheelMotor_Slot1.kS = 0;
+      wheelMotor_Slot1.kV = 0;
+      wheelMotor_Slot1.kA = 0;
+      wheelMotor_Slot1.kP = 10;
+      wheelMotor_Slot1.kI = 0;
+      wheelMotor_Slot1.kD = 0;
       //MotioinMagic Config
 
       turnMotionMagicConfigs.MotionMagicCruiseVelocity = 40;
@@ -124,7 +124,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
       //Motor Configurations
       intakewheel.getConfigurator().apply(wheelConfig);
       intakewheel.getConfigurator().apply(speedMotionMagicConfigs);
-      intakewheel.getConfigurator().apply(speedSlot0Configs);
+      intakewheel.getConfigurator().apply(wheelMotor_Slot0);
       intakeArm.getConfigurator().apply(armConfig);
   
       // PID Controller and Feedforward
@@ -315,7 +315,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
     //   shouldMotorTurn_HasItem = needTurn;
     //   shouldMotorReset = needTurn;
     //   intakewheel.getConfigurator().apply(turnMotionMagicConfigs);
-    //   intakewheel.getConfigurator().apply(slot1Configs);
+    //   intakewheel.getConfigurator().apply(wheelMotor_Slot1);
     // }
   
     @Override
@@ -329,7 +329,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
       //   if (intakewheel.getPosition().getValueAsDouble() >= nowPosition + 0.65) {
       //     shouldMotorTurn_HasItem = false;
       //     intakewheel.getConfigurator().apply(speedMotionMagicConfigs);
-      //     intakewheel.getConfigurator().apply(speedSlot0Configs);
+      //     intakewheel.getConfigurator().apply(wheelMotor_Slot0);
       //   }
       // }
       // Arm

@@ -58,25 +58,25 @@ public class IntakeAlgae_High extends Command {
   public void execute() {
     if(m_EndEffectorSubsystem.arriveSetPoint()) {
       m_ElevatorSubsystem.intakeAlgae_High();
-
-      if(m_ElevatorSubsystem.arriveSetPoint()) {
-        m_EndEffectorSubsystem.intakeAlgae_High_Arm();
-        m_EndEffectorSubsystem.intakeAlgae_High_Wheel();
-      }
     }
 
-    if(m_EndEffectorSubsystem.sensorHasAlgae()) {
-      timer.start();
-      if(timer.get() > 0.5) {
-        hasAlgae = true;
-
-        timer.reset();
-        timer.stop();
-      }
+    if(m_ElevatorSubsystem.arriveSetPoint()) {
+      m_EndEffectorSubsystem.intakeAlgae_High_Arm();
+      m_EndEffectorSubsystem.intakeAlgae_High_Wheel();
     }
+
+    // if(m_EndEffectorSubsystem.sensorHasAlgae()) {
+    //   timer.start();
+    //   if(timer.get() > 0.5) {
+    //     hasAlgae = true;
+
+    //     timer.reset();
+    //     timer.stop();
+    //   }
+    // }
     // if (hasAlgae) {
-      m_EndEffectorSubsystem.primitiveArm();
-      shouldHold = true;
+      // m_EndEffectorSubsystem.primitiveArm();
+      // shouldHold = true;
     // }
     // if (hasAlgae && shouldHold && m_EndEffectorSubsystem.arriveSetPoint()) {
     //   m_EndEffectorSubsystem.holdAlgae();
@@ -101,22 +101,24 @@ public class IntakeAlgae_High extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_ElevatorSubsystem.toPrimitive();
-    m_EndEffectorSubsystem.primitiveArm();
-    shouldHold = false;
-    if (hasAlgae) {
+    // m_ElevatorSubsystem.toPrimitive();
+    // m_EndEffectorSubsystem.primitiveArm();
+    // shouldHold = false;
+    // if (hasAlgae) {
       m_EndEffectorSubsystem.holdAlgae();
+      m_EndEffectorSubsystem.primitiveArm();
+      m_ElevatorSubsystem.toPrimitive();
 
       LEDConstants.hasGamePiece = true;
       LEDConstants.intakeGamePiece = false;
       LEDConstants.LEDFlag = true;
-    }else{
-      m_EndEffectorSubsystem.stopWheel();
+    // }else{
+    //   m_EndEffectorSubsystem.stopWheel();
 
-      LEDConstants.hasGamePiece = false;
-      LEDConstants.intakeGamePiece = false;
-      LEDConstants.LEDFlag = true;
-    }
+    //   LEDConstants.hasGamePiece = false;
+    //   LEDConstants.intakeGamePiece = false;
+    //   LEDConstants.LEDFlag = true;
+    // }
   }
 
   // Returns true when the command should end.

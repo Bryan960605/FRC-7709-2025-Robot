@@ -9,6 +9,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
@@ -72,10 +73,6 @@ public class TrackLeftReef extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // xSpeed = xSpeedFunc.getAsDouble() * 0.8;
-    // xSpeed = MathUtil.applyDeadband(xSpeed, OperatorConstants.kJoystickDeadBand);
-    // xSpeed = xLimiter.calculate(xSpeed);
-
     if(m_PhotonVisionSubsystem.hasFrontRightTarget()) {
       // Rotation-PID calculations
       rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_FrontRight();
@@ -86,33 +83,40 @@ public class TrackLeftReef extends Command {
       // Y-PID calculations
       yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_FrontRight();
       yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_LeftReef);
-      yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_LeftReef;
+      yPidMeasurements = (yPidError > 0.01) ? yPidMeasurements : PhotonConstants.yPidSetPoint_LeftReef;
       yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_LeftReef);
       yPidOutput = Constants.setMaxOutput(yPidOutput, PhotonConstants.yPidMaxOutput_Reef);
-      // X-PID calculations
-      xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontRight();
-      xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_LeftReef);
-      xPidMeasurements = (xPidError > 0.05) ? xPidMeasurements : PhotonConstants.xPidSetPoint_LeftReef;
-      xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_LeftReef);
-      xPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.xPidSetPoint_LeftReef);
+      if(rotationPidController.getError()<0.5 && yPidController.getError()<0.05){
+        // X-PID calculations
+        xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontRight();
+        xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_LeftReef);
+        xPidMeasurements = (xPidError > 0.05) ? xPidMeasurements : PhotonConstants.xPidSetPoint_LeftReef;
+        xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_LeftReef);
+        xPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.xPidSetPoint_LeftReef);
+        if(xPidController.getError()<0.05) SmartDashboard.putBoolean("Align/LeftReefAlign", true);
+        else SmartDashboard.putBoolean("Align/LeftReefAlign", false);
+      }else{
+        xPidOutput = 0;
+      }
     }else {
       xPidOutput = 0;
       yPidOutput = 0;
       rotationPidOutput = 0;
     }
+    // LED control 
     if(xPidMeasurements == PhotonConstants.xPidSetPoint_LeftReef 
     && yPidMeasurements == PhotonConstants.yPidSetPoint_LeftReef 
     && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_LeftReef) {
       LEDConstants.arrivePosition_Base = true;
       LEDConstants.LEDFlag = true;
     }
-
-    // impl
+    // Speed limit protection
     if(ElevatorConstants.arriveLow == false) {
       xPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.xPidMaxOutput_NeedSlow_Reef);
       yPidOutput = Constants.setMaxOutput(yPidOutput, PhotonConstants.yPidMaxOutput_NeedSlow_Reef);
       rotationPidOutput = Constants.setMaxOutput(rotationPidOutput, PhotonConstants.rotationPidMaxOutput_NeedSlow_Reef);
     }
+    // Impl
     m_SwerveSubsystem.drive(xPidOutput, yPidOutput, rotationPidOutput, false);
       
   }
@@ -130,7 +134,7 @@ public class TrackLeftReef extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return LEDConstants.arrivePosition_Base;
+    return false;
   }
 
 }

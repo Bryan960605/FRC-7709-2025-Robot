@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.06025,
-        "y": 5.3315
+        "x": 5.0468237704918035,
+        "y": 2.700358606557377
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.191838653654074,
-        "y": 5.544066286671966
+        "x": 4.9218237704918035,
+        "y": 2.9168649575034866
       },
       "isLocked": false,
-      "linkedName": "NearRight_RightReef"
+      "linkedName": "NearLeft_LeftReef"
     },
     {
       "anchor": {
-        "x": 1.62825,
-        "y": 7.223
+        "x": 5.50875,
+        "y": 1.9677499999999997
       },
       "prevControl": {
-        "x": 1.7327880092174135,
-        "y": 6.995905736248447
+        "x": 5.63375,
+        "y": 1.75124364905389
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "RightCoralStation_Right"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -54.0
+    "rotation": 119.99999999999999
   },
   "reversed": false,
-  "folder": "RightCoralStation",
+  "folder": null,
   "idealStartingState": {
-    "velocity": 4.0,
-    "rotation": -119.99999999999999
+    "velocity": 0,
+    "rotation": 119.99999999999999
   },
   "useDefaultConstraints": true
 }

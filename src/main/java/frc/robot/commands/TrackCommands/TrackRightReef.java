@@ -88,27 +88,24 @@ public class TrackRightReef extends Command {
       rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_FrontLeft();
       rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.rotationPidSetPoint_RightReef);
       rotationPidMeasurements = (rotationPidError > 0.5) ? rotationPidMeasurements : PhotonConstants.rotationPidSetPoint_RightReef;
-      if(rotationPidError < 0.5) {
-        rotationReady = true;
-      }
       rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_RightReef);
       rotationPidOutput = Constants.setMaxOutput(rotationPidOutput, PhotonConstants.rotationPidMaxOutput_Reef);
       // Y-PID calculations
       yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_FrontLeft();
       yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_RightReef);
-      yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_RightReef;
+      yPidMeasurements = (yPidError > 0.01) ? yPidMeasurements : PhotonConstants.yPidSetPoint_RightReef;
       yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_RightReef);
       yPidOutput = Constants.setMaxOutput(yPidOutput, PhotonConstants.yPidMaxOutput_Reef);
-      if(yPidError < 0.05) {
-        yReady = true;
-      }
       // X-PID calculations
-      if(rotationReady && yReady) {
-      xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontLeft();
-      xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_RightReef);
-      xPidMeasurements = (xPidError > 0.05) ? xPidMeasurements : PhotonConstants.xPidSetPoint_RightReef;
-      xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_RightReef);
-      xPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.xPidMaxOutput_Reef);
+      if(rotationPidController.getError()<0.5 && yPidController.getError()<0.05) {
+        xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontLeft();
+        xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_RightReef);
+        xPidMeasurements = (xPidError > 0.05) ? xPidMeasurements : PhotonConstants.xPidSetPoint_RightReef;
+        xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_RightReef);
+        xPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.xPidMaxOutput_Reef);
+        // Aligned
+        if(xPidController.getError() < 0.05) SmartDashboard.putBoolean("Align/LeftReefAlign", true);
+        else SmartDashboard.putBoolean("Align/LeftReefAlign", false);
       }else {
         xPidOutput = 0;
       }

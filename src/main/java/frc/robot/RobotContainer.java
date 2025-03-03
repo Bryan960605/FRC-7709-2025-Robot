@@ -80,23 +80,23 @@ public class RobotContainer {
   private final CommandXboxController driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private final CommandXboxController operatorController = new CommandXboxController(OperatorConstants.kOperatorControllerPort);
 
-  // private final SendableChooser<Command> autoChooser;
+  private final SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
     // Configure the trigger bindings
-    // autoChooser = AutoBuilder.buildAutoChooser();
+    autoChooser = AutoBuilder.buildAutoChooser();
     configureBindings();
-    // SmartDashboard.putData("Auto Mode", autoChooser);
+    SmartDashboard.putData("Auto Mode", autoChooser);
 
-    // NamedCommands.registerCommand("Coral_L3_Left", new Coral_L3_Auto_LeftReef(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem));
-    // NamedCommands.registerCommand("Coral_L3_Right", new Coral_L3_Auto_RightReef(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem));
-    // NamedCommands.registerCommand("Coral_L4_Left", new Coral_L4_Auto_LeftReef(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem));
-    // NamedCommands.registerCommand("Coral_L4_RightReef", new Coral_L4_Auto_RightReef(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem));
-    // NamedCommands.registerCommand("PrimitiveIntake", new PrimitiveIntake(m_ElevatorSubsystem, m_EndEffectorSubsystem));
-    // // NamedCommands.registerCommand("TrackLeftReef", new TrackLeftReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
-    // // NamedCommands.registerCommand("TrackRightReef", new TrackRightReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
-    // // NamedCommands.registerCommand("TrackMiddleReef", new TrackMiddleReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
-    // NamedCommands.registerCommand("FeedCoral", new FeedCoral_Auto(m_EndEffectorSubsystem).withTimeout(2));
+    NamedCommands.registerCommand("Coral_L3_Left", new Coral_L3_Auto_LeftReef(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem));
+    NamedCommands.registerCommand("Coral_L3_Right", new Coral_L3_Auto_RightReef(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem));
+    NamedCommands.registerCommand("Coral_L4_Left", new Coral_L4_Auto_LeftReef(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem));
+    NamedCommands.registerCommand("Coral_L4_RightReef", new Coral_L4_Auto_RightReef(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem));
+    NamedCommands.registerCommand("PrimitiveIntake", new PrimitiveIntake(m_ElevatorSubsystem, m_EndEffectorSubsystem));
+    // NamedCommands.registerCommand("TrackLeftReef", new TrackLeftReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
+    // NamedCommands.registerCommand("TrackRightReef", new TrackRightReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
+    // NamedCommands.registerCommand("TrackMiddleReef", new TrackMiddleReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
+    NamedCommands.registerCommand("FeedCoral", new FeedCoral_Auto(m_EndEffectorSubsystem).withTimeout(2));
   }
 
   /**
@@ -119,11 +119,12 @@ public class RobotContainer {
 
     BooleanSupplier isSlowFunc = ()-> driverController.getHID().getRightTriggerAxis() > 0.4;
     BooleanSupplier needSlow = ()-> ElevatorConstants.arriveLow;
-    BooleanSupplier ifFeed = ()-> operatorController.getHID().getXButton();
-
-    // driverController.leftBumper().toggleOnTrue(new TrackLeftReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
+    BooleanSupplier ifFeed = ()-> driverController.getHID().getLeftTriggerAxis() > 0.4;
+    //
+    
+    driverController.leftBumper().whileTrue(new TrackLeftReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
     // driverController.leftTrigger(0.4).toggleOnTrue(new TrackMiddleReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
-    // driverController.rightBumper().toggleOnTrue(new TrackRightReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
+    driverController.rightBumper().whileTrue(new TrackRightReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
     // driverController.a().toggleOnTrue(new TrackCage(m_SwerveSubsystem, m_PhotonVisionSubsystem));
 
     driverController.y().whileTrue(
@@ -157,6 +158,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null;
+    return autoChooser.getSelected();
   }
-}
+} 

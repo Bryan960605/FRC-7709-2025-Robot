@@ -15,6 +15,12 @@
           "data": {
             "name": "Coral_L4_LeftReef"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FeedCoral"
+          }
         }
       ]
     }

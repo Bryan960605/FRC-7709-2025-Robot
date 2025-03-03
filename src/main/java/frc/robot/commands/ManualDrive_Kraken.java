@@ -43,9 +43,9 @@ public class ManualDrive_Kraken extends Command {
     this.isSlowFunc = isSlow;
     // this.needSlowFunc = needSlow;
 
-    this.xLimiter = new SlewRateLimiter(4.6);
-    this.yLimiter = new SlewRateLimiter(4.6);
-    this.zLimiter = new SlewRateLimiter(4.6);
+    this.xLimiter = new SlewRateLimiter(5.5);
+    this.yLimiter = new SlewRateLimiter(5.5);
+    this.zLimiter = new SlewRateLimiter(5.5);
 
     addRequirements(m_SwerveSubsystem_Kraken);
 
@@ -76,13 +76,13 @@ public class ManualDrive_Kraken extends Command {
     // this.needSlow = needSlowFunc.getAsBoolean();
 
     if(isSlow || ElevatorConstants.arriveLow == false) {
-      xSpeed = xSpeed*0.2;
-      ySpeed = ySpeed*0.2;
-      zSpeed = zSpeed*0.1;
+      xSpeed = xSpeed*Math.abs(xSpeed)*0.2;
+      ySpeed = ySpeed*Math.abs(ySpeed)*0.2;
+      zSpeed = zSpeed*Math.abs(zSpeed)*0.1;
     }else {
-      xSpeed = xSpeed*0.8;
-      ySpeed = ySpeed*0.8;
-      zSpeed = zSpeed*0.4;
+      xSpeed = xSpeed*Math.abs(xSpeed)*0.6;
+      ySpeed = ySpeed*Math.abs(ySpeed)*0.6;
+      zSpeed = zSpeed*Math.abs(zSpeed)*0.4;
     }
 
     SmartDashboard.putNumber("ManualDrive/Xspeed", xSpeed);
