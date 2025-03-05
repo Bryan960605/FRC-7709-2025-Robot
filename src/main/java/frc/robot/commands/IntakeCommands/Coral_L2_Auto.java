@@ -28,7 +28,7 @@ public class Coral_L2_Auto extends Command {
   @Override
   public void initialize() {
     m_ElevatorSubsystem.outCoral_L2();
-    m_EndEffectorSubsystem.outCoral_L2_Arm();
+    m_EndEffectorSubsystem.Arm_shootCoral_L2();
     // m_EndEffectorSubsystem.primitiveArm();
 
 
@@ -42,7 +42,7 @@ public class Coral_L2_Auto extends Command {
   public void execute() {
 
     if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arrivedSetpoint()) {
-      m_EndEffectorSubsystem.outCoral_L2_Wheel();
+      m_EndEffectorSubsystem.Wheel_shootCoral_L2();
 
       LEDConstants.arrivePosition_Intake = true;
       LEDConstants.LEDFlag = true;

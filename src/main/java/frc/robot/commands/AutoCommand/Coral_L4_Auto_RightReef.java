@@ -74,11 +74,11 @@ public class Coral_L4_Auto_RightReef extends Command {
     if(m_EndEffectorSubsystem.arrivedSetpoint()) {
       m_ElevatorSubsystem.outCoral_L4();    
       if(m_ElevatorSubsystem.arriveSetPoint()) {
-        m_EndEffectorSubsystem.outCoral_L4_Arm();
+        m_EndEffectorSubsystem.Arm_shootCoral_L4();
       }
     }
     if(m_ElevatorSubsystem.arriveSetPoint() && Math.abs(m_EndEffectorSubsystem.getAngle() - EndEffectorConstants.coralL4Angle) <= 1) {
-      m_EndEffectorSubsystem.outCoral_L4_Wheel();
+      m_EndEffectorSubsystem.Wheel_shootCoral_L4();
 
       LEDConstants.arrivePosition_Intake = true;
       LEDConstants.LEDFlag = true;

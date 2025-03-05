@@ -21,7 +21,7 @@ public class ArmTest_IntakeAlgae_Floor extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_EndEffectorSubsystem.intakeAlgae_Floor_Arm();
+    m_EndEffectorSubsystem.Arm_intakeAlgae_Floor();
     m_EndEffectorSubsystem.intakeAlgae_Floor_Wheel();
   }
 
@@ -32,7 +32,7 @@ public class ArmTest_IntakeAlgae_Floor extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_EndEffectorSubsystem.primitiveArm();
+    m_EndEffectorSubsystem.Arm_IDLE();
     m_EndEffectorSubsystem.holdAlgae();
   }
 

@@ -15,77 +15,61 @@ import frc.robot.subsystems.PhotonVisionSubsystem;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Coral_L1 extends Command {
   /** Creates a new Coral_L1. */
-  private final ElevatorSubsystem m_ElevatorSubsystem;
-  private final EndEffectorSubsystem m_EndEffectorSubsystem;
-
+  private final ElevatorSubsystem m_Elevator;
+  private final EndEffectorSubsystem m_EndEffector;
   private final BooleanSupplier ifFeedFunc;
-
   private boolean ifFeed;
+
   public Coral_L1(ElevatorSubsystem elevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem, BooleanSupplier ifFeed) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    this.m_ElevatorSubsystem = elevatorSubsystem;
-    this.m_EndEffectorSubsystem = endEffectorSubsystem;
-
+    this.m_Elevator = elevatorSubsystem;
+    this.m_EndEffector = endEffectorSubsystem;
     this.ifFeedFunc = ifFeed;
-
-    addRequirements(m_ElevatorSubsystem, m_EndEffectorSubsystem);
+    addRequirements(m_Elevator, m_EndEffector);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // m_EndEffectorSubsystem.primitiveArm();
-
-
     LEDConstants.intakeArriving = true;
     LEDConstants.arrivePosition_Intake = false;
     LEDConstants.LEDFlag = true;
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     ifFeed = ifFeedFunc.getAsBoolean();
-
-    // if(Math.abs(m_EndEffectorSubsystem.getAngle() - EndEffectorConstants.primitiveAngle) <= 1) {
-    //   arriveEndEffectorPrimition = true;
-    // }
-    // if(arriveEndEffectorPrimition) {
-    //   m_ElevatorSubsystem.outCoral_L1();
-    //   if(Math.abs(m_ElevatorSubsystem.getCurrentPosition() - m_ElevatorSubsystem.getGoalPosition()) < 1) {
-    //     m_EndEffectorSubsystem.outCoral_L1_Arm();
-    //   }
-    // }
-    if(m_EndEffectorSubsystem.canUp()) {
-      m_ElevatorSubsystem.outCoral_L1();
-      m_EndEffectorSubsystem.outCoral_L1_Arm();
+    // Move to the position
+    if(m_EndEffector.canUp()) {
+      m_Elevator.outCoral_L1();
+      m_EndEffector.Arm_shootCoral_L1();
     }
+    // Shoot when you ready
+    if(m_Elevator.arriveSetPoint() && ifFeed) m_EndEffector.Wheel_shootCoral_L1();
+    else m_EndEffector.stopWheel();
 
-    if(m_ElevatorSubsystem.arriveSetPoint() && ifFeed) {
-      m_EndEffectorSubsystem.outCoral_L1_Wheel();
-    }else {
-      m_EndEffectorSubsystem.stopWheel();
-    }
-    if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arrivedSetpoint()) {
+    // LED controller
+    if(m_Elevator.arriveSetPoint() && m_EndEffector.arrivedSetpoint()) {
       LEDConstants.arrivePosition_Intake = true;
       LEDConstants.LEDFlag = true;
     }else {
       LEDConstants.arrivePosition_Intake = false;
       LEDConstants.LEDFlag = true;
     }
+
+    // Shoot when robot ready
     if((LEDConstants.arrivePosition_Intake) && LEDConstants.arrivePosition_Base) {
-      m_EndEffectorSubsystem.outCoral_L1_Wheel();
+      m_EndEffector.Wheel_shootCoral_L1();
     }else {
-      m_EndEffectorSubsystem.stopWheel();
+      m_EndEffector.stopWheel();
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    // m_ElevatorSubsystem.toPrimitive();
-    // m_EndEffectorSubsystem.primitiveArm();
-    // m_EndEffectorSubsystem.stopWheel();
+    // m_Elevator.toPrimitive();
+    // m_EndEffector.primitiveArm();
+    // m_EndEffector.stopWheel();
 
     // LEDConstants.intakeArriving = false;
     // LEDConstants.arrivePosition_Intake = false;

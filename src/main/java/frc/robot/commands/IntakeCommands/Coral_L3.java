@@ -36,8 +36,8 @@ public class Coral_L3 extends Command {
   @Override
   public void initialize() {
     // m_ElevatorSubsystem.outCoral_L3();
-    // m_EndEffectorSubsystem.outCoral_L3_Arm();
-    m_EndEffectorSubsystem.primitiveArm();
+    // m_EndEffectorSubsystem.Arm_shootCoral_L3();
+    m_EndEffectorSubsystem.Arm_IDLE();
 
     arriveEndEffectorPrimition = false;
 
@@ -57,7 +57,7 @@ public class Coral_L3 extends Command {
     if(arriveEndEffectorPrimition && m_EndEffectorSubsystem.canUp()) {
       m_ElevatorSubsystem.outCoral_L3();
       if(m_ElevatorSubsystem.arriveSetPoint()) {
-        m_EndEffectorSubsystem.outCoral_L3_Arm();
+        m_EndEffectorSubsystem.Arm_shootCoral_L3();
         
         if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arrivedSetpoint()) {
           LEDConstants.arrivePosition_Intake = true;
@@ -70,13 +70,13 @@ public class Coral_L3 extends Command {
     }
   
     if(m_ElevatorSubsystem.arriveSetPoint() && ifFeed) {
-      m_EndEffectorSubsystem.outCoral_L3_Wheel();
+      m_EndEffectorSubsystem.Wheel_shootCoral_L3();
     }else {
       m_EndEffectorSubsystem.stopWheel();
     }
 
     if((LEDConstants.arrivePosition_Intake) && LEDConstants.arrivePosition_Base) {
-      m_EndEffectorSubsystem.outCoral_L3_Wheel();
+      m_EndEffectorSubsystem.Wheel_shootCoral_L3();
     }else {
       m_EndEffectorSubsystem.stopWheel();
     }
@@ -87,7 +87,7 @@ public class Coral_L3 extends Command {
   @Override
   public void end(boolean interrupted) {
     // m_ElevatorSubsystem.toPrimitive();
-    // m_EndEffectorSubsystem.primitiveArm();
+    // m_EndEffectorSubsystem.Arm_IDLE();
     // m_EndEffectorSubsystem.stopWheel();
 
     // LEDConstants.intakeArriving = false;

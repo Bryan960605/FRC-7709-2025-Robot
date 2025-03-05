@@ -34,7 +34,7 @@ public class CoralL4ToPrimitive extends Command {
     if(m_EndEffectorSubsystem.arrivedSetpoint()) {
       m_ElevatorSubsystem.toPrimitive();
       if(m_ElevatorSubsystem.arriveSetPoint()) {
-        m_EndEffectorSubsystem.primitiveArm();
+        m_EndEffectorSubsystem.Arm_IDLE();
       }
     }
   }

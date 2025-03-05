@@ -76,21 +76,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     goalPosition = ElevatorConstants.coralStationPosition; 
   }
 
-  public void outCoral_L1() {
-    goalPosition = ElevatorConstants.coralL1Position;
-  }
-
-  public void outCoral_L2() {
-    goalPosition = ElevatorConstants.coralL2Position;
-  }
-
-  public void outCoral_L3() {
-    goalPosition = ElevatorConstants.coralL3Position;
-  }
-
-  public void outCoral_L4() {
-    goalPosition = ElevatorConstants.coralL4Position;
-  }
+  public void outCoral_L1() {goalPosition = ElevatorConstants.coralL1Position;}
+  public void outCoral_L2() {goalPosition = ElevatorConstants.coralL2Position;}
+  public void outCoral_L3() {goalPosition = ElevatorConstants.coralL3Position;}
+  public void outCoral_L4() {goalPosition = ElevatorConstants.coralL4Position;}
 
   public void shootNet() {
     goalPosition = ElevatorConstants.algaeNetPosition;

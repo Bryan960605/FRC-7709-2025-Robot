@@ -60,8 +60,8 @@ public class Coral_L3_Auto_LeftReef extends Command {
   public void initialize() {
     arriveEndEffectorPrimition = false;
     // m_ElevatorSubsystem.outCoral_L3();
-    // m_EndEffectorSubsystem.outCoral_L3_Arm();
-    m_EndEffectorSubsystem.primitiveArm();
+    // m_EndEffectorSubsystem.Arm_shootCoral_L3();
+    m_EndEffectorSubsystem.Arm_IDLE();
     m_SwerveSubsystem.drive(0, 0, 0, false);
 
     LEDConstants.tracking = true;
@@ -82,7 +82,7 @@ public class Coral_L3_Auto_LeftReef extends Command {
     if(arriveEndEffectorPrimition) {
       m_ElevatorSubsystem.outCoral_L3();
       if(m_ElevatorSubsystem.arriveSetPoint()) {
-        m_EndEffectorSubsystem.outCoral_L3_Arm();
+        m_EndEffectorSubsystem.Arm_shootCoral_L3();
       }
     }
   

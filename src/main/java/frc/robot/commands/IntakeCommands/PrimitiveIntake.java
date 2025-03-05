@@ -16,9 +16,6 @@ public class PrimitiveIntake extends Command {
   private final ElevatorSubsystem m_ElevatorSubsystem;
   private final EndEffectorSubsystem m_EndEffectorSubsystem;
 
-  private boolean corall4;
-  private boolean hasCoral;
-
   public PrimitiveIntake(ElevatorSubsystem elevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
 
@@ -36,8 +33,8 @@ public class PrimitiveIntake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_EndEffectorSubsystem.sensorHasAlgae()) {
-      m_EndEffectorSubsystem.primitiveArm();
+    if(m_EndEffectorSubsystem.hasAlgae()) {
+      m_EndEffectorSubsystem.Arm_IDLE();
       m_EndEffectorSubsystem.holdAlgae();
       if(m_EndEffectorSubsystem.arrivedSetpoint()) {
         m_ElevatorSubsystem.toPrimitive();
@@ -53,7 +50,7 @@ public class PrimitiveIntake extends Command {
       if(m_EndEffectorSubsystem.arrivedSetpoint()) {
         m_ElevatorSubsystem.toPrimitive();
         if(m_ElevatorSubsystem.arriveSetPoint()) {
-          m_EndEffectorSubsystem.primitiveArm();
+          m_EndEffectorSubsystem.Arm_IDLE();
 
           LEDConstants.intakeArriving = false;
           LEDConstants.arrivePosition_Intake = false;
@@ -61,7 +58,7 @@ public class PrimitiveIntake extends Command {
         }
       }
     }else {
-      m_EndEffectorSubsystem.primitiveArm();
+      m_EndEffectorSubsystem.Arm_IDLE();
       m_EndEffectorSubsystem.stopWheel();
       if(m_EndEffectorSubsystem.arrivedSetpoint()) {
         m_ElevatorSubsystem.toPrimitive();

@@ -56,7 +56,7 @@ public class IntakeCoral extends Command {
   @Override
   public void end(boolean interrupted) {
     m_ElevatorSubsystem.toPrimitive();
-    m_EndEffectorSubsystem.primitiveArm();
+    m_EndEffectorSubsystem.Arm_IDLE();
     m_EndEffectorSubsystem.stopWheel();
     if(m_EndEffectorSubsystem.hasCoral()) {
       LEDConstants.hasGamePiece = true;

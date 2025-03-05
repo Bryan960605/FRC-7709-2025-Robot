@@ -72,9 +72,9 @@ public final class Constants {
       new Translation2d(-kModuleDistance/2, -kModuleDistance/2)
     );
 
-    public static final double turningPidController_Kp = 0.016;
+    public static final double turningPidController_Kp = 0.012;
     public static final double turningPidController_Ki = 0;
-    public static final double turningPidController_Kd = 0.0001;
+    public static final double turningPidController_Kd = 0.00001;
 
     public static final double drivePidController_Kp = 0;
     public static final double drivePidController_Ki = 0;

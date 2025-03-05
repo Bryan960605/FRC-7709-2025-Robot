@@ -31,8 +31,8 @@ public class Coral_L3_Auto extends Command {
   @Override
   public void initialize() {
     // m_ElevatorSubsystem.outCoral_L3();
-    // m_EndEffectorSubsystem.outCoral_L3_Arm();
-    m_EndEffectorSubsystem.primitiveArm();
+    // m_EndEffectorSubsystem.Arm_shootCoral_L3();
+    m_EndEffectorSubsystem.Arm_IDLE();
 
     arriveEndEffectorPrimition = false;
 
@@ -51,12 +51,12 @@ public class Coral_L3_Auto extends Command {
     if(arriveEndEffectorPrimition) {
       m_ElevatorSubsystem.outCoral_L3();
       if(m_ElevatorSubsystem.arriveSetPoint()) {
-        m_EndEffectorSubsystem.outCoral_L3_Arm();
+        m_EndEffectorSubsystem.Arm_shootCoral_L3();
       }
     }
   
     if(m_ElevatorSubsystem.arriveSetPoint() && Math.abs(m_EndEffectorSubsystem.getAngle() - EndEffectorConstants.coralL3Angle) <= 1) {
-      m_EndEffectorSubsystem.outCoral_L3_Wheel();
+      m_EndEffectorSubsystem.Wheel_shootCoral_L3();
 
       LEDConstants.arrivePosition_Intake = true;
       LEDConstants.LEDFlag = true;

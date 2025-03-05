@@ -31,7 +31,7 @@ public class Coral_L4_Auto extends Command {
   @Override
   public void initialize() {
     // m_ElevatorSubsystem.outCoral_L4();
-    // m_EndEffectorSubsystem.outCoral_L4_Arm();
+    // m_EndEffectorSubsystem.Arm_shootCoral_L4();
     m_EndEffectorSubsystem.coralL4Primitive_Arm();
 
 
@@ -47,11 +47,11 @@ public class Coral_L4_Auto extends Command {
     if(m_EndEffectorSubsystem.arrivedSetpoint()) {
       m_ElevatorSubsystem.outCoral_L4();    
       if(m_ElevatorSubsystem.arriveSetPoint()) {
-        m_EndEffectorSubsystem.outCoral_L4_Arm();
+        m_EndEffectorSubsystem.Arm_shootCoral_L4();
       }
     }
     if(m_ElevatorSubsystem.arriveSetPoint() && Math.abs(m_EndEffectorSubsystem.getAngle() - EndEffectorConstants.coralL4Angle) <= 1) {
-      m_EndEffectorSubsystem.outCoral_L4_Wheel();
+      m_EndEffectorSubsystem.Wheel_shootCoral_L4();
 
       LEDConstants.arrivePosition_Intake = true;
       LEDConstants.LEDFlag = true;
@@ -65,14 +65,14 @@ public class Coral_L4_Auto extends Command {
   @Override
   public void end(boolean interrupted) {
     // m_ElevatorSubsystem.toPrimitive();
-    // m_EndEffectorSubsystem.primitiveArm();
+    // m_EndEffectorSubsystem.Arm_IDLE();
     // m_EndEffectorSubsystem.stopWheel();
     m_EndEffectorSubsystem.coralL4Primitive_Arm();
     while(!m_ElevatorSubsystem.arrivePrimition()) {
     if(m_EndEffectorSubsystem.arrivedSetpoint()) {
       m_ElevatorSubsystem.toPrimitive();
       if(m_ElevatorSubsystem.arriveSetPoint()) {
-        m_EndEffectorSubsystem.primitiveArm();
+        m_EndEffectorSubsystem.Arm_IDLE();
       }
     }
     }

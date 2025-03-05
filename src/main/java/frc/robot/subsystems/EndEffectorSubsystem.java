@@ -51,33 +51,23 @@ public class EndEffectorSubsystem extends SubsystemBase {
   private final PIDController armPID;
   private ArmFeedforward armFeedforward;
 
-  private final Timer timer_Coral;
-  private final Timer timer_Algae;
-
   private double pidOutput;
   private double feedforwardOutput;
   private double output;
   private double arriveAngle;
-  private double nowTime_Coral;
-  private double nowTime_Algae;
-  private boolean shouldStart_Coral;
-  private boolean shouldStart_Algae;
-  private boolean shouldMotorTurn_HasItem;
-  private boolean shouldMotorReset;
-  private double nowPosition;
+
   
     public EndEffectorSubsystem() {
+      // Motor controller
       intakewheel = new TalonFX(EndEffectorConstants.intakeWheel_ID);
       intakeArm = new TalonFX(EndEffectorConstants.intakeArm_ID);
+      // Encoder
       armAbsolutedEncoder = new CANcoder(EndEffectorConstants.armAbsolutedEncoder_ID);
+      // IR sensor
       irSensor_CoralFirst = new DigitalInput(EndEffectorConstants.irSensor_CoralFirst_ID);
       irSensor_CoralSecond = new DigitalInput(EndEffectorConstants.irSensor_CoralSecond_ID);
       irSensor_Algae = new DigitalInput(EndEffectorConstants.irSensor_Algae_ID);
       arriveAngle = EndEffectorConstants.primitiveAngle;
-      timer_Coral = new Timer();
-      timer_Algae = new Timer();
-      shouldStart_Coral = true;
-      shouldStart_Algae = true;
       m_request = new MotionMagicVoltage(0);
       turnMotionMagicConfigs = new MotionMagicConfigs();
   
@@ -109,8 +99,8 @@ public class EndEffectorSubsystem extends SubsystemBase {
       wheelMotor_Slot1.kP = 10;
       wheelMotor_Slot1.kI = 0;
       wheelMotor_Slot1.kD = 0;
-      //MotioinMagic Config
 
+      //MotioinMagic Config
       turnMotionMagicConfigs.MotionMagicCruiseVelocity = 40;
       turnMotionMagicConfigs.MotionMagicAcceleration = 80;
       turnMotionMagicConfigs.MotionMagicJerk = 400;
@@ -135,122 +125,51 @@ public class EndEffectorSubsystem extends SubsystemBase {
       // armPID.setIntegratorRange(EndEffectorConstants.armPIDMinOutput, EndEffectorConstants.armPIDMaxOutput);
     }
   
-    public void intakeCoral_Arm() {
-      arriveAngle = EndEffectorConstants.coralStationAngle;
-    }
-  
-    public void intakeCoral_Wheel() {
-      intakewheel.setControl(request_EndEffectorSpeed.withVelocity(EndEffectorConstants.coralInSpeed_RotionPerSecond));
-    }
+    // ======== Arm ========
+    // Intake coral
+    public void intakeCoral_Arm() {arriveAngle = EndEffectorConstants.coralStationAngle;}
+    // Shoot Reef
+    public void Arm_IDLE() {arriveAngle = EndEffectorConstants.primitiveAngle;}
+    public void Arm_shootCoral_L1() {arriveAngle = EndEffectorConstants.coralL1Angle;}
+    public void Arm_shootCoral_L2() {arriveAngle = EndEffectorConstants.coralL2Angle;}
+    public void Arm_shootCoral_L3() {arriveAngle = EndEffectorConstants.coralL3Angle;}
+    public void Arm_shootCoral_L4() {arriveAngle = EndEffectorConstants.coralL4Angle;}
+    public void coralL4Primitive_Arm(){arriveAngle = EndEffectorConstants.coralL4UpAngle;}
 
-    public void intakeCoralSlow_Wheel() {
-      intakewheel.setControl(request_EndEffectorSpeed.withVelocity(EndEffectorConstants.coralInSpeedSlow_RotationPerSecond));
-    }
-  
-    public void outCoral_L1_Arm() {
-      arriveAngle = EndEffectorConstants.coralL1Angle;
-    }
-  
-    public void outCoral_L1_Wheel() {
-      intakewheel.setVoltage(EndEffectorConstants.coralL1OutVol);
-    }
-  
-    public void outCoral_L2_Arm() {
-      arriveAngle = EndEffectorConstants.coralL2Angle;
-    }
-  
-    public void outCoral_L2_Wheel() {
-      intakewheel.setVoltage(EndEffectorConstants.coralL2OutVol);
-    }
+    public void Arm_NET_IDLE() {arriveAngle = EndEffectorConstants.netUpAngle;}
+    public void Arm_shootAlgae_NET() {arriveAngle = EndEffectorConstants.algaeNetAngle;}
+    public void Arm_shootAlgae_Processor() {arriveAngle = EndEffectorConstants.algaeProccesorAngle;}
+    // Intake algae
+    public void Arm_intakeAlgae_Low() {arriveAngle = EndEffectorConstants.algaeLowInAngle;}
+    public void Arm_intakeAlgae_High() {arriveAngle = EndEffectorConstants.algaeHighInAngle;}
+    public void Arm_intakeAlgae_Floor() {arriveAngle = EndEffectorConstants.algaeFloorAngle;}
 
-    public void turnMore_Coral(){
-      intakewheel.setVoltage(EndEffectorConstants.coralTurnMore);
-    }
-  
-    public void outCoral_L3_Arm() {
-      arriveAngle = EndEffectorConstants.coralL3Angle;
-    }
-  
-    public void outCoral_L3_Wheel() {
-      intakewheel.setVoltage(EndEffectorConstants.coralL3OutVol);
-    }
-  
-    public void outCoral_L4_Arm() {
-      arriveAngle = EndEffectorConstants.coralL4Angle;
-    }
+    public void primitiveArm_HasCoral(){arriveAngle = EndEffectorConstants.primitiveAngle_HasCoral;}
 
-    public void coralL4Primitive_Arm(){
-      arriveAngle = EndEffectorConstants.coralL4UpAngle;
-    }
+    // ======== Wheel ========
+    // Inatake coral
+    public void intakeCoral_Wheel() {intakewheel.setControl(request_EndEffectorSpeed.withVelocity(EndEffectorConstants.coralInSpeed_RotionPerSecond));}
+    public void intakeCoralSlow_Wheel() {intakewheel.setControl(request_EndEffectorSpeed.withVelocity(EndEffectorConstants.coralInSpeedSlow_RotationPerSecond));}
+    // Coral
+    public void turnMore_Coral() {intakewheel.setVoltage(EndEffectorConstants.coralTurnMore);}
+    // Shoot coral
+    public void Wheel_shootCoral_L1() {intakewheel.setVoltage(EndEffectorConstants.coralL1OutVol);}
+    public void Wheel_shootCoral_L2() {intakewheel.setVoltage(EndEffectorConstants.coralL2OutVol);}
+    public void Wheel_shootCoral_L3() {intakewheel.setVoltage(EndEffectorConstants.coralL3OutVol);}
+    public void Wheel_shootCoral_L4() {intakewheel.setVoltage(EndEffectorConstants.coralL4OutVol);}
+    // Intake Algae
+    public void intakeAlgae_Low_Wheel() {intakewheel.setVoltage(EndEffectorConstants.algaeLowInVol);}
+    public void intakeAlgae_High_Wheel() {intakewheel.setVoltage(EndEffectorConstants.algaeHighInVol);}
+    public void intakeAlgae_Floor_Wheel() {intakewheel.setVoltage(EndEffectorConstants.algaeFloorInVol);}
+    // Shoot Algae
+    public void Wheel_shootAlgae_NET() {intakewheel.setVoltage(EndEffectorConstants.algaeShootNetVol);}
+    public void Wheel_shootAlgae_Processor() {intakewheel.setVoltage(EndEffectorConstants.algaeShootProcessorVol);}
+    // Wheel control
+    public void outAlgae() {intakewheel.setVoltage(EndEffectorConstants.algaeOutVol);}
+    public void holdAlgae(){intakewheel.setVoltage(EndEffectorConstants.algaeHoldVol);}
+    public void stopWheel() {intakewheel.setControl(request_EndEffectorSpeed.withVelocity(0));}
   
-    public void outCoral_L4_Wheel() {
-      intakewheel.setVoltage(EndEffectorConstants.coralL4OutVol);
-    }
-  
-    public void shootNet_Arm() {
-      arriveAngle = EndEffectorConstants.algaeNetAngle;
-    }
-
-    public void netPrimitive_Arm(){
-      arriveAngle = EndEffectorConstants.netUpAngle;
-    }
-  
-    public void shootNet_Wheel() {
-      intakewheel.setVoltage(EndEffectorConstants.algaeShootNetVol);
-    }
-  
-    public void shootProcessor_Arm() {
-      arriveAngle = EndEffectorConstants.algaeProccesorAngle;
-    }
-  
-    public void shootProcessor_Wheel() {
-      intakewheel.setVoltage(EndEffectorConstants.algaeShootProcessorVol);
-    }
-  
-    public void intakeAlgae_Low_Arm() {
-      arriveAngle = EndEffectorConstants.algaeLowInAngle;
-    }
-  
-    public void intakeAlgae_Low_Wheel() {
-      intakewheel.setVoltage(EndEffectorConstants.algaeLowInVol);
-    }
-  
-    public void intakeAlgae_High_Arm() {
-      arriveAngle = EndEffectorConstants.algaeHighInAngle;
-    }
-  
-    public void intakeAlgae_High_Wheel() {
-      intakewheel.setVoltage(EndEffectorConstants.algaeHighInVol);
-    }
-  
-    public void intakeAlgae_Floor_Arm() {
-      arriveAngle = EndEffectorConstants.algaeFloorAngle;
-    }
-  
-    public void intakeAlgae_Floor_Wheel() {
-      intakewheel.setVoltage(EndEffectorConstants.algaeFloorInVol);
-    }
-
-    public void outAlgae() {
-      intakewheel.setVoltage(EndEffectorConstants.algaeOutVol);
-    }
-  
-    public void primitiveArm() {
-      arriveAngle = EndEffectorConstants.primitiveAngle;
-    }
-
-    public void primitiveArm_HasCoral(){
-      arriveAngle = EndEffectorConstants.primitiveAngle_HasCoral;
-    }
-  
-    public void holdAlgae(){
-      intakewheel.setVoltage(EndEffectorConstants.algaeHoldVol);
-    }
-  
-    public void stopWheel() {
-      intakewheel.setControl(request_EndEffectorSpeed.withVelocity(0));
-    }
-  
+    
     public double getPosition() {
       return intakeArm.getPosition().getValueAsDouble();
     }
@@ -270,65 +189,29 @@ public class EndEffectorSubsystem extends SubsystemBase {
     public double getVelocity() {
       return Units.rotationsPerMinuteToRadiansPerSecond(armAbsolutedEncoder.getVelocity().getValueAsDouble()*60);
     }
+    
+    // IR sensor
+    public boolean shouldCoralSlow() {return !irSensor_CoralSecond.get() && !irSensor_CoralFirst.get();}
+
+    public boolean canUp() {return irSensor_CoralFirst.get();}
+
+    public boolean hasCoral() {return (irSensor_CoralFirst.get()) && (!irSensor_CoralSecond.get());}
   
-    public boolean shouldCoralSlow() {
-      return !irSensor_CoralSecond.get() && !irSensor_CoralFirst.get();
+    public boolean hasAlgae() {
+      return wheelOverCurrent();
     }
 
-    public boolean canUp() {
-      return irSensor_CoralFirst.get();
-    }
-
-    public boolean hasCoral() {
-      return (irSensor_CoralFirst.get()) && (!irSensor_CoralSecond.get());
-    }
-  
-    public boolean sensorHasAlgae() {
-      return !irSensor_Algae.get();
-    }
-
-    public boolean hasAlgae(){
-      nowTime_Algae = timer_Algae.get();
-      if (shouldStart_Algae && sensorHasAlgae()) {
-        timer_Algae.reset();
-        timer_Algae.start();
-        shouldStart_Algae = false;
-      }
-      if (nowTime_Algae >= 0.5 && sensorHasAlgae()) {
-        timer_Algae.stop();
-        shouldStart_Algae = true;
-        return true;
-      }else {
-        shouldStart_Algae = false;
-        return false;
-      }
+    public boolean wheelOverCurrent(){
+      return Math.abs(intakewheel.getStatorCurrent().getValueAsDouble()) > 40;
     }
   
     public boolean arrivedSetpoint() {
       return (Math.abs(armPID.getError()) <= 2);
     }
   
-    // public void setNeedMotorTurn(boolean needTurn){
-    //   shouldMotorTurn_HasItem = needTurn;
-    //   shouldMotorReset = needTurn;
-    //   intakewheel.getConfigurator().apply(turnMotionMagicConfigs);
-    //   intakewheel.getConfigurator().apply(wheelMotor_Slot1);
-    // }
   
     @Override
     public void periodic() {
-      // if (shouldMotorReset) {
-      //   nowPosition = intakewheel.getPosition().getValueAsDouble();
-      //   shouldMotorReset = false;
-      // }
-      // if (shouldMotorTurn_HasItem) {
-      //   intakewheel.setControl(m_request.withPosition(nowPosition + 0.65));
-      //   if (intakewheel.getPosition().getValueAsDouble() >= nowPosition + 0.65) {
-      //     shouldMotorTurn_HasItem = false;
-      //     intakewheel.getConfigurator().apply(speedMotionMagicConfigs);
-      //     intakewheel.getConfigurator().apply(wheelMotor_Slot0);
-      //   }
-      // }
       // Arm
       if(90 >= getAngle() && getAngle() > 80 || 75 >= getAngle() && getAngle() > 70) {
         armFeedforward = new ArmFeedforward(EndEffectorConstants.armFeedforward_Ks, EndEffectorConstants.armFeedforward_Kg, EndEffectorConstants.armFeedforward_Kv);
@@ -353,11 +236,11 @@ public class EndEffectorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("EndEffector/Output", output);
     SmartDashboard.putBoolean("EndEffector/arrivedSetpoint", arrivedSetpoint());
     SmartDashboard.putBoolean("EndEffector/hasCoral", hasCoral());
-    SmartDashboard.putBoolean("EndEffector/hasAlgae", hasAlgae());
-    SmartDashboard.putBoolean("EndEffector/HasSensorAlgae", sensorHasAlgae());
+    SmartDashboard.putBoolean("EndEffector/HasSensorAlgae", hasAlgae());
     SmartDashboard.putNumber("EndEffector/AbsolutedArmPosition", getAbsolutePosition());
     SmartDashboard.putNumber("EndEffector/ArmAngle", getAngle());
     SmartDashboard.putNumber("EndEffector/getPosition", getPosition());
     SmartDashboard.putString("Mode", Mode.nowMode);
+    SmartDashboard.putNumber("EndEffector Current", intakewheel.getStatorCurrent().getValueAsDouble());
   }
 }

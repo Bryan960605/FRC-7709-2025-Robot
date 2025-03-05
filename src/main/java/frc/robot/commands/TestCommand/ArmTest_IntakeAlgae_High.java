@@ -28,7 +28,7 @@ public class ArmTest_IntakeAlgae_High extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_EndEffectorSubsystem.intakeAlgae_High_Arm();
+    m_EndEffectorSubsystem.Arm_intakeAlgae_High();
     m_EndEffectorSubsystem.intakeAlgae_High_Wheel();
 
     hasAlgae = false;
@@ -37,20 +37,20 @@ public class ArmTest_IntakeAlgae_High extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_EndEffectorSubsystem.hasAlgae()) {
-      timer.start();
-    }
-    if(timer.get() > 0.5) {
-      hasAlgae = true;
-      timer.reset();
-      timer.stop();
-    }
+    // if(m_EndEffectorSubsystem.hasAlgae()) {
+    //   timer.start();
+    // }
+    // if(timer.get() > 0.5) {
+    //   hasAlgae = true;
+    //   timer.reset();
+    //   timer.stop();
+    // }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_EndEffectorSubsystem.primitiveArm();
+    m_EndEffectorSubsystem.Arm_IDLE();
     m_EndEffectorSubsystem.holdAlgae();
   }
 

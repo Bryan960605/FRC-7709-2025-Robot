@@ -36,8 +36,8 @@ public class ShootNet extends Command {
   @Override
   public void initialize() {
     // m_ElevatorSubsystem.shootNet();
-    // m_EndEffectorSubsystem.shootNet_Arm();
-    m_EndEffectorSubsystem.netPrimitive_Arm();
+    // m_EndEffectorSubsystem.Arm_shootAlgae_NET();
+    m_EndEffectorSubsystem.Arm_NET_IDLE();
 
     LEDConstants.intakeArriving = true;
     LEDConstants.arrivePosition_Intake = false;
@@ -53,7 +53,7 @@ public class ShootNet extends Command {
     if(arriveEndEffectorPrimition) {
       m_ElevatorSubsystem.shootNet();
       if(m_ElevatorSubsystem.arriveSetPoint()) {
-        m_EndEffectorSubsystem.shootNet_Arm();
+        m_EndEffectorSubsystem.Arm_shootAlgae_NET();
         if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arrivedSetpoint()) {
           LEDConstants.arrivePosition_Intake = true;
           LEDConstants.LEDFlag = true;
@@ -64,7 +64,7 @@ public class ShootNet extends Command {
       }
     }
     if (m_ElevatorSubsystem.arriveSetPoint() && ifFeed) {
-      m_EndEffectorSubsystem.shootNet_Wheel();
+      m_EndEffectorSubsystem.Wheel_shootAlgae_NET();
     }else {
       m_EndEffectorSubsystem.holdAlgae();
     }

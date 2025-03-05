@@ -21,8 +21,8 @@ public class ArmTest_OutCoral extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_EndEffectorSubsystem.outCoral_L1_Arm();
-    m_EndEffectorSubsystem.outCoral_L1_Wheel();
+    m_EndEffectorSubsystem.Arm_shootCoral_L1();
+    m_EndEffectorSubsystem.Wheel_shootCoral_L1();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -33,7 +33,7 @@ public class ArmTest_OutCoral extends Command {
   @Override
   public void end(boolean interrupted) {
     m_EndEffectorSubsystem.stopWheel();
-    m_EndEffectorSubsystem.primitiveArm();
+    m_EndEffectorSubsystem.Arm_IDLE();
   }
 
   // Returns true when the command should end.

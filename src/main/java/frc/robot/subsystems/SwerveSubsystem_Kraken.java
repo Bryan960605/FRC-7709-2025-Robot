@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -73,8 +74,8 @@ public class SwerveSubsystem_Kraken extends SubsystemBase {
      gyro = new Pigeon2(Swerve_KrakenConstants.gyro_ID);
      gyroConfig = new Pigeon2Configuration();
 
-     gyroConfig.MountPose.MountPoseYaw = -10;
-     gyroConfig.MountPose.MountPosePitch = 0;
+     gyroConfig.MountPose.MountPoseYaw = -90;
+     gyroConfig.MountPose.MountPosePitch = 6;
      gyroConfig.MountPose.MountPoseRoll = 0;
 
      gyro.getConfigurator().apply(gyroConfig);
@@ -207,6 +208,7 @@ public class SwerveSubsystem_Kraken extends SubsystemBase {
     odometry.update(getRotation(), getModulesPosition());
     field.setRobotPose(odometry.getPoseMeters());
 
+    SmartDashboard.putNumber("Swerve/gyro", getRotation().getDegrees());
     SmartDashboard.putNumber("Swerve/leftFrontAbsolutePosion", leftFront.getTurningPosition());
     SmartDashboard.putNumber("Swerve/leftBackAbsolutePosion", leftBack.getTurningPosition());
     SmartDashboard.putNumber("Swerve/rightFrontAbsolutePosion", rightFront.getTurningPosition());

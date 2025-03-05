@@ -34,7 +34,7 @@ public class ShootProcessor extends Command {
   @Override
   public void initialize() {
     m_ElevatorSubsystem.shootProcessor();
-    m_EndEffectorSubsystem.shootProcessor_Arm();
+    m_EndEffectorSubsystem.Arm_shootAlgae_Processor();
 
     LEDConstants.intakeArriving = true;
     LEDConstants.arrivePosition_Intake = false;
@@ -47,7 +47,7 @@ public class ShootProcessor extends Command {
     ifFeed = ifFeedFunc.getAsBoolean();
 
     if(m_EndEffectorSubsystem.arrivedSetpoint() && ifFeed) {
-      m_EndEffectorSubsystem.shootProcessor_Wheel();
+      m_EndEffectorSubsystem.Wheel_shootAlgae_Processor();
     }
     if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arrivedSetpoint()) {
       LEDConstants.arrivePosition_Intake = true;
@@ -58,7 +58,7 @@ public class ShootProcessor extends Command {
     }
 
     // if (m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arrivedSetpoint() && ifFeed) {
-    //   m_EndEffectorSubsystem.shootProcessor_Wheel();
+    //   m_EndEffectorSubsystem.Wheel_shootAlgae_Processor();
   // }
   }
 
@@ -66,7 +66,7 @@ public class ShootProcessor extends Command {
   @Override
   public void end(boolean interrupted) {
     m_ElevatorSubsystem.toPrimitive();
-    m_EndEffectorSubsystem.primitiveArm();
+    m_EndEffectorSubsystem.Arm_IDLE();
     m_EndEffectorSubsystem.stopWheel();
 
     LEDConstants.arrivePosition_Intake = false;

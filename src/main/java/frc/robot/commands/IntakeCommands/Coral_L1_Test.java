@@ -41,7 +41,7 @@ public class Coral_L1_Test extends Command {
   @Override
   public void initialize() {
     // m_ElevatorSubsystem.outCoral_L1();
-    m_EndEffectorSubsystem.outCoral_L1_Arm();
+    m_EndEffectorSubsystem.Arm_shootCoral_L1();
 
     LEDConstants.intakeArriving = true;
     LEDConstants.arrivePosition_Intake = false;
@@ -80,7 +80,7 @@ public class Coral_L1_Test extends Command {
     }
 
     if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arrivedSetpoint() && ifFeed) {
-      m_EndEffectorSubsystem.outCoral_L1_Wheel();
+      m_EndEffectorSubsystem.Wheel_shootCoral_L1();
 
       LEDConstants.arrivePosition_Intake = true;
       LEDConstants.LEDFlag = true;
@@ -94,7 +94,7 @@ public class Coral_L1_Test extends Command {
   @Override
   public void end(boolean interrupted) {
     m_ElevatorSubsystem.toPrimitive();
-    m_EndEffectorSubsystem.primitiveArm();
+    m_EndEffectorSubsystem.Arm_IDLE();
     m_EndEffectorSubsystem.stopWheel();
 
     LEDConstants.intakeArriving = false;
