@@ -79,7 +79,7 @@ public class Coral_L1_Test extends Command {
       }
     }
 
-    if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint() && ifFeed) {
+    if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arrivedSetpoint() && ifFeed) {
       m_EndEffectorSubsystem.outCoral_L1_Wheel();
 
       LEDConstants.arrivePosition_Intake = true;

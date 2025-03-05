@@ -56,7 +56,7 @@ public class IntakeAlgae_High extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_EndEffectorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.canUp()) {
+    if(m_EndEffectorSubsystem.arrivedSetpoint() && m_EndEffectorSubsystem.canUp()) {
       m_ElevatorSubsystem.intakeAlgae_High();
     }
 
@@ -78,7 +78,7 @@ public class IntakeAlgae_High extends Command {
       // m_EndEffectorSubsystem.primitiveArm();
       // shouldHold = true;
     // }
-    // if (hasAlgae && shouldHold && m_EndEffectorSubsystem.arriveSetPoint()) {
+    // if (hasAlgae && shouldHold && m_EndEffectorSubsystem.arrivedSetpoint()) {
     //   m_EndEffectorSubsystem.holdAlgae();
     // }
     // if(m_EndEffectorSubsystem.hasAlgae()) {

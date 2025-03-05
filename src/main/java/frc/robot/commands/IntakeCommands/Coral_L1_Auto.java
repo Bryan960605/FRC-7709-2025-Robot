@@ -52,7 +52,7 @@ public class Coral_L1_Auto extends Command {
     //   }
     // }
 
-    if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint()) {
+    if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arrivedSetpoint()) {
       m_EndEffectorSubsystem.outCoral_L1_Wheel();
 
       LEDConstants.arrivePosition_Intake = true;

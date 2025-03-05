@@ -31,7 +31,7 @@ public class CoralL4ToPrimitive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_EndEffectorSubsystem.arriveSetPoint()) {
+    if(m_EndEffectorSubsystem.arrivedSetpoint()) {
       m_ElevatorSubsystem.toPrimitive();
       if(m_ElevatorSubsystem.arriveSetPoint()) {
         m_EndEffectorSubsystem.primitiveArm();

@@ -70,7 +70,7 @@ public class Coral_L2 extends Command {
       m_EndEffectorSubsystem.stopWheel();
     }
 
-    if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint()) {
+    if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arrivedSetpoint()) {
       LEDConstants.arrivePosition_Intake = true;
       LEDConstants.LEDFlag = true;
     }else {

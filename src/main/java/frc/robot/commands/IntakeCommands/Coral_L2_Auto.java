@@ -41,7 +41,7 @@ public class Coral_L2_Auto extends Command {
   @Override
   public void execute() {
 
-    if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint()) {
+    if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arrivedSetpoint()) {
       m_EndEffectorSubsystem.outCoral_L2_Wheel();
 
       LEDConstants.arrivePosition_Intake = true;

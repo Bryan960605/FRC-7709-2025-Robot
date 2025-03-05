@@ -59,7 +59,7 @@ public class Coral_L3 extends Command {
       if(m_ElevatorSubsystem.arriveSetPoint()) {
         m_EndEffectorSubsystem.outCoral_L3_Arm();
         
-        if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint()) {
+        if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arrivedSetpoint()) {
           LEDConstants.arrivePosition_Intake = true;
           LEDConstants.LEDFlag = true;
         }else {

@@ -282,23 +282,6 @@ public class EndEffectorSubsystem extends SubsystemBase {
     public boolean hasCoral() {
       return (irSensor_CoralFirst.get()) && (!irSensor_CoralSecond.get());
     }
-
-    // public boolean hasCoral(){
-    //   nowTime_Coral = timer_Coral.get();
-    //   if (shouldStart_Coral && sensorHasCoral()) {
-    //     timer_Coral.reset();
-    //     timer_Coral.start();
-    //     shouldStart_Coral = false;
-    //   }
-    //   if (nowTime_Coral >= 0.02 && sensorHasCoral()) {
-    //     timer_Coral.stop();
-    //     shouldStart_Coral = false;
-    //     return true;
-    //   }else{
-    //     shouldStart_Coral = false;
-    //     return false;
-    //   }
-    // }
   
     public boolean sensorHasAlgae() {
       return !irSensor_Algae.get();
@@ -321,7 +304,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
       }
     }
   
-    public boolean arriveSetPoint() {
+    public boolean arrivedSetpoint() {
       return (Math.abs(armPID.getError()) <= 2);
     }
   
@@ -368,7 +351,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("EndEffector/pidOutput", pidOutput);
     SmartDashboard.putNumber("EndEffector/feedforwardOutput", feedforwardOutput);
     SmartDashboard.putNumber("EndEffector/Output", output);
-    SmartDashboard.putBoolean("EndEffector/arriveSetpoint", arriveSetPoint());
+    SmartDashboard.putBoolean("EndEffector/arrivedSetpoint", arrivedSetpoint());
     SmartDashboard.putBoolean("EndEffector/hasCoral", hasCoral());
     SmartDashboard.putBoolean("EndEffector/hasAlgae", hasAlgae());
     SmartDashboard.putBoolean("EndEffector/HasSensorAlgae", sensorHasAlgae());

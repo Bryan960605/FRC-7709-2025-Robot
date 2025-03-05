@@ -21,12 +21,9 @@ public class Coral_L4 extends Command {
 
   private boolean ifFeed;
   public Coral_L4(ElevatorSubsystem elevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem, BooleanSupplier ifFeed) {
-    // Use addRequirements() here to declare subsystem dependencies.
     this.m_ElevatorSubsystem = elevatorSubsystem;
     this.m_EndEffectorSubsystem = endEffectorSubsystem;
-
     this.ifFeedFunc = ifFeed;
-
     addRequirements(m_ElevatorSubsystem, m_EndEffectorSubsystem);
   }
 
@@ -47,15 +44,13 @@ public class Coral_L4 extends Command {
   @Override
   public void execute() {
     ifFeed = ifFeedFunc.getAsBoolean();
-    // if(m_EndEffectorSubsystem.arriveSetPoint()) {
-    //   arriveEndEffectorPrimition = true;
-    // }
-    if(m_EndEffectorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.canUp()) {
+    // 
+    if(m_EndEffectorSubsystem.arrivedSetpoint() && m_EndEffectorSubsystem.canUp()) {
       m_ElevatorSubsystem.outCoral_L4();    
       if(m_ElevatorSubsystem.arriveSetPoint()) {
         m_EndEffectorSubsystem.outCoral_L4_Arm();
 
-        if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint()) {
+        if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arrivedSetpoint()) {
           LEDConstants.arrivePosition_Intake = true;
           LEDConstants.LEDFlag = true;
         }else {

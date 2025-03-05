@@ -71,7 +71,7 @@ public class Coral_L4_Auto_LeftReef extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_EndEffectorSubsystem.arriveSetPoint()) {
+    if(m_EndEffectorSubsystem.arrivedSetpoint()) {
       m_ElevatorSubsystem.outCoral_L4();    
       if(m_ElevatorSubsystem.arriveSetPoint()) {
         m_EndEffectorSubsystem.outCoral_L4_Arm();

@@ -46,10 +46,10 @@ public class ShootProcessor extends Command {
   public void execute() {
     ifFeed = ifFeedFunc.getAsBoolean();
 
-    if(m_EndEffectorSubsystem.arriveSetPoint() && ifFeed) {
+    if(m_EndEffectorSubsystem.arrivedSetpoint() && ifFeed) {
       m_EndEffectorSubsystem.shootProcessor_Wheel();
     }
-    if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint()) {
+    if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arrivedSetpoint()) {
       LEDConstants.arrivePosition_Intake = true;
       LEDConstants.LEDFlag = true;
     }else {
@@ -57,7 +57,7 @@ public class ShootProcessor extends Command {
       LEDConstants.LEDFlag = true;
     }
 
-    // if (m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint() && ifFeed) {
+    // if (m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arrivedSetpoint() && ifFeed) {
     //   m_EndEffectorSubsystem.shootProcessor_Wheel();
   // }
   }

@@ -47,14 +47,14 @@ public class ShootNet extends Command {
   @Override
   public void execute() {
     ifFeed = ifFeedFunc.getAsBoolean();
-    if(m_EndEffectorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.canUp()) {
+    if(m_EndEffectorSubsystem.arrivedSetpoint() && m_EndEffectorSubsystem.canUp()) {
       arriveEndEffectorPrimition = true;
     }
     if(arriveEndEffectorPrimition) {
       m_ElevatorSubsystem.shootNet();
       if(m_ElevatorSubsystem.arriveSetPoint()) {
         m_EndEffectorSubsystem.shootNet_Arm();
-        if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint()) {
+        if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arrivedSetpoint()) {
           LEDConstants.arrivePosition_Intake = true;
           LEDConstants.LEDFlag = true;
         }else {

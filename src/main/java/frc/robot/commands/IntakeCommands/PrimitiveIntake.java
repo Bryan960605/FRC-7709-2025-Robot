@@ -39,7 +39,7 @@ public class PrimitiveIntake extends Command {
     if(m_EndEffectorSubsystem.sensorHasAlgae()) {
       m_EndEffectorSubsystem.primitiveArm();
       m_EndEffectorSubsystem.holdAlgae();
-      if(m_EndEffectorSubsystem.arriveSetPoint()) {
+      if(m_EndEffectorSubsystem.arrivedSetpoint()) {
         m_ElevatorSubsystem.toPrimitive();
       }
 
@@ -50,7 +50,7 @@ public class PrimitiveIntake extends Command {
     }else if(m_EndEffectorSubsystem.hasCoral() && Math.abs(m_ElevatorSubsystem.getCurrentPosition() - ElevatorConstants.coralL4Position) <= 1) {
       m_EndEffectorSubsystem.primitiveArm_HasCoral();
       m_EndEffectorSubsystem.stopWheel();
-      if(m_EndEffectorSubsystem.arriveSetPoint()) {
+      if(m_EndEffectorSubsystem.arrivedSetpoint()) {
         m_ElevatorSubsystem.toPrimitive();
         if(m_ElevatorSubsystem.arriveSetPoint()) {
           m_EndEffectorSubsystem.primitiveArm();
@@ -63,7 +63,7 @@ public class PrimitiveIntake extends Command {
     }else {
       m_EndEffectorSubsystem.primitiveArm();
       m_EndEffectorSubsystem.stopWheel();
-      if(m_EndEffectorSubsystem.arriveSetPoint()) {
+      if(m_EndEffectorSubsystem.arrivedSetpoint()) {
         m_ElevatorSubsystem.toPrimitive();
       }
 

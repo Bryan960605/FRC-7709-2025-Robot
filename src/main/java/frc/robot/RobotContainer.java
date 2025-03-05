@@ -154,7 +154,6 @@ public class RobotContainer {
     operatorController.axisGreaterThan(1, 0.6).whileTrue(new OutAlgae(m_EndEffectorSubsystem));
     operatorController.axisGreaterThan(5, 0.6).whileTrue(new TurnMore(m_EndEffectorSubsystem));
 
-
     m_SwerveSubsystem.setDefaultCommand(new ManualDrive_Kraken(m_SwerveSubsystem, xSpeedFunc, ySpeedFunc, zSpeedFunc, isSlowFunc));
   }
 

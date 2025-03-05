@@ -68,10 +68,10 @@ public class IntakeAlgae_Low extends Command {
       m_EndEffectorSubsystem.primitiveArm();
       shouldHold = true;
     }
-    if (hasAlgae && shouldHold && m_EndEffectorSubsystem.arriveSetPoint()) {
+    if (hasAlgae && shouldHold && m_EndEffectorSubsystem.arrivedSetpoint()) {
       m_EndEffectorSubsystem.holdAlgae();
     }
-    // if(m_EndEffectorSubsystem.arriveSetPoint()) {
+    // if(m_EndEffectorSubsystem.arrivedSetpoint()) {
     //   m_ElevatorSubsystem.intakeAlgae_Low();
     //   if(m_ElevatorSubsystem.arriveSetPoint()) {
     //     m_EndEffectorSubsystem.intakeAlgae_Low_Arm();
