@@ -77,12 +77,12 @@ public class TrackMiddleReef extends Command {
       rotationPidOutput = rotationPidController.calculate(rotationMeasure, PhotonConstants.rotationPidSetPoint_MiddleReef_FrontRight);
       rotationPidOutput = Constants.setMaxOutput(rotationPidOutput, PhotonConstants.rotationPidMaxOutput_Reef);
       // Y-PID calculations
-      yMeasure = m_PhotonVisionSubsystem.getYPidMeasurements_FrontRight();
+      yMeasure = m_PhotonVisionSubsystem.getYMeasurements_FrontRight();
       yMeasure = MathUtil.applyDeadband(yMeasure, 0.05);
       yPidOutput = -yPidController.calculate(yMeasure, PhotonConstants.yPidSetPoint_MiddleReef_FrontRight);
       yPidOutput = Constants.setMaxOutput(yPidOutput, PhotonConstants.yPidMaxOutput_Reef);
       // X-PID calculations
-      xMeasure = m_PhotonVisionSubsystem.getXPidMeasurements_FrontRight();
+      xMeasure = m_PhotonVisionSubsystem.getXMeasurements_FrontRight();
       xMeasure = MathUtil.applyDeadband(xMeasure, 0.05);
       xPidOutput = -xPidController.calculate(xMeasure, PhotonConstants.xPidSetPoint_MiddleReef_FrontRight);
       xPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.xPidMaxOutput_Reef);
@@ -94,13 +94,13 @@ public class TrackMiddleReef extends Command {
       rotationPidOutput = rotationPidController.calculate(rotationMeasure, PhotonConstants.rotationPidSetPoint_MiddleReef_FrontLeft);
       rotationPidOutput = Constants.setMaxOutput(rotationPidOutput, PhotonConstants.rotationPidMaxOutput_Reef);
       // Y-PID calculations
-      yMeasure = m_PhotonVisionSubsystem.getYPidMeasurements_FrontLeft();
+      yMeasure = m_PhotonVisionSubsystem.getYMeasurements_FrontLeft();
       yPidError = Math.abs(yMeasure - PhotonConstants.yPidSetPoint_MiddleReef_FrontLeft);
       yMeasure = (yPidError > 0.05) ? yMeasure : PhotonConstants.yPidSetPoint_MiddleReef_FrontLeft;
       yPidOutput = -yPidController.calculate(yMeasure, PhotonConstants.yPidSetPoint_MiddleReef_FrontLeft);
       yPidOutput = Constants.setMaxOutput(yPidOutput, PhotonConstants.yPidMaxOutput_Reef);
       // X-PID calculations
-      xMeasure = m_PhotonVisionSubsystem.getXPidMeasurements_FrontLeft();
+      xMeasure = m_PhotonVisionSubsystem.getXMeasurements_FrontLeft();
       xPidError = Math.abs(xMeasure - PhotonConstants.xPidSetPoint_MiddleReef_FrontLeft);
       xMeasure = (xPidError > 0.05) ? xMeasure : PhotonConstants.xPidSetPoint_MiddleReef_FrontLeft;
       xPidOutput = -xPidController.calculate(xMeasure, PhotonConstants.xPidSetPoint_MiddleReef_FrontLeft);

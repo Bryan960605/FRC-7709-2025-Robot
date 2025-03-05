@@ -81,31 +81,30 @@ public class TrackLeftReef extends Command {
       rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_LeftReef);
       rotationPidOutput = Constants.setMaxOutput(rotationPidOutput, PhotonConstants.rotationPidMaxOutput_Reef);
       // Y-PID calculations
-      yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_FrontRight();
+      yPidMeasurements = m_PhotonVisionSubsystem.getYMeasurements_FrontRight();
       yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_LeftReef);
       yPidMeasurements = (yPidError > 0.02) ? yPidMeasurements : PhotonConstants.yPidSetPoint_LeftReef;
       yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_LeftReef);
       yPidOutput = Constants.setMaxOutput(yPidOutput, PhotonConstants.yPidMaxOutput_Reef);
       // X-PID calculations
-      xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontRight();
+      xPidMeasurements = m_PhotonVisionSubsystem.getXMeasurements_FrontRight();
       xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_LeftReef);
       xPidMeasurements = (xPidError > 0.02) ? xPidMeasurements : PhotonConstants.xPidSetPoint_LeftReef;
       xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_LeftReef);
       xPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.xPidSetPoint_LeftReef);
       // if(xPidController.getError()<0.05) SmartDashboard.putBoolean("Align/LeftReefAlign", true);
       // else SmartDashboard.putBoolean("Align/LeftReefAlign", false);
+
+      if(m_PhotonVisionSubsystem.isArrive_Reef("LeftReef")) {
+        LEDConstants.arrivePosition_Base = true;
+        LEDConstants.LEDFlag = true;
+      }
     }else {
       xPidOutput = 0;
       yPidOutput = 0;
       rotationPidOutput = 0;
     }
     // LED control 
-    if(xPidMeasurements == PhotonConstants.xPidSetPoint_LeftReef 
-    && yPidMeasurements == PhotonConstants.yPidSetPoint_LeftReef 
-    && rotationPidMeasurements == PhotonConstants.rotationPidSetPoint_LeftReef) {
-      LEDConstants.arrivePosition_Base = true;
-      LEDConstants.LEDFlag = true;
-    }
     // Speed limit protection
     if(ElevatorConstants.arriveLow == false) {
       xPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.xPidMaxOutput_NeedSlow_Reef);

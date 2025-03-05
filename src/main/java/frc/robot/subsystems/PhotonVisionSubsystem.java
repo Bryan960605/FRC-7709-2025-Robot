@@ -26,6 +26,7 @@ import edu.wpi.first.math.numbers.N8;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.PhotonConstants;
 
 public class PhotonVisionSubsystem extends SubsystemBase {
   /** Creates a new PhotonVisionSubsystem. */
@@ -154,11 +155,11 @@ public class PhotonVisionSubsystem extends SubsystemBase {
     return null;
   }
 
-  public double getXPidMeasurements_FrontRight() {
+  public double getXMeasurements_FrontRight() {
     return botXMeasurements_FrontRight;
   }
 
-  public double getYPidMeasurements_FrontRight() {
+  public double getYMeasurements_FrontRight() {
     return botYMeasurements_FrontRight;
   }
 
@@ -166,11 +167,11 @@ public class PhotonVisionSubsystem extends SubsystemBase {
     return botRotationMeasurements_FrontRight;
   }
 
-  public double getXPidMeasurements_FrontLeft() {
+  public double getXMeasurements_FrontLeft() {
     return botXMeasurements_FrontLeft;
   }
 
-  public double getYPidMeasurements_FrontLeft() {
+  public double getYMeasurements_FrontLeft() {
     return botYMeasurements_FrontLeft;
   }
 
@@ -178,16 +179,41 @@ public class PhotonVisionSubsystem extends SubsystemBase {
     return botRotationMeasurements_FrontLeft;
   }
 
-  public double getXPidMeasurements_Back() {
+  public double getXMeasurements_Back() {
     return botXMeasurements_Back;
   }
 
-  public double getYPidMeasurements_Back() {
+  public double getYMeasurements_Back() {
     return botYMeasurements_Back;
   }
 
   public double getRotationMeasurements_Back() {
     return botRotationMeasurements_Back;
+  }
+  
+  public double getXError_Reef(String reef) {
+    if(reef == "RightReef") return Math.abs(getXMeasurements_FrontLeft() - PhotonConstants.xPidSetPoint_RightReef);
+    else return Math.abs(getXMeasurements_FrontRight() - PhotonConstants.xPidSetPoint_LeftReef);
+  }
+
+  public double getYError_Reef(String reef) {
+    if(reef == "RightReef") return Math.abs(getYMeasurements_FrontLeft() - PhotonConstants.yPidSetPoint_RightReef);
+    else return Math.abs(getXMeasurements_FrontRight() - PhotonConstants.yPidSetPoint_LeftReef);
+  }
+
+  public double getRotationError_Reef(String reef) {
+    if(reef == "RightReef") return Math.abs(getRotationMeasurements_FrontLeft() - PhotonConstants.rotationPidSetPoint_RightReef);
+    else return Math.abs(getRotationMeasurements_FrontRight() - PhotonConstants.rotationPidSetPoint_LeftReef);
+  }
+
+  public boolean isArrive_Reef(String reef) {
+    if(reef == "rightReef") {
+      if((getXError_Reef("RightReef")) <= 0.02 && (getYError_Reef("RightReef") <= 0.02) && (getRotationError_Reef("RightReef") <= 0.5)) return true;
+      else return false;
+    }else {
+      if((getXError_Reef("LeftReef")) <= 0.02 && (getYError_Reef("LeftReef") <= 0.02) && (getRotationError_Reef("LeftReef") <= 0.5)) return true;
+      else return false;
+    }
   }
 
   public PhotonPipelineResult getResult(String camera) {

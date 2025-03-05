@@ -37,7 +37,7 @@ public class Coral_L1_Auto extends Command {
     LEDConstants.arrivePosition_Intake = false;
     LEDConstants.LEDFlag = true;
   }
-
+  
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {

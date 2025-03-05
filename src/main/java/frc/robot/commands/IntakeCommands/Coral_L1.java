@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
+import frc.robot.subsystems.PhotonVisionSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Coral_L1 extends Command {
@@ -33,8 +34,6 @@ public class Coral_L1 extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_ElevatorSubsystem.outCoral_L1();
-    m_EndEffectorSubsystem.outCoral_L1_Arm();
     // m_EndEffectorSubsystem.primitiveArm();
 
 
@@ -57,6 +56,10 @@ public class Coral_L1 extends Command {
     //     m_EndEffectorSubsystem.outCoral_L1_Arm();
     //   }
     // }
+    if(m_EndEffectorSubsystem.canUp()) {
+      m_ElevatorSubsystem.outCoral_L1();
+      m_EndEffectorSubsystem.outCoral_L1_Arm();
+    }
 
     if(m_ElevatorSubsystem.arriveSetPoint() && ifFeed) {
       m_EndEffectorSubsystem.outCoral_L1_Wheel();
@@ -69,6 +72,11 @@ public class Coral_L1 extends Command {
     }else {
       LEDConstants.arrivePosition_Intake = false;
       LEDConstants.LEDFlag = true;
+    }
+    if((LEDConstants.arrivePosition_Intake) && LEDConstants.arrivePosition_Base) {
+      m_EndEffectorSubsystem.outCoral_L1_Wheel();
+    }else {
+      m_EndEffectorSubsystem.stopWheel();
     }
   }
 

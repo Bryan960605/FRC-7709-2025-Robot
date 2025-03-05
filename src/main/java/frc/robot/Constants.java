@@ -325,7 +325,7 @@ public final class Constants {
     public static final int armAbsolutedEncoder_ID = 45;
     public static final int irSensor_CoralFirst_ID = 0;
     public static final int irSensor_CoralSecond_ID = 1;
-    public static final int irSensor_Algae_ID = 0;
+    public static final int irSensor_Algae_ID = 3;
 
     public static final double absolutedEncoderOffset = 0.140625;
 
@@ -374,7 +374,7 @@ public final class Constants {
     public static final double coralL4OutVol = -2;
     public static final double coralTurnMore = -0.5;
     public static final double coralInSpeed_RotionPerSecond = -32;
-    public static final double coralInSpeedSlow_RotationPerSecond = -15;
+    public static final double coralInSpeedSlow_RotationPerSecond = -5;
     public static final double algaeFloorInVol = -4;
     public static final double algaeShootNetVol = 6;
     public static final double algaeLowInVol = -4;
@@ -409,7 +409,7 @@ public final class Constants {
   public class LEDConstants {
     public static final int candle_ID = 0;
 
-    public static final int ledNum = 0;
+    public static final int ledNum = 24;
 
     public static boolean LEDFlag = false;
     public static boolean hasGamePiece = false;

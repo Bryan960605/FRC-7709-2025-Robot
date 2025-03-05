@@ -36,10 +36,6 @@ public class IntakeAlgae_Low extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_ElevatorSubsystem.intakeAlgae_Low();
-    m_EndEffectorSubsystem.intakeAlgae_Low_Arm();
-    m_EndEffectorSubsystem.intakeAlgae_Low_Wheel();
-
     timer.start();
 
     hasAlgae = false;
@@ -52,6 +48,13 @@ public class IntakeAlgae_Low extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(m_EndEffectorSubsystem.canUp()) {
+      m_ElevatorSubsystem.intakeAlgae_Low();
+      m_EndEffectorSubsystem.intakeAlgae_Low_Arm();
+      m_EndEffectorSubsystem.intakeAlgae_Low_Wheel();
+      }
+
+      
     if(m_EndEffectorSubsystem.sensorHasAlgae()) {
       timer.start();
       if(timer.get() > 0.5) {

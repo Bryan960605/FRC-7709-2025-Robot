@@ -53,17 +53,17 @@ public class Coral_L1_Test extends Command {
   public void execute() {
     ifFeed = ifFeedFunc.getAsBoolean();
     if(m_PhotonVisionSubsystem.hasFrontRightTarget()) {
-      hasArrivePosition = m_PhotonVisionSubsystem.getXPidMeasurements_FrontRight() < PhotonConstants.arriveXPosition_Reef ? true : false;
+      hasArrivePosition = m_PhotonVisionSubsystem.getXMeasurements_FrontRight() < PhotonConstants.arriveXPosition_Reef ? true : false;
     }else if(m_PhotonVisionSubsystem.hasFrontLeftTarget()) {
-      hasArrivePosition = m_PhotonVisionSubsystem.getXPidMeasurements_FrontLeft() < PhotonConstants.arriveXPosition_Reef ? true : false;
+      hasArrivePosition = m_PhotonVisionSubsystem.getXMeasurements_FrontLeft() < PhotonConstants.arriveXPosition_Reef ? true : false;
     }else if(!m_PhotonVisionSubsystem.hasFrontTarget()) {
       hasArrivePosition = true;
     }
 
     if(m_PhotonVisionSubsystem.hasFrontRightTarget()) {
-      tooClose = m_PhotonVisionSubsystem.getXPidMeasurements_FrontRight() < PhotonConstants.tooClosePosition_Reef ? true : false;
+      tooClose = m_PhotonVisionSubsystem.getXMeasurements_FrontRight() < PhotonConstants.tooClosePosition_Reef ? true : false;
     }else if(m_PhotonVisionSubsystem.hasFrontLeftTarget()) {
-      tooClose = m_PhotonVisionSubsystem.getXPidMeasurements_FrontLeft() < PhotonConstants.tooClosePosition_Reef ? true : false;
+      tooClose = m_PhotonVisionSubsystem.getXMeasurements_FrontLeft() < PhotonConstants.tooClosePosition_Reef ? true : false;
     }else if(!m_PhotonVisionSubsystem.hasFrontTarget()) {
       tooClose = false;
     }

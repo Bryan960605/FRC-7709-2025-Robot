@@ -272,7 +272,11 @@ public class EndEffectorSubsystem extends SubsystemBase {
     }
   
     public boolean shouldCoralSlow() {
-      return !irSensor_CoralSecond.get();
+      return !irSensor_CoralSecond.get() && !irSensor_CoralFirst.get();
+    }
+
+    public boolean canUp() {
+      return irSensor_CoralFirst.get();
     }
 
     public boolean hasCoral() {

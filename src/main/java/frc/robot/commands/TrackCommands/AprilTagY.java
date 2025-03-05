@@ -43,7 +43,7 @@ public class AprilTagY extends Command {
   @Override
   public void execute() {
     if(m_PhotonVisionSubsystem.hasFrontRightTarget()) {
-      yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_FrontRight();
+      yPidMeasurements = m_PhotonVisionSubsystem.getYMeasurements_FrontRight();
       yPidMeasurements = Math.abs(yPidMeasurements) > 0.05 ? yPidMeasurements : 0;
       yPidOutput = Constants.setMaxOutput(yPidOutput, PhotonConstants.yPidMaxOutput);
     }else {

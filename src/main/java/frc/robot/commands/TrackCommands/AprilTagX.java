@@ -47,7 +47,7 @@ public class AprilTagX extends Command {
   public void execute() {
 
     if(m_PhotonVisionSubsystem.hasFrontRightTarget()) {
-      xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontRight();
+      xPidMeasurements = m_PhotonVisionSubsystem.getXMeasurements_FrontRight();
       xPidMeasurements = Math.abs(xPidMeasurements - 1) > 0.05 ? xPidMeasurements : 1;
       xPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.xPidMaxOutput);
     }else {

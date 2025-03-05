@@ -77,13 +77,13 @@ public class TrackCage extends Command {
         rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_Cage_FrontRight);
         rotationPidOutput = Constants.setMaxOutput(rotationPidOutput, PhotonConstants.rotationPidMaxOutput_Cage);
         // Y-PID calculations
-        yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_FrontRight();
+        yPidMeasurements = m_PhotonVisionSubsystem.getYMeasurements_FrontRight();
         yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_Cage_FrontRight);
         yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_Cage_FrontRight;
         yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_Cage_FrontRight);
         yPidOutput = Constants.setMaxOutput(yPidOutput, PhotonConstants.yPidMaxOutput_Cage);
         // X-PID calculations
-        xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontRight();
+        xPidMeasurements = m_PhotonVisionSubsystem.getXMeasurements_FrontRight();
         xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_Cage_FrontRight);
         xPidMeasurements = (xPidError > 0.05) ? xPidMeasurements : PhotonConstants.xPidSetPoint_Cage_FrontRight;
         xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_Cage_FrontRight);
@@ -96,13 +96,13 @@ public class TrackCage extends Command {
         rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_Cage_FrontLeft);
         rotationPidOutput = Constants.setMaxOutput(rotationPidOutput, PhotonConstants.rotationPidMaxOutput_Cage);
         // Y-PID calculations
-        yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_FrontLeft();
+        yPidMeasurements = m_PhotonVisionSubsystem.getYMeasurements_FrontLeft();
         yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_Cage_FrontLeft);
         yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_Cage_FrontLeft;
         yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_Cage_FrontLeft);
         yPidOutput = Constants.setMaxOutput(yPidOutput, PhotonConstants.yPidMaxOutput_Cage);
         // X-PID calculations
-        xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontLeft();
+        xPidMeasurements = m_PhotonVisionSubsystem.getXMeasurements_FrontLeft();
         xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_Cage_FrontLeft);
         xPidMeasurements = (xPidError > 0.05) ? xPidMeasurements : PhotonConstants.xPidSetPoint_Cage_FrontLeft;
         xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_Cage_FrontLeft);
@@ -117,13 +117,13 @@ public class TrackCage extends Command {
       rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_Cage_Back_ID20_ID11);
       rotationPidOutput = Constants.setMaxOutput(rotationPidOutput, PhotonConstants.rotationPidMaxOutput_Cage);
       // Y-PID calculations
-      yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_Back();
+      yPidMeasurements = m_PhotonVisionSubsystem.getYMeasurements_Back();
       yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_Cage_Back_ID20_ID11);
       yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_Cage_Back_ID20_ID11;
       yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_Cage_Back_ID20_ID11);
       yPidOutput = Constants.setMaxOutput(yPidOutput, PhotonConstants.yPidMaxOutput_Cage);
       // X-PID calculations
-      xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_Back();
+      xPidMeasurements = m_PhotonVisionSubsystem.getXMeasurements_Back();
       xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_Cage_Back_ID20_ID11);
       xPidMeasurements = (xPidError > 0.05) ? xPidMeasurements : PhotonConstants.xPidSetPoint_Cage_Back_ID20_ID11;
       xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_Cage_Back_ID20_ID11);
@@ -136,13 +136,13 @@ public class TrackCage extends Command {
       rotationPidOutput = rotationPidController.calculate(rotationPidMeasurements, PhotonConstants.rotationPidSetPoint_Cage_Back_ID21_ID10);
       rotationPidOutput = Constants.setMaxOutput(rotationPidOutput, PhotonConstants.rotationPidMaxOutput_Cage);
       // Y-PID calculations
-      yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_Back();
+      yPidMeasurements = m_PhotonVisionSubsystem.getYMeasurements_Back();
       yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_Cage_Back_ID21_ID10);
       yPidMeasurements = (yPidError > 0.05) ? yPidMeasurements : PhotonConstants.yPidSetPoint_Cage_Back_ID21_ID10;
       yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_Cage_Back_ID21_ID10);
       yPidOutput = Constants.setMaxOutput(yPidOutput, PhotonConstants.yPidMaxOutput_Cage);
       // X-PID calculations
-      xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_Back();
+      xPidMeasurements = m_PhotonVisionSubsystem.getXMeasurements_Back();
       xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_Cage_Back_ID21_ID10);
       xPidMeasurements = (xPidError > 0.05) ? xPidMeasurements : PhotonConstants.xPidSetPoint_Cage_Back_ID21_ID10;
       xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_Cage_Back_ID21_ID10);

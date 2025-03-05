@@ -54,7 +54,7 @@ public class Coral_L3 extends Command {
       arriveEndEffectorPrimition = true;
     }
 
-    if(arriveEndEffectorPrimition) {
+    if(arriveEndEffectorPrimition && m_EndEffectorSubsystem.canUp()) {
       m_ElevatorSubsystem.outCoral_L3();
       if(m_ElevatorSubsystem.arriveSetPoint()) {
         m_EndEffectorSubsystem.outCoral_L3_Arm();
@@ -70,6 +70,12 @@ public class Coral_L3 extends Command {
     }
   
     if(m_ElevatorSubsystem.arriveSetPoint() && ifFeed) {
+      m_EndEffectorSubsystem.outCoral_L3_Wheel();
+    }else {
+      m_EndEffectorSubsystem.stopWheel();
+    }
+
+    if((LEDConstants.arrivePosition_Intake) && LEDConstants.arrivePosition_Base) {
       m_EndEffectorSubsystem.outCoral_L3_Wheel();
     }else {
       m_EndEffectorSubsystem.stopWheel();
