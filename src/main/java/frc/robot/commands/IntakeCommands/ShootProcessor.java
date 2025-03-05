@@ -49,16 +49,17 @@ public class ShootProcessor extends Command {
     if(m_EndEffectorSubsystem.arriveSetPoint() && ifFeed) {
       m_EndEffectorSubsystem.shootProcessor_Wheel();
     }
+    if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint()) {
+      LEDConstants.arrivePosition_Intake = true;
+      LEDConstants.LEDFlag = true;
+    }else {
+      LEDConstants.arrivePosition_Intake = false;
+      LEDConstants.LEDFlag = true;
+    }
 
     // if (m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint() && ifFeed) {
     //   m_EndEffectorSubsystem.shootProcessor_Wheel();
-
-    //   LEDConstants.arrivePosition_Intake = true;
-    //   LEDConstants.LEDFlag = true;
-    // }else {
-    //   LEDConstants.arrivePosition_Intake = false;
-    //   LEDConstants.LEDFlag = true;
-    // }
+  // }
   }
 
   // Called once the command ends or is interrupted.

@@ -38,6 +38,11 @@ public class IntakeCoral extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(m_EndEffectorSubsystem.shouldCoralSlow()) {
+      m_EndEffectorSubsystem.intakeCoralSlow_Wheel();
+    }else {
+      m_EndEffectorSubsystem.intakeCoral_Wheel();
+    }
     if(m_EndEffectorSubsystem.hasCoral()) {
       LEDConstants.hasGamePiece = true;
       LEDConstants.LEDFlag = true;

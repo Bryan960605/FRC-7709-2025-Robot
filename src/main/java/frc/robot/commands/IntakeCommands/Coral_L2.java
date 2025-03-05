@@ -60,15 +60,18 @@ public class Coral_L2 extends Command {
 
     ifFeed = ifFeedFunc.getAsBoolean();
 
-    if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint() && ifFeed) {
+    if(m_ElevatorSubsystem.arriveSetPoint() && ifFeed) {
       m_EndEffectorSubsystem.outCoral_L2_Wheel();
+    }else {
+      m_EndEffectorSubsystem.stopWheel();
+    }
 
+    if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint()) {
       LEDConstants.arrivePosition_Intake = true;
       LEDConstants.LEDFlag = true;
     }else {
       LEDConstants.arrivePosition_Intake = false;
       LEDConstants.LEDFlag = true;
-      m_EndEffectorSubsystem.stopWheel();
     }
 
   }

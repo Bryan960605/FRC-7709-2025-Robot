@@ -52,7 +52,7 @@ public class LEDSubsystem extends SubsystemBase {
   }
 
   public void tracking() {
-    ledAnimation = new StrobeAnimation(ledNum, ledNum, ledNum);
+    ledAnimation = new StrobeAnimation(0, 0, 255);
     candle.animate(ledAnimation);
     candle.setLEDs(0, 0, 255, 0, 0, ledNum);
     LEDConstants.LEDFlag = false;
@@ -65,7 +65,7 @@ public class LEDSubsystem extends SubsystemBase {
   }
 
   public void intakeGamePiece() {
-    ledAnimation = new StrobeAnimation(ledNum, ledNum, ledNum);
+    ledAnimation = new StrobeAnimation(255, 0, 0);
     candle.animate(ledAnimation);
     candle.setLEDs(255, 0, 0, 0, 0, ledNum);
     LEDConstants.LEDFlag = false;
@@ -78,16 +78,16 @@ public class LEDSubsystem extends SubsystemBase {
   }
 
   public void intakeArriving() {
-    ledAnimation = new StrobeAnimation(ledNum, ledNum, ledNum);
+    ledAnimation = new StrobeAnimation(255, 192, 0);
     candle.animate(ledAnimation);
-    candle.setLEDs(ledNum, ledNum, ledNum, ledNum, ledNum, ledNum);
+    candle.setLEDs(255, 192, 0, 0, 0, ledNum);
     LEDConstants.LEDFlag = false;
   }
 
   public void shootGamePiece() {
     ledAnimation = new StrobeAnimation(ledNum, ledNum, ledNum);
     candle.animate(ledAnimation);
-    candle.setLEDs(255, 192, 0, 0, 0, ledNum);
+    candle.setLEDs(255, 255, 0, 0, 0, ledNum);
     LEDConstants.LEDFlag = false;
   }
 

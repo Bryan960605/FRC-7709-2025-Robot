@@ -54,16 +54,20 @@ public class Coral_L4 extends Command {
       m_ElevatorSubsystem.outCoral_L4();    
       if(m_ElevatorSubsystem.arriveSetPoint()) {
         m_EndEffectorSubsystem.outCoral_L4_Arm();
+
+        if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint()) {
+          LEDConstants.arrivePosition_Intake = true;
+          LEDConstants.LEDFlag = true;
+        }else {
+          LEDConstants.arrivePosition_Intake = false;
+          LEDConstants.LEDFlag = true;
+        }
       }
     }
     if(m_ElevatorSubsystem.arriveSetPoint() && ifFeed) {
       m_EndEffectorSubsystem.outCoral_L4_Wheel();
-
-      LEDConstants.arrivePosition_Intake = true;
-      LEDConstants.LEDFlag = true;
     }else {
-      LEDConstants.arrivePosition_Intake = false;
-      LEDConstants.LEDFlag = true;
+      m_EndEffectorSubsystem.stopWheel();
     }
   }
 
@@ -74,9 +78,9 @@ public class Coral_L4 extends Command {
     // m_EndEffectorSubsystem.primitiveArm();
     // m_EndEffectorSubsystem.stopWheel();
 
-    LEDConstants.intakeArriving = false;
-    LEDConstants.arrivePosition_Intake = false;
-    LEDConstants.LEDFlag = true;
+    // LEDConstants.intakeArriving = false;
+    // LEDConstants.arrivePosition_Intake = false;
+    // LEDConstants.LEDFlag = true;
   }
 
   // Returns true when the command should end.

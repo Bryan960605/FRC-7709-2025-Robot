@@ -52,18 +52,21 @@ public class ShootNet extends Command {
     }
     if(arriveEndEffectorPrimition) {
       m_ElevatorSubsystem.shootNet();
-      if(Math.abs(m_ElevatorSubsystem.getCurrentPosition() - m_ElevatorSubsystem.getGoalPosition()) < 2) {
+      if(m_ElevatorSubsystem.arriveSetPoint()) {
         m_EndEffectorSubsystem.shootNet_Arm();
+        if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arriveSetPoint()) {
+          LEDConstants.arrivePosition_Intake = true;
+          LEDConstants.LEDFlag = true;
+        }else {
+          LEDConstants.arrivePosition_Intake = false;
+          LEDConstants.LEDFlag = true;
+        }
       }
     }
     if (m_ElevatorSubsystem.arriveSetPoint() && ifFeed) {
       m_EndEffectorSubsystem.shootNet_Wheel();
-
-      LEDConstants.arrivePosition_Intake = true;
-      LEDConstants.LEDFlag = true;
     }else {
-      LEDConstants.arrivePosition_Intake = false;
-      LEDConstants.LEDFlag = true;
+      m_EndEffectorSubsystem.holdAlgae();
     }
   }
 

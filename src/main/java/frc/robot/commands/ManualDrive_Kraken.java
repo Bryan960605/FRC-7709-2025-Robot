@@ -89,7 +89,7 @@ public class ManualDrive_Kraken extends Command {
     SmartDashboard.putNumber("ManualDrive/Yspeed", ySpeed);
     SmartDashboard.putNumber("ManualDrive/Zspeed", zSpeed);
 
-    m_SwerveSubsystem_Kraken.drive(this.xSpeed, this.ySpeed, this.zSpeed,true);
+    m_SwerveSubsystem_Kraken.drive(this.xSpeed, this.ySpeed, this.zSpeed, true);
   }
 
   // Called once the command ends or is interrupted.

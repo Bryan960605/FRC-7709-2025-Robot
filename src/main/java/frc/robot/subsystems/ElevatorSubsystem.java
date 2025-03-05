@@ -50,7 +50,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevatorSlot0Config.kG = 0.44;
     elevatorSlot0Config.kV = 0;
     elevatorSlot0Config.kA = 0;
-    elevatorSlot0Config.kP = 0.5;
+    elevatorSlot0Config.kP = 0.9;
     elevatorSlot0Config.kI = 0;
     elevatorSlot0Config.kD = 0;
 
@@ -142,18 +142,18 @@ public class ElevatorSubsystem extends SubsystemBase {
       ElevatorConstants.arriveLow = false;
     }
 
-    if ((getCurrentPosition() < 3 && lastPosition > 3)) {
+    if ((getCurrentPosition() < 8 && lastPosition > 8)) {
       ifChange_Low = true;
-    }else if((getCurrentPosition() > 3 && lastPosition < 3)){
+    }else if((getCurrentPosition() > 8 && lastPosition < 8)){
       ifChange_High = true;
     }
 
     if(ifChange_Low) {
       elevatorSlot0Config.kS = 0;
-      elevatorSlot0Config.kG = 0.28;
+      elevatorSlot0Config.kG = 0.35;
       elevatorSlot0Config.kV = 0;
       elevatorSlot0Config.kA = 0;
-      elevatorSlot0Config.kP = 0.5;
+      elevatorSlot0Config.kP = 0.9;
       elevatorSlot0Config.kI = 0;
       elevatorSlot0Config.kD = 0;
 
@@ -166,7 +166,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       elevatorSlot0Config.kG = 0.44;
       elevatorSlot0Config.kV = 0;
       elevatorSlot0Config.kA = 0;
-      elevatorSlot0Config.kP = 0.5;
+      elevatorSlot0Config.kP = 0.9;
       elevatorSlot0Config.kI = 0;
       elevatorSlot0Config.kD = 0;
 

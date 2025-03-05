@@ -72,7 +72,7 @@ public final class Constants {
       new Translation2d(-kModuleDistance/2, -kModuleDistance/2)
     );
 
-    public static final double turningPidController_Kp = 0.013;
+    public static final double turningPidController_Kp = 0.016;
     public static final double turningPidController_Ki = 0;
     public static final double turningPidController_Kd = 0.0001;
 
@@ -101,10 +101,10 @@ public final class Constants {
     public static final int rightFrontAbsolutedEncoder_ID = 43;
     public static final int rightBackAbsolutedEncoder_ID = 44;
 
-    public static final double leftFrontOffset = -0.33349;
-    public static final double leftBackOffset = 0.138671;
-    public static final double rightFrontOffset = -0.25075;
-    public static final double rightBackOffset = 0.156494;
+    public static final double leftFrontOffset = -0.342285;
+    public static final double leftBackOffset = 0.144287;
+    public static final double rightFrontOffset = -0.27856;
+    public static final double rightBackOffset = 0.155029;
     public static final int gyro_ID = 56;
 
     public static final double wheelDiameterMeters = Units.inchesToMeters(4);
@@ -126,10 +126,11 @@ public final class Constants {
 
 
     public static SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
-      new Translation2d(kModuleDistance/2, kModuleDistance/2),
-      new Translation2d(kModuleDistance/2, -kModuleDistance/2),
+      new Translation2d(kModuleDistance/2, kModuleDistance/2), 
+      new Translation2d(kModuleDistance/2, -kModuleDistance/2), 
       new Translation2d(-kModuleDistance/2, kModuleDistance/2),
-      new Translation2d(-kModuleDistance/2, -kModuleDistance/2));
+      new Translation2d(-kModuleDistance/2, -kModuleDistance/2)
+    );
 
     public static final double pathingMoving_Kp = 0;
     public static final double pathingMoving_Ki = 0;
@@ -158,7 +159,7 @@ public final class Constants {
 
     public static final double rotationPidController_Kp = 0.004;
     public static final double rotationPidController_Ki = 0;
-    public static final double rotationPidController_Kd = 0;
+    public static final double rotationPidController_Kd = 0.0005;
 
     public static final double xPidMaxOutput = 0.4;
     public static final double yPidMaxOutput = 0.4;
@@ -280,17 +281,18 @@ public final class Constants {
     public static final int elevator_FirstMotor_ID = 6;
     public static final int elevator_SecondMotor_ID = 7;
 
-    public static final double primitivePosition = 0.13;//-0.14
-    public static final double coralL1Position = 4.24;//3.72
-    public static final double coralL2Position = 11.74;//7.42
-    public static final double coralL3Position = 21.84;//21.42
-    public static final double coralL4Position = 43.64;//42.52
-    public static final double coralStationPosition = 0.13;//0.12
+    public static final double primitivePosition = -0.2;//-0.14
+    public static final double coralL1Position = 4.44;//3.72
+    public static final double coralL2Position = 11.94;//7.42
+    public static final double coralL3Position = 22.04;//21.42
+    public static final double coralL4Position = 43.84;//42.52
+    public static final double coralStationPosition = -0.2;//0.12
 
-    public static final double algaeFloorPosition = 0.13;//0.12
-    public static final double algaeNetPosition = 46;//0.12
-    public static final double algaeL2Position = 3.14;//3.82
-    public static final double algaeL3Position = 16.29;//15.82
+    public static final double algaeFloorPosition = -0.2;//0.12
+    public static final double algaeNetPosition = 46.2;//0.12
+    public static final double algaeL2Position = 3.34;//3.82
+    public static final double algaeL3Position = 16.5;//15.82
+
     public static final double algaeProccesorPosition = 0.13;//0.12
 
     public static boolean arriveLow = false;
@@ -321,16 +323,17 @@ public final class Constants {
     public static final int intakeWheel_ID = 13;
     public static final int intakeArm_ID = 14;
     public static final int armAbsolutedEncoder_ID = 45;
-    public static final int irSensor_Coral_ID = 1;
+    public static final int irSensor_CoralFirst_ID = 0;
+    public static final int irSensor_CoralSecond_ID = 1;
     public static final int irSensor_Algae_ID = 0;
 
     public static final double absolutedEncoderOffset = 0.140625;
 
-    public static final double armPID_Kp = 0.0051;//0.0048
+    public static final double armPID_Kp = 0.0051;//0.0048  
     public static final double armPID_Ki = 0;
     public static final double armPID_Kd = 0.0001;//0.0001
     public static final double armPIDMinOutput = 0;
-    public static final double armPIDMaxOutput = 0.1;
+    public static final double armPIDMaxOutput = 0.2;
 
     public static final double armFeedforward_Ks = 0;
     public static final double armFeedforward_Kg = 0.6;//
@@ -362,7 +365,7 @@ public final class Constants {
     public static final double netUpAngle = 82;
     public static final double algaeLowInAngle = 64;
     public static final double algaeHighInAngle = 64;
-    public static final double algaeProccesorAngle = 11;//not yet
+    public static final double algaeProccesorAngle = 10;//not yet
     
 
     public static final double coralL1OutVol = -1.5;
@@ -371,6 +374,7 @@ public final class Constants {
     public static final double coralL4OutVol = -2;
     public static final double coralTurnMore = -0.5;
     public static final double coralInSpeed_RotionPerSecond = -32;
+    public static final double coralInSpeedSlow_RotationPerSecond = -15;
     public static final double algaeFloorInVol = -4;
     public static final double algaeShootNetVol = 6;
     public static final double algaeLowInVol = -4;
