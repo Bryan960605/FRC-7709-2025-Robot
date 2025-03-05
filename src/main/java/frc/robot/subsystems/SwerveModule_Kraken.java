@@ -34,6 +34,9 @@ public class SwerveModule_Kraken extends SubsystemBase {
   private final PIDController turningPidController;
   private final SimpleMotorFeedforward driveFeedForward;
 
+  private double stateAngle;
+
+
   public SwerveModule_Kraken(int turningMotor_ID, int driveMotor_ID, int absolutedEncoder_ID, double offset) {
     turningMotor = new TalonFX(turningMotor_ID);
     driveMotor = new TalonFX(driveMotor_ID);
@@ -71,14 +74,6 @@ public class SwerveModule_Kraken extends SubsystemBase {
     driveMotor.setPosition(0);
   }
 
-  public SwerveModuleState getState() {
-    return new SwerveModuleState(getDriveVelocity(), Rotation2d.fromDegrees(getTurningAngle()));
-  }
-
-  public SwerveModulePosition getPosition() {
-    return new SwerveModulePosition(getDrivePosition(), Rotation2d.fromDegrees(getTurningAngle()));
-  }
-
   public double getDriveVelocity() {
     return driveMotor.getVelocity().getValueAsDouble()*Module_KrakenConstants.driveEncoderRot2MeterPerSec;
   }
@@ -99,15 +94,28 @@ public class SwerveModule_Kraken extends SubsystemBase {
     return absolutedEncoder.getAbsolutePosition().getValueAsDouble()*360;
   }
 
+  public SwerveModuleState getState() {
+    return new SwerveModuleState(getDriveVelocity(), Rotation2d.fromDegrees(getTurningAngle()));
+  }
+
+  public SwerveModulePosition getPosition() {
+    return new SwerveModulePosition(getDrivePosition(), Rotation2d.fromDegrees(getTurningAngle()));
+  }
+
   public void stopMotor() {
     driveMotor.set(0);
     turningMotor.set(0);
+  }
+
+  public double getStateAngle() {
+    return stateAngle;
   }
 
   public void setState(SwerveModuleState state) {
     // Turn Motor
       state.optimize(getState().angle);
       double turningMotorOutput = turningPidController.calculate(getState().angle.getDegrees(), state.angle.getDegrees());
+      stateAngle = state.angle.getDegrees();
       turningMotor.set(turningMotorOutput);
     // Drive motor
       double driveMotorOutput = driveFeedForward.calculate(state.speedMetersPerSecond)/12;

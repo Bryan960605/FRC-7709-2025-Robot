@@ -83,21 +83,17 @@ public class TrackLeftReef extends Command {
       // Y-PID calculations
       yPidMeasurements = m_PhotonVisionSubsystem.getYPidMeasurements_FrontRight();
       yPidError = Math.abs(yPidMeasurements - PhotonConstants.yPidSetPoint_LeftReef);
-      yPidMeasurements = (yPidError > 0.01) ? yPidMeasurements : PhotonConstants.yPidSetPoint_LeftReef;
+      yPidMeasurements = (yPidError > 0.02) ? yPidMeasurements : PhotonConstants.yPidSetPoint_LeftReef;
       yPidOutput = -yPidController.calculate(yPidMeasurements, PhotonConstants.yPidSetPoint_LeftReef);
       yPidOutput = Constants.setMaxOutput(yPidOutput, PhotonConstants.yPidMaxOutput_Reef);
-      if(rotationPidController.getError()<0.5 && yPidController.getError()<0.05){
-        // X-PID calculations
-        xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontRight();
-        xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_LeftReef);
-        xPidMeasurements = (xPidError > 0.05) ? xPidMeasurements : PhotonConstants.xPidSetPoint_LeftReef;
-        xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_LeftReef);
-        xPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.xPidSetPoint_LeftReef);
-        if(xPidController.getError()<0.05) SmartDashboard.putBoolean("Align/LeftReefAlign", true);
-        else SmartDashboard.putBoolean("Align/LeftReefAlign", false);
-      }else{
-        xPidOutput = 0;
-      }
+      // X-PID calculations
+      xPidMeasurements = m_PhotonVisionSubsystem.getXPidMeasurements_FrontRight();
+      xPidError = Math.abs(xPidMeasurements - PhotonConstants.xPidSetPoint_LeftReef);
+      xPidMeasurements = (xPidError > 0.02) ? xPidMeasurements : PhotonConstants.xPidSetPoint_LeftReef;
+      xPidOutput = -xPidController.calculate(xPidMeasurements, PhotonConstants.xPidSetPoint_LeftReef);
+      xPidOutput = Constants.setMaxOutput(xPidOutput, PhotonConstants.xPidSetPoint_LeftReef);
+      // if(xPidController.getError()<0.05) SmartDashboard.putBoolean("Align/LeftReefAlign", true);
+      // else SmartDashboard.putBoolean("Align/LeftReefAlign", false);
     }else {
       xPidOutput = 0;
       yPidOutput = 0;

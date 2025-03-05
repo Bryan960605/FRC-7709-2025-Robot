@@ -33,7 +33,8 @@ public class EndEffectorSubsystem extends SubsystemBase {
   private final TalonFX intakewheel;
   private final TalonFX intakeArm;
   private final CANcoder armAbsolutedEncoder;
-  private final DigitalInput irSensor_Coral;
+  private final DigitalInput irSensor_CoralFirst;
+  private final DigitalInput irSensor_CoralSecond;
   private final DigitalInput irSensor_Algae;
 
   private final TalonFXConfiguration wheelConfig;
@@ -69,7 +70,8 @@ public class EndEffectorSubsystem extends SubsystemBase {
       intakewheel = new TalonFX(EndEffectorConstants.intakeWheel_ID);
       intakeArm = new TalonFX(EndEffectorConstants.intakeArm_ID);
       armAbsolutedEncoder = new CANcoder(EndEffectorConstants.armAbsolutedEncoder_ID);
-      irSensor_Coral = new DigitalInput(EndEffectorConstants.irSensor_Coral_ID);
+      irSensor_CoralFirst = new DigitalInput(EndEffectorConstants.irSensor_CoralFirst_ID);
+      irSensor_CoralSecond = new DigitalInput(EndEffectorConstants.irSensor_CoralSecond_ID);
       irSensor_Algae = new DigitalInput(EndEffectorConstants.irSensor_Algae_ID);
       arriveAngle = EndEffectorConstants.primitiveAngle;
       timer_Coral = new Timer();
@@ -139,6 +141,10 @@ public class EndEffectorSubsystem extends SubsystemBase {
   
     public void intakeCoral_Wheel() {
       intakewheel.setControl(request_EndEffectorSpeed.withVelocity(EndEffectorConstants.coralInSpeed_RotionPerSecond));
+    }
+
+    public void intakeCoralSlow_Wheel() {
+      intakewheel.setControl(request_EndEffectorSpeed.withVelocity(EndEffectorConstants.coralInSpeedSlow_RotationPerSecond));
     }
   
     public void outCoral_L1_Arm() {
@@ -265,8 +271,12 @@ public class EndEffectorSubsystem extends SubsystemBase {
       return Units.rotationsPerMinuteToRadiansPerSecond(armAbsolutedEncoder.getVelocity().getValueAsDouble()*60);
     }
   
+    public boolean shouldCoralSlow() {
+      return !irSensor_CoralSecond.get();
+    }
+
     public boolean hasCoral() {
-      return !irSensor_Coral.get();
+      return (irSensor_CoralFirst.get()) && (!irSensor_CoralSecond.get());
     }
 
     // public boolean hasCoral(){
