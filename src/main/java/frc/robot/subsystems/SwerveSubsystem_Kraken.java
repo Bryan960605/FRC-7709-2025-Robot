@@ -202,6 +202,13 @@ public class SwerveSubsystem_Kraken extends SubsystemBase {
     setModouleStates(states);
   }
 
+  public void stopMotor(){
+    leftBack.stopMotor();
+    leftFront.stopMotor();
+    rightBack.stopMotor();
+    rightFront.stopMotor();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

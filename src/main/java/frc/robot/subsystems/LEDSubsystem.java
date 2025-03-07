@@ -16,6 +16,7 @@ import com.ctre.phoenix.led.CANdle.LEDStripType;
 import com.ctre.phoenix.led.CANdle.VBatOutputMode;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LEDConstants;
 
@@ -47,7 +48,7 @@ public class LEDSubsystem extends SubsystemBase {
   }
 
   public void fireAnimation() {
-    ledAnimation = new FireAnimation(0.6, 0.2, ledNum, 1, 0.2, false, 9);
+    ledAnimation = new FireAnimation(0.6, 0.2, ledNum, 1, 0.2, false, 0);
     candle.animate(ledAnimation);
     LEDConstants.LEDFlag = false;
   }
@@ -156,5 +157,7 @@ public class LEDSubsystem extends SubsystemBase {
     }
     // candle.animate(null);
     // candle.setLEDs(0, 0, 0);
+    SmartDashboard.putBoolean("LED/BaseArriveSetpoint", LEDConstants.arrivePosition_Base);
+    SmartDashboard.putBoolean("LED/ElevatorArriveSetpoint", LEDConstants.arrivePosition_Intake);
   }
 }

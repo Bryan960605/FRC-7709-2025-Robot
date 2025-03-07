@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 6.074249999999999,
+        "x": 5.95,
         "y": 4.030993852459016
       },
       "prevControl": {
-        "x": 5.824276121444179,
+        "x": 5.70002612144418,
         "y": 4.0273799847580225
       },
       "nextControl": null,
@@ -28,7 +28,12 @@
       "linkedName": "NearMiddle"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 180.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],

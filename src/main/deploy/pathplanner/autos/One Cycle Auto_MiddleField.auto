@@ -25,6 +25,12 @@
         {
           "type": "named",
           "data": {
+            "name": "stopMotor"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Coral_L4_Intake"
           }
         },

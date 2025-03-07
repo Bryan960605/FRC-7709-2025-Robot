@@ -74,7 +74,7 @@ public class TrackLeftReef_Auto extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_PhotonVisionSubsystem.hasFrontRightTarget()) {
+    if(m_PhotonVisionSubsystem.getFrontRightTargetID() == 10 || m_PhotonVisionSubsystem.getFrontRightTargetID() == 21) {
       // Rotation-PID calculations
       rotationPidMeasurements = m_PhotonVisionSubsystem.getRotationMeasurements_FrontRight();
       rotationPidError = Math.abs(rotationPidMeasurements - PhotonConstants.rotationPidSetPoint_LeftReef);
@@ -96,7 +96,10 @@ public class TrackLeftReef_Auto extends Command {
       // if(xPidController.getError()<0.05) SmartDashboard.putBoolean("Align/LeftReefAlign", true);
       // else SmartDashboard.putBoolean("Align/LeftReefAlign", false);
 
-      if(m_PhotonVisionSubsystem.isArrive_Reef("LeftReef")) {
+      if(Math.abs(rotationPidController.getError()) <1 &&
+         Math.abs(yPidController.getError())  < 0.1&&
+         Math.abs(xPidController.getError()) < 0.1)
+        {
         LEDConstants.arrivePosition_Base = true;
         LEDConstants.LEDFlag = true;
       }

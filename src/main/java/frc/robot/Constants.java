@@ -365,7 +365,7 @@ public final class Constants {
     public static final double netUpAngle = 82;
     public static final double algaeLowInAngle = 64;
     public static final double algaeHighInAngle = 64;
-    public static final double algaeProccesorAngle = 10;//not yet
+    public static final double algaeProccesorAngle = 7;//not yet
     
 
     public static final double coralL1OutVol = -1.5;
@@ -380,7 +380,7 @@ public final class Constants {
     public static final double algaeLowInVol = -4;
     public static final double algaeHighInVol = -4;
     public static final double algaeShootProcessorVol = 3;
-    public static final double algaeHoldVol = -1.5;  
+    public static final double algaeHoldVol = -2.5;  
     public static final double algaeOutVol = 6; 
   }
 

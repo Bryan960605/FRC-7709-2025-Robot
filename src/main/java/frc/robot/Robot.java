@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.DriverStation.MatchType;
@@ -28,6 +30,9 @@ public class Robot extends TimedRobot {
   public Robot() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+    DataLogManager.start();
+    DriverStation.startDataLog(DataLogManager.getLog());
+
     m_robotContainer = new RobotContainer();
     LEDConstants.fireAnimation = true;
     LEDConstants.normal = true;
@@ -70,6 +75,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+    LEDConstants.fireAnimation = false;
+    LEDConstants.LEDFlag = true;
   }
 
   /** This function is called periodically during autonomous. */
