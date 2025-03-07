@@ -16,6 +16,7 @@ import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.PhotonConstants;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PhotonVisionSubsystem;
 import frc.robot.subsystems.SwerveSubsystem_Kraken;
 import frc.robot.subsystems.SwerveSubsystem_Kraken;
@@ -66,7 +67,7 @@ public class TrackLeftReef extends Command {
     m_SwerveSubsystem.drive(0, 0, 0, false);
 
     LEDConstants.tracking = true;
-    LEDConstants.arrivePosition_Base = true;
+    LEDConstants.arrivePosition_Base = false;
     LEDConstants.LEDFlag = true;
   }
 
@@ -111,6 +112,7 @@ public class TrackLeftReef extends Command {
       yPidOutput = Constants.setMaxOutput(yPidOutput, PhotonConstants.yPidMaxOutput_NeedSlow_Reef);
       rotationPidOutput = Constants.setMaxOutput(rotationPidOutput, PhotonConstants.rotationPidMaxOutput_NeedSlow_Reef);
     }
+    SmartDashboard.putNumber("Photon/RotationPidOutput", rotationPidOutput);
     // Impl
     m_SwerveSubsystem.drive(xPidOutput, yPidOutput, rotationPidOutput, false);
       

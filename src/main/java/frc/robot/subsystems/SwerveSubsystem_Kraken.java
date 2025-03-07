@@ -74,8 +74,8 @@ public class SwerveSubsystem_Kraken extends SubsystemBase {
      gyro = new Pigeon2(Swerve_KrakenConstants.gyro_ID);
      gyroConfig = new Pigeon2Configuration();
 
-     gyroConfig.MountPose.MountPoseYaw = -90;
-     gyroConfig.MountPose.MountPosePitch = 6;
+     gyroConfig.MountPose.MountPoseYaw = 0;
+     gyroConfig.MountPose.MountPosePitch = 0;
      gyroConfig.MountPose.MountPoseRoll = 0;
 
      gyro.getConfigurator().apply(gyroConfig);
@@ -208,6 +208,8 @@ public class SwerveSubsystem_Kraken extends SubsystemBase {
     odometry.update(getRotation(), getModulesPosition());
     field.setRobotPose(odometry.getPoseMeters());
 
+    SmartDashboard.putNumber("Swerve/Yaw", gyro.getYaw().getValueAsDouble());
+
     SmartDashboard.putNumber("Swerve/gyro", getRotation().getDegrees());
     SmartDashboard.putNumber("Swerve/leftFrontAbsolutePosion", leftFront.getTurningPosition());
     SmartDashboard.putNumber("Swerve/leftBackAbsolutePosion", leftBack.getTurningPosition());
@@ -228,5 +230,7 @@ public class SwerveSubsystem_Kraken extends SubsystemBase {
     
     SmartDashboard.putNumber("Swerve/leftFrontStateAngle", leftFront.getStateAngle());
     SmartDashboard.putNumber("Swerve/leftFrontAngle", leftFront.getTurningAngle());
+
+    SmartDashboard.putNumber("Swerve/GyroYaw", gyro.getYaw().getValueAsDouble());
   }
 }

@@ -44,7 +44,7 @@ public class PrimitiveIntake extends Command {
       LEDConstants.arrivePosition_Intake = false;
       LEDConstants.hasGamePiece = true;
       LEDConstants.LEDFlag = true;
-    }else if(m_EndEffectorSubsystem.hasCoral() && Math.abs(m_ElevatorSubsystem.getCurrentPosition() - ElevatorConstants.coralL4Position) <= 1) {
+    }else if(m_EndEffectorSubsystem.hasCoral() && Math.abs(m_ElevatorSubsystem.getCurrentPosition() - ElevatorConstants.coralL4Position) <= 2) {
       m_EndEffectorSubsystem.primitiveArm_HasCoral();
       m_EndEffectorSubsystem.stopWheel();
       if(m_EndEffectorSubsystem.arrivedSetpoint()) {
@@ -66,6 +66,7 @@ public class PrimitiveIntake extends Command {
 
       LEDConstants.intakeArriving = false;
       LEDConstants.arrivePosition_Intake = false;
+      LEDConstants.hasGamePiece = false;
       LEDConstants.LEDFlag = true;
     }
   }

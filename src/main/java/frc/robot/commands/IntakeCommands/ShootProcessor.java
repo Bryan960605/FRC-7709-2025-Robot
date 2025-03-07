@@ -49,7 +49,7 @@ public class ShootProcessor extends Command {
     if(m_EndEffectorSubsystem.arrivedSetpoint() && ifFeed) {
       m_EndEffectorSubsystem.Wheel_shootAlgae_Processor();
     }
-    if(m_ElevatorSubsystem.arriveSetPoint() && m_EndEffectorSubsystem.arrivedSetpoint()) {
+    if(m_EndEffectorSubsystem.arrivedSetpoint()) {
       LEDConstants.arrivePosition_Intake = true;
       LEDConstants.LEDFlag = true;
     }else {

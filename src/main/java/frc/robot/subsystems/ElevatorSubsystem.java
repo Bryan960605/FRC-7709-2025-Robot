@@ -125,7 +125,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void periodic() {
     elevator_FirstMotor.setControl(request_Elevator.withPosition(goalPosition));
 
-    if (getCurrentPosition() <= 20) {
+    if (getCurrentPosition() <= 30) {
       ElevatorConstants.arriveLow = true;
     }else{
       ElevatorConstants.arriveLow = false;

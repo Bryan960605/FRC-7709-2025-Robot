@@ -63,7 +63,7 @@ public class ShootNet extends Command {
         }
       }
     }
-    if (m_ElevatorSubsystem.arriveSetPoint() && ifFeed) {
+    if (ifFeed) {
       m_EndEffectorSubsystem.Wheel_shootAlgae_NET();
     }else {
       m_EndEffectorSubsystem.holdAlgae();

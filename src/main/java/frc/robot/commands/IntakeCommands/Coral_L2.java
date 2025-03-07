@@ -51,7 +51,7 @@ public class Coral_L2 extends Command {
 
     ifFeed = ifFeedFunc.getAsBoolean();
 
-    if(m_Elevator.arriveSetPoint() && ifFeed) {
+    if((ifFeed) || (LEDConstants.arrivePosition_Intake && LEDConstants.arrivePosition_Base)) {
       m_EndEffector.Wheel_shootCoral_L2();
     }else {
       m_EndEffector.stopWheel();
@@ -63,12 +63,6 @@ public class Coral_L2 extends Command {
     }else {
       LEDConstants.arrivePosition_Intake = false;
       LEDConstants.LEDFlag = true;
-    }
-
-    if((LEDConstants.arrivePosition_Intake) && LEDConstants.arrivePosition_Base) {
-      m_EndEffector.Wheel_shootCoral_L2();
-    }else {
-      m_EndEffector.stopWheel();
     }
 
   }

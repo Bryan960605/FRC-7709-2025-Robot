@@ -26,6 +26,7 @@ import edu.wpi.first.math.numbers.N8;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.LEDConstants;
 import frc.robot.Constants.PhotonConstants;
 
 public class PhotonVisionSubsystem extends SubsystemBase {
@@ -198,7 +199,7 @@ public class PhotonVisionSubsystem extends SubsystemBase {
 
   public double getYError_Reef(String reef) {
     if(reef == "RightReef") return Math.abs(getYMeasurements_FrontLeft() - PhotonConstants.yPidSetPoint_RightReef);
-    else return Math.abs(getXMeasurements_FrontRight() - PhotonConstants.yPidSetPoint_LeftReef);
+    else return Math.abs(getYMeasurements_FrontRight() - PhotonConstants.yPidSetPoint_LeftReef);
   }
 
   public double getRotationError_Reef(String reef) {
@@ -208,10 +209,10 @@ public class PhotonVisionSubsystem extends SubsystemBase {
 
   public boolean isArrive_Reef(String reef) {
     if(reef == "rightReef") {
-      if((getXError_Reef("RightReef")) <= 0.02 && (getYError_Reef("RightReef") <= 0.02) && (getRotationError_Reef("RightReef") <= 0.5)) return true;
+      if((getXError_Reef("RightReef")) <= 0.03 && (getYError_Reef("RightReef") <= 0.03) && (getRotationError_Reef("RightReef") <= 0.75) && hasFrontLeftTarget()) return true;
       else return false;
     }else {
-      if((getXError_Reef("LeftReef")) <= 0.02 && (getYError_Reef("LeftReef") <= 0.02) && (getRotationError_Reef("LeftReef") <= 0.5)) return true;
+      if((getXError_Reef("LeftReef")) <= 0.02 && (getYError_Reef("LeftReef") <= 0.02) && (getRotationError_Reef("LeftReef") <= 0.5) && hasFrontRightTarget()) return true;
       else return false;
     }
   }
@@ -290,6 +291,9 @@ public class PhotonVisionSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("Photon/botYMeasurements_FrontRight", botYMeasurements_FrontRight);
       SmartDashboard.putNumber("Photon/botRotationMeasurements_FrontRight", botRotationMeasurements_FrontRight);
       SmartDashboard.putNumber("Photon/FrontRightTarget_ID", frontRightTarget_ID);
+      SmartDashboard.putNumber("Photon/botXError_FrontRight", getXError_Reef("FrontRight"));
+      SmartDashboard.putNumber("Photon/botYError_FrontRight", getYError_Reef("FrontRight"));
+      SmartDashboard.putNumber("Photon/botRotationError_FrontRight", getRotationError_Reef("FrontRight"));
 
     }else {
       botXMeasurements_FrontRight = 0;
@@ -333,5 +337,19 @@ public class PhotonVisionSubsystem extends SubsystemBase {
       botRotationMeasurements_Back = 0;
       backTarget_ID = 0;
     }
+    if(LEDConstants.hasGamePiece && hasFrontRightTarget()) {
+      LEDConstants.canTrackLeft = true;
+      LEDConstants.LEDFlag = true;
+    }else {
+      LEDConstants.canTrackLeft = false;
+      LEDConstants.LEDFlag = true;
+    }
+    if(LEDConstants.hasGamePiece && hasFrontLeftTarget()) {
+      LEDConstants.canTrackRight = true;
+      LEDConstants.LEDFlag = true;
+    }else {
+      LEDConstants.canTrackRight = false;
+      LEDConstants.LEDFlag = true;
+    }   
   }
 }

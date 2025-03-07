@@ -69,13 +69,7 @@ public class Coral_L3 extends Command {
       } 
     }
   
-    if(m_ElevatorSubsystem.arriveSetPoint() && ifFeed) {
-      m_EndEffectorSubsystem.Wheel_shootCoral_L3();
-    }else {
-      m_EndEffectorSubsystem.stopWheel();
-    }
-
-    if((LEDConstants.arrivePosition_Intake) && LEDConstants.arrivePosition_Base) {
+    if((ifFeed) || (LEDConstants.arrivePosition_Intake && LEDConstants.arrivePosition_Base)) {
       m_EndEffectorSubsystem.Wheel_shootCoral_L3();
     }else {
       m_EndEffectorSubsystem.stopWheel();

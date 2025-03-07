@@ -44,7 +44,7 @@ public class Coral_L1 extends Command {
       m_EndEffector.Arm_shootCoral_L1();
     }
     // Shoot when you ready
-    if(m_Elevator.arriveSetPoint() && ifFeed) m_EndEffector.Wheel_shootCoral_L1();
+    if(ifFeed) m_EndEffector.Wheel_shootCoral_L1();
     else m_EndEffector.stopWheel();
 
     // LED controller
@@ -56,12 +56,6 @@ public class Coral_L1 extends Command {
       LEDConstants.LEDFlag = true;
     }
 
-    // Shoot when robot ready
-    if((LEDConstants.arrivePosition_Intake) && LEDConstants.arrivePosition_Base) {
-      m_EndEffector.Wheel_shootCoral_L1();
-    }else {
-      m_EndEffector.stopWheel();
-    }
   }
 
   // Called once the command ends or is interrupted.

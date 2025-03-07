@@ -101,10 +101,10 @@ public final class Constants {
     public static final int rightFrontAbsolutedEncoder_ID = 43;
     public static final int rightBackAbsolutedEncoder_ID = 44;
 
-    public static final double leftFrontOffset = -0.342285;
-    public static final double leftBackOffset = 0.144287;
-    public static final double rightFrontOffset = -0.27856;
-    public static final double rightBackOffset = 0.155029;
+    public static final double leftFrontOffset = -0.352806;
+    public static final double leftBackOffset = 0.138427;
+    public static final double rightFrontOffset = -0.280517;
+    public static final double rightBackOffset = 0.161621;
     public static final int gyro_ID = 56;
 
     public static final double wheelDiameterMeters = Units.inchesToMeters(4);
@@ -132,11 +132,11 @@ public final class Constants {
       new Translation2d(-kModuleDistance/2, -kModuleDistance/2)
     );
 
-    public static final double pathingMoving_Kp = 0;
+    public static final double pathingMoving_Kp = 5;
     public static final double pathingMoving_Ki = 0;
     public static final double pathingMoving_Kd = 0;
 
-    public static final double pathingtheta_Kp = 0;
+    public static final double pathingtheta_Kp = 0.6;
     public static final double pathingtheta_Ki = 0;
     public static final double pathingtheta_Kd = 0;
 
@@ -155,11 +155,11 @@ public final class Constants {
 
     public static final double yPidController_Kp = 0.6;
     public static final double yPidController_Ki = 0;
-    public static final double yPidController_Kd = 0.001;
+    public static final double yPidController_Kd = 0.0015;
 
-    public static final double rotationPidController_Kp = 0.004;
+    public static final double rotationPidController_Kp = 0.0015;
     public static final double rotationPidController_Ki = 0;
-    public static final double rotationPidController_Kd = 0.0005;
+    public static final double rotationPidController_Kd = 0.000;
 
     public static final double xPidMaxOutput = 0.4;
     public static final double yPidMaxOutput = 0.4;
@@ -168,12 +168,12 @@ public final class Constants {
     public static final double yPidMaxOutput_NeedSlow = 0.2;
     public static final double rotationPidMaxOutput_NeedSlow = 0.2;
 
-    public static final double xPidMaxOutput_Reef = 0.4;
-    public static final double yPidMaxOutput_Reef = 0.4;
-    public static final double rotationPidMaxOutput_Reef = 0.4;
+    public static final double xPidMaxOutput_Reef = 0.3;
+    public static final double yPidMaxOutput_Reef = 0.3;
+    public static final double rotationPidMaxOutput_Reef = 0.3;
     public static final double xPidMaxOutput_NeedSlow_Reef= 0.2;
     public static final double yPidMaxOutput_NeedSlow_Reef = 0.2;
-    public static final double rotationPidMaxOutput_NeedSlow_Reef = 0.2;
+    public static final double rotationPidMaxOutput_NeedSlow_Reef = 0.1;
 
     public static final double xPidMaxOutput_CoralStation = 0.4;
     public static final double yPidMaxOutput_CoralStation = 0.4;
@@ -203,13 +203,13 @@ public final class Constants {
     public static final double yPidMaxOutput_NeedSlow_Processor = 0.2;
     public static final double rotationPidMaxOutput_NeedSlow_Processor = 0.2;
 
-    public static final double xPidSetPoint_RightReef = 0.45; 
-    public static final double yPidSetPoint_RightReef = -0.14;
-    public static final double rotationPidSetPoint_RightReef = 183;
+    public static final double xPidSetPoint_RightReef = 0.428; 
+    public static final double yPidSetPoint_RightReef = -0.127;
+    public static final double rotationPidSetPoint_RightReef = 181;
 
-    public static final double xPidSetPoint_LeftReef = 0.446;
-    public static final double yPidSetPoint_LeftReef = 0.1102;
-    public static final double rotationPidSetPoint_LeftReef = 183.4;
+    public static final double xPidSetPoint_LeftReef = 0.445;
+    public static final double yPidSetPoint_LeftReef = 0.125;
+    public static final double rotationPidSetPoint_LeftReef = 181.2;
 
     public static final double xPidSetPoint_MiddleReef_FrontRight = 0;
     public static final double yPidSetPoint_MiddleReef_FrontRight = 0;
@@ -358,7 +358,7 @@ public final class Constants {
     public static final double coralL2Angle = 75;
     public static final double coralL3Angle = 82;
     public static final double coralL4Angle = 56;//not yet
-    public static final double coralStationAngle = 79;
+    public static final double coralStationAngle = 76;
     public static final double coralL4UpAngle = 70;
     public static final double algaeFloorAngle = 7;
     public static final double algaeNetAngle = 100;//not yet
@@ -407,21 +407,28 @@ public final class Constants {
   }
 
   public class LEDConstants {
-    public static final int candle_ID = 0;
+    public static final int candle_ID = 46;
 
-    public static final int ledNum = 24;
+    public static final int ledNum = 32;
 
     public static boolean LEDFlag = false;
     public static boolean hasGamePiece = false;
     public static boolean intakeGamePiece = false;
     public static boolean tracking = false;
     public static boolean arrivePosition_Intake = false;
+    public static boolean hasFrontRightTarget = false;
+    public static boolean hasFrontLeftTarget = false;
+    public static boolean canTrackLeft = false;
+    public static boolean canTrackRight = false;
+    public static boolean noTarget = false;
     public static boolean intakeArriving = false;
     public static boolean arrivePosition_Base = false;
     public static boolean shootGamePiece = false;
     public static boolean onCage = false;
     public static boolean climbing = false;
     public static boolean fireAnimation = false;
+    public static boolean normal = false;
+
 
   }
 

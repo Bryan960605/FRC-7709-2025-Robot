@@ -12,11 +12,12 @@ import frc.robot.commands.ManualDrive_Kraken;
 // import frc.robot.commands.ArmTest_IntakeAlgae_Floor;
 // import frc.robot.commands.ArmTest_IntakeCoral;
 import frc.robot.commands.ManualDrive_Neo;
-import frc.robot.commands.AutoCommand.Coral_L3_Auto_LeftReef;
-import frc.robot.commands.AutoCommand.Coral_L3_Auto_RightReef;
-import frc.robot.commands.AutoCommand.Coral_L4_Auto_LeftReef;
-import frc.robot.commands.AutoCommand.Coral_L4_Auto_RightReef;
+import frc.robot.commands.AutoCommand.Coral_L4_Elevator;
 import frc.robot.commands.AutoCommand.FeedCoral_Auto;
+import frc.robot.commands.AutoCommand.PrimitiveIntake_Auto;
+import frc.robot.commands.AutoCommand.ShootCoral_Auto;
+import frc.robot.commands.AutoCommand.TrackLeftReef_Auto;
+import frc.robot.commands.AutoCommand.TurnSome;
 // import frc.robot.commands.AutoCommand.Coral_L3_Auto_LeftReef;
 // import frc.robot.commands.AutoCommand.Coral_L3_Auto_RightReef;
 // import frc.robot.commands.AutoCommand.Coral_L4_Auto_LeftReef;
@@ -25,9 +26,7 @@ import frc.robot.commands.AutoCommand.FeedCoral_Auto;
 import frc.robot.commands.IntakeCommands.Coral_L1;
 // import frc.robot.commands.IntakeCommands.Coral_L1_Auto;
 import frc.robot.commands.IntakeCommands.Coral_L2;
-import frc.robot.commands.IntakeCommands.Coral_L2_Auto;
 import frc.robot.commands.IntakeCommands.Coral_L3;
-import frc.robot.commands.IntakeCommands.Coral_L3_Auto;
 import frc.robot.commands.IntakeCommands.Coral_L4;
 // import frc.robot.commands.IntakeCommands.Coral_L4_Auto;
 import frc.robot.commands.IntakeCommands.IntakeAlgae_Floor;
@@ -50,6 +49,7 @@ import frc.robot.commands.TrackCommands.TrackMiddleReef;
 // import frc.robot.commands.IntakeCommands.TurnMore;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.PhotonVisionSubsystem;
 import frc.robot.subsystems.SwerveSubsystem_Kraken;
 import frc.robot.subsystems.SwerveSubsystem_Neo;
@@ -80,6 +80,7 @@ public class RobotContainer {
   // private final SwerveSubsystem_Neo m_SwerveSubsystem_Neo = new SwerveSubsystem_Neo(m_PhotonVisionSubsystem);
   private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   private final EndEffectorSubsystem m_EndEffectorSubsystem = new EndEffectorSubsystem();
+  private final LEDSubsystem m_LEDSubsystem = new LEDSubsystem(); 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
@@ -91,19 +92,26 @@ public class RobotContainer {
 
   public RobotContainer() {
     // Configure the trigger bindings
-    autoChooser = AutoBuilder.buildAutoChooser();
-    configureBindings();
-    SmartDashboard.putData("Auto Mode", autoChooser);
+    
 
-    NamedCommands.registerCommand("Coral_L3_Left", new Coral_L3_Auto_LeftReef(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem));
-    NamedCommands.registerCommand("Coral_L3_Right", new Coral_L3_Auto_RightReef(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem));
-    NamedCommands.registerCommand("Coral_L4_Left", new Coral_L4_Auto_LeftReef(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem));
-    NamedCommands.registerCommand("Coral_L4_RightReef", new Coral_L4_Auto_RightReef(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem));
-    NamedCommands.registerCommand("PrimitiveIntake", new PrimitiveIntake(m_ElevatorSubsystem, m_EndEffectorSubsystem));
+    // NamedCommands.registerCommand("Coral_L3_Left", new Coral_L3_Auto_LeftReef(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem));
+    // NamedCommands.registerCommand("Coral_L3_Right", new Coral_L3_Auto_RightReef(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem));
+    // NamedCommands.registerCommand("TrackLeftReef", new TrackLeftReef_Auto(m_PhotonVisionSubsystem, m_SwerveSubsystem).withTimeout(5));
+    // NamedCommands.registerCommand("Coral_L4_RightReef", new Coral_L4_Auto_RightReef(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem));
+    NamedCommands.registerCommand("PrimitiveIntake", new PrimitiveIntake_Auto(m_ElevatorSubsystem, m_EndEffectorSubsystem).withTimeout(3));
+    NamedCommands.registerCommand("Coral_L4_Intake", new Coral_L4_Elevator(m_ElevatorSubsystem, m_EndEffectorSubsystem).withTimeout(3));
+    NamedCommands.registerCommand("IntakeCoral_IDLE", new IntakeCoral(m_ElevatorSubsystem, m_EndEffectorSubsystem).withTimeout(1));
+    NamedCommands.registerCommand("TrackReef_Auto", new TrackLeftReef_Auto(m_PhotonVisionSubsystem, m_SwerveSubsystem).withTimeout(2));
+    NamedCommands.registerCommand("ShootCoral_Auto", new ShootCoral_Auto(m_EndEffectorSubsystem).withTimeout(1));
     // NamedCommands.registerCommand("TrackLeftReef", new TrackLeftReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
     // NamedCommands.registerCommand("TrackRightReef", new TrackRightReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
     // NamedCommands.registerCommand("TrackMiddleReef", new TrackMiddleReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
     NamedCommands.registerCommand("FeedCoral", new FeedCoral_Auto(m_EndEffectorSubsystem).withTimeout(2));
+    NamedCommands.registerCommand("TurnSome", new TurnSome(m_EndEffectorSubsystem));
+
+    autoChooser = AutoBuilder.buildAutoChooser();
+    configureBindings();
+    SmartDashboard.putData("Auto Mode", autoChooser);
   }
 
   /**
@@ -151,8 +159,8 @@ public class RobotContainer {
     operatorController.a().toggleOnTrue(new PrimitiveIntake(m_ElevatorSubsystem, m_EndEffectorSubsystem));
     operatorController.b().toggleOnTrue(new IntakeCoral(m_ElevatorSubsystem, m_EndEffectorSubsystem));
     operatorController.y().toggleOnTrue(new ShootNet(m_ElevatorSubsystem, m_EndEffectorSubsystem, ifFeed));
-    operatorController.axisGreaterThan(1, 0.6).whileTrue(new OutAlgae(m_EndEffectorSubsystem));
-    operatorController.axisGreaterThan(5, 0.6).whileTrue(new TurnMore(m_EndEffectorSubsystem));
+    operatorController.axisGreaterThan(5, 0.6).whileTrue(new OutAlgae(m_EndEffectorSubsystem));
+    operatorController.axisGreaterThan(1, 0.6).whileTrue(new TurnMore(m_EndEffectorSubsystem));
 
     m_SwerveSubsystem.setDefaultCommand(new ManualDrive_Kraken(m_SwerveSubsystem, xSpeedFunc, ySpeedFunc, zSpeedFunc, isSlowFunc));
   }

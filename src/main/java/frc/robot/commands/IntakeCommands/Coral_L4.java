@@ -30,9 +30,7 @@ public class Coral_L4 extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // m_ElevatorSubsystem.outCoral_L4();
-    // m_EndEffectorSubsystem.Arm_shootCoral_L4();
-    m_EndEffectorSubsystem.coralL4Primitive_Arm();;
+    m_EndEffectorSubsystem.coralL4Primitive_Arm();
 
 
     LEDConstants.intakeArriving = true;
@@ -58,14 +56,8 @@ public class Coral_L4 extends Command {
           LEDConstants.LEDFlag = true;
         }
       }
-    }
-    if(m_ElevatorSubsystem.arriveSetPoint() && ifFeed) {
-      m_EndEffectorSubsystem.Wheel_shootCoral_L4();
-    }else {
-      m_EndEffectorSubsystem.stopWheel();
-    }
-
-    if((LEDConstants.arrivePosition_Intake) && LEDConstants.arrivePosition_Base) {
+  }
+    if((ifFeed) || (LEDConstants.arrivePosition_Intake && LEDConstants.arrivePosition_Base)) {
       m_EndEffectorSubsystem.Wheel_shootCoral_L4();
     }else {
       m_EndEffectorSubsystem.stopWheel();
