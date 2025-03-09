@@ -205,12 +205,18 @@ public class EndEffectorSubsystem extends SubsystemBase {
       return m_Debouncer.calculate(irSensor_CoralSecond.get());
     }
 
+    public boolean shouldCoralSlow() {return !getFirstIR() && !getSecondIR();}
 
-    public boolean shouldCoralSlow() {return !irSensor_CoralSecond.get() && !irSensor_CoralFirst.get();}
+    public boolean canUp() {return getFirstIR();}
 
-    public boolean canUp() {return irSensor_CoralFirst.get();}
+    public boolean hasCoral() {return (getFirstIR()) && (!getSecondIR());}
 
-    public boolean hasCoral() {return (irSensor_CoralFirst.get()) && (!irSensor_CoralSecond.get());}
+
+    // public boolean shouldCoralSlow() {return !irSensor_CoralSecond.get() && !irSensor_CoralFirst.get();}
+
+    // public boolean canUp() {return irSensor_CoralFirst.get();}
+
+    // public boolean hasCoral() {return (irSensor_CoralFirst.get()) && (!irSensor_CoralSecond.get());}
   
     public boolean hasAlgae() {
       return wheelOverCurrent();
@@ -257,7 +263,6 @@ public class EndEffectorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("EndEffector/AbsolutedArmPosition", getAbsolutePosition());
     SmartDashboard.putNumber("EndEffector/ArmAngle", getAngle());
     SmartDashboard.putNumber("EndEffector/getPosition", getPosition());
-    SmartDashboard.putString("Mode", Mode.nowMode);
     SmartDashboard.putNumber("EndEffector Current", intakewheel.getStatorCurrent().getValueAsDouble());
   }
 }
