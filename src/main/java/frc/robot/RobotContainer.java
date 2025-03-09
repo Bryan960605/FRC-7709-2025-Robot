@@ -35,6 +35,7 @@ import frc.robot.commands.IntakeCommands.IntakeAlgae_Low;
 import frc.robot.commands.IntakeCommands.IntakeCoral;
 import frc.robot.commands.IntakeCommands.OutAlgae;
 import frc.robot.commands.IntakeCommands.PrimitiveIntake;
+import frc.robot.commands.IntakeCommands.PrimitiveIntake_Algae;
 // import frc.robot.commands.IntakeCommands.OutAlgae;
 // import frc.robot.commands.IntakeCommands.PrimitiveIntake;
 import frc.robot.commands.IntakeCommands.ShootNet;
@@ -99,7 +100,7 @@ public class RobotContainer {
     // NamedCommands.registerCommand("TrackLeftReef", new TrackLeftReef_Auto(m_PhotonVisionSubsystem, m_SwerveSubsystem).withTimeout(5));
     // NamedCommands.registerCommand("Coral_L4_RightReef", new Coral_L4_Auto_RightReef(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem));
     NamedCommands.registerCommand("stopMotor", Commands.runOnce(() -> m_SwerveSubsystem.stopMotor(), m_SwerveSubsystem));
-    NamedCommands.registerCommand("PrimitiveIntake", new PrimitiveIntake_Auto(m_ElevatorSubsystem, m_EndEffectorSubsystem).withTimeout(3));
+    NamedCommands.registerCommand("PrimitiveIntake", new PrimitiveIntake_Auto(m_ElevatorSubsystem, m_EndEffectorSubsystem).withTimeout(1));
     NamedCommands.registerCommand("Coral_L4_Intake", new Coral_L4_Elevator(m_ElevatorSubsystem, m_EndEffectorSubsystem).withTimeout(3));
     NamedCommands.registerCommand("IntakeCoral_IDLE", new IntakeCoral(m_ElevatorSubsystem, m_EndEffectorSubsystem).withTimeout(1));
     NamedCommands.registerCommand("TrackReef_Auto", new TrackLeftReef_Auto(m_PhotonVisionSubsystem, m_SwerveSubsystem).withTimeout(2));
@@ -156,7 +157,8 @@ public class RobotContainer {
     operatorController.pov(90).toggleOnTrue(new IntakeAlgae_Floor(m_ElevatorSubsystem, m_EndEffectorSubsystem));
     operatorController.rightTrigger().toggleOnTrue(new IntakeAlgae_Low(m_ElevatorSubsystem, m_EndEffectorSubsystem));
     operatorController.rightBumper().toggleOnTrue(new IntakeAlgae_High(m_ElevatorSubsystem, m_EndEffectorSubsystem));
-
+    
+    operatorController.x().toggleOnTrue(new PrimitiveIntake_Algae(m_EndEffectorSubsystem, m_ElevatorSubsystem));
     operatorController.a().toggleOnTrue(new PrimitiveIntake(m_ElevatorSubsystem, m_EndEffectorSubsystem));
     operatorController.b().toggleOnTrue(new IntakeCoral(m_ElevatorSubsystem, m_EndEffectorSubsystem));
     operatorController.y().toggleOnTrue(new ShootNet(m_ElevatorSubsystem, m_EndEffectorSubsystem, ifFeed));

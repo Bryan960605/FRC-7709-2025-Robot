@@ -19,7 +19,10 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.util.datalog.BooleanLogEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -56,7 +59,8 @@ public class EndEffectorSubsystem extends SubsystemBase {
   private double output;
   private double arriveAngle;
 
-  
+  private Debouncer m_Debouncer;
+
     public EndEffectorSubsystem() {
       // Motor controller
       intakewheel = new TalonFX(EndEffectorConstants.intakeWheel_ID);
@@ -123,6 +127,9 @@ public class EndEffectorSubsystem extends SubsystemBase {
       armPID = new PIDController(EndEffectorConstants.armPID_Kp, EndEffectorConstants.armPID_Ki, EndEffectorConstants.armPID_Kd);
       armFeedforward = new ArmFeedforward(EndEffectorConstants.armFeedforward_Ks, EndEffectorConstants.armFeedforward_Kg, EndEffectorConstants.armFeedforward_Kv);
       // armPID.setIntegratorRange(EndEffectorConstants.armPIDMinOutput, EndEffectorConstants.armPIDMaxOutput);
+
+      // Init debouncer
+      m_Debouncer = new Debouncer(0.2);
     }
   
     // ======== Arm ========
@@ -191,6 +198,14 @@ public class EndEffectorSubsystem extends SubsystemBase {
     }
     
     // IR sensor
+    public Boolean getFirstIR() {
+      return m_Debouncer.calculate(irSensor_CoralFirst.get());
+    }
+    public Boolean getSecondIR() {
+      return m_Debouncer.calculate(irSensor_CoralSecond.get());
+    }
+
+
     public boolean shouldCoralSlow() {return !irSensor_CoralSecond.get() && !irSensor_CoralFirst.get();}
 
     public boolean canUp() {return irSensor_CoralFirst.get();}
@@ -235,6 +250,8 @@ public class EndEffectorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("EndEffector/feedforwardOutput", feedforwardOutput);
     SmartDashboard.putNumber("EndEffector/Output", output);
     SmartDashboard.putBoolean("EndEffector/arrivedSetpoint", arrivedSetpoint());
+    SmartDashboard.putBoolean("EndEffector/First IR", getFirstIR());
+    SmartDashboard.putBoolean("EndEffector/Second IR", getSecondIR());
     SmartDashboard.putBoolean("EndEffector/hasCoral", hasCoral());
     SmartDashboard.putBoolean("EndEffector/HasSensorAlgae", hasAlgae());
     SmartDashboard.putNumber("EndEffector/AbsolutedArmPosition", getAbsolutePosition());

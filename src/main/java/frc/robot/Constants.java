@@ -282,18 +282,18 @@ public final class Constants {
     public static final int elevator_SecondMotor_ID = 7;
 
     public static final double primitivePosition = -0.2;//-0.14
-    public static final double coralL1Position = 4.44;//3.72
-    public static final double coralL2Position = 11.94;//7.42
-    public static final double coralL3Position = 22.04;//21.42
-    public static final double coralL4Position = 43.84;//42.52
+    public static final double coralL1Position = 4;//3.72
+    public static final double coralL2Position = 11.44;//7.42
+    public static final double coralL3Position = 21.54;//21.42
+    public static final double coralL4Position = 43.34;//42.52
     public static final double coralStationPosition = -0.2;//0.12
 
     public static final double algaeFloorPosition = -0.2;//0.12
-    public static final double algaeNetPosition = 46.2;//0.12
-    public static final double algaeL2Position = 3.34;//3.82
-    public static final double algaeL3Position = 16.5;//15.82
+    public static final double algaeNetPosition = 45.7;//0.12
+    public static final double algaeL2Position = 2.84;//3.82
+    public static final double algaeL3Position = 16;//15.82
 
-    public static final double algaeProccesorPosition = 0.13;//0.12
+    public static final double algaeProccesorPosition = -0.2;//0.12
 
     public static boolean arriveLow = false;
   }
@@ -365,22 +365,22 @@ public final class Constants {
     public static final double netUpAngle = 82;
     public static final double algaeLowInAngle = 64;
     public static final double algaeHighInAngle = 64;
-    public static final double algaeProccesorAngle = 7;//not yet
+    public static final double algaeProccesorAngle = 9;//not yet
     
 
-    public static final double coralL1OutVol = -1.5;
-    public static final double coralL2OutVol = -3;
-    public static final double coralL3OutVol = -3;
+    public static final double coralL1OutVol = -3.5;
+    public static final double coralL2OutVol = -2;
+    public static final double coralL3OutVol = -2;
     public static final double coralL4OutVol = -2;
     public static final double coralTurnMore = -0.5;
     public static final double coralInSpeed_RotionPerSecond = -32;
     public static final double coralInSpeedSlow_RotationPerSecond = -5;
-    public static final double algaeFloorInVol = -4;
+    public static final double algaeFloorInVol = -6;
     public static final double algaeShootNetVol = 6;
-    public static final double algaeLowInVol = -4;
-    public static final double algaeHighInVol = -4;
+    public static final double algaeLowInVol = -6;
+    public static final double algaeHighInVol = -6;
     public static final double algaeShootProcessorVol = 3;
-    public static final double algaeHoldVol = -2.5;  
+    public static final double algaeHoldVol = -4;  
     public static final double algaeOutVol = 6; 
   }
 

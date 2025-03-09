@@ -4,6 +4,7 @@
 
 package frc.robot.commands.IntakeCommands;
 
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -12,23 +13,22 @@ import frc.robot.subsystems.EndEffectorSubsystem;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class IntakeCoral extends Command {
   /** Creates a new IntakeCoral_Elevator. */
-  private final ElevatorSubsystem m_ElevatorSubsystem;
-  private final EndEffectorSubsystem m_EndEffectorSubsystem;
+  private final ElevatorSubsystem m_Elevator;
+  private final EndEffectorSubsystem m_EndEffector;
   
   public IntakeCoral(ElevatorSubsystem elevatorSubsystem, EndEffectorSubsystem endEffectorSubsystem) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    this.m_ElevatorSubsystem = elevatorSubsystem;
-    this.m_EndEffectorSubsystem = endEffectorSubsystem;
+    this.m_Elevator = elevatorSubsystem;
+    this.m_EndEffector = endEffectorSubsystem;
 
-    addRequirements(m_ElevatorSubsystem, m_EndEffectorSubsystem);
+    addRequirements(m_Elevator, m_EndEffector);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_ElevatorSubsystem.intakeCoral();
-    m_EndEffectorSubsystem.intakeCoral_Arm();
-    m_EndEffectorSubsystem.intakeCoral_Wheel();
+    m_Elevator.intakeCoral();
+    m_EndEffector.intakeCoral_Arm();
+    m_EndEffector.intakeCoral_Wheel();
 
     LEDConstants.intakeGamePiece = true;
     LEDConstants.hasGamePiece = false;
@@ -38,12 +38,14 @@ public class IntakeCoral extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_EndEffectorSubsystem.shouldCoralSlow()) {
-      m_EndEffectorSubsystem.intakeCoralSlow_Wheel();
-    }else {
-      m_EndEffectorSubsystem.intakeCoral_Wheel();
+    if(!m_EndEffector.getFirstIR() && !m_EndEffector.getSecondIR()) {
+      m_EndEffector.intakeCoralSlow_Wheel();
     }
-    if(m_EndEffectorSubsystem.hasCoral()) {
+    // else {
+    //   m_EndEffector.intakeCoral_Wheel();
+    // }
+    
+    if(m_EndEffector.getFirstIR() && !m_EndEffector.getSecondIR()) {
       LEDConstants.hasGamePiece = true;
       LEDConstants.LEDFlag = true;
     }else {
@@ -55,10 +57,11 @@ public class IntakeCoral extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_ElevatorSubsystem.toPrimitive();
-    m_EndEffectorSubsystem.Arm_IDLE();
-    m_EndEffectorSubsystem.stopWheel();
-    if(m_EndEffectorSubsystem.hasCoral()) {
+    m_Elevator.toPrimitive();
+    m_EndEffector.Arm_IDLE();
+    m_EndEffector.stopWheel();
+
+    if(m_EndEffector.hasCoral()) {
       LEDConstants.hasGamePiece = true;
       LEDConstants.intakeGamePiece = false;
       LEDConstants.LEDFlag = true;
@@ -72,6 +75,6 @@ public class IntakeCoral extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_EndEffectorSubsystem.hasCoral();
+    return m_EndEffector.getFirstIR() && !m_EndEffector.getSecondIR();
   }
 }

@@ -143,7 +143,8 @@ public class LEDSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     if(LEDConstants.LEDFlag) {
-      if(LEDConstants.shootGamePiece) shootGamePiece();
+      if(LEDConstants.fireAnimation) fireAnimation();
+      else if(LEDConstants.shootGamePiece) shootGamePiece();
       else if(LEDConstants.arrivePosition_Base) arrivePosition_Base();
       else if(LEDConstants.tracking) tracking();
       else if(LEDConstants.canTrackRight) canTrackLeft();
@@ -152,7 +153,6 @@ public class LEDSubsystem extends SubsystemBase {
       else if(LEDConstants.intakeArriving) intakeArriving();
       else if(LEDConstants.hasGamePiece) hasGamePiece();
       else if(LEDConstants.intakeGamePiece) intakeGamePiece();
-      else if(LEDConstants.fireAnimation) fireAnimation();
       else if(LEDConstants.normal) normal();
     }
     // candle.animate(null);

@@ -36,6 +36,9 @@ public class ShootCoral_Auto extends Command {
   @Override
   public void end(boolean interrupted) {
     m_EndEffectorSubsystem.stopWheel();
+
+    LEDConstants.arrivePosition_Base = false;
+    LEDConstants.LEDFlag = true;
   }
 
   // Returns true when the command should end.
