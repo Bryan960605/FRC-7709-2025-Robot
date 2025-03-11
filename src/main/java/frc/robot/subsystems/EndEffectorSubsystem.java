@@ -199,10 +199,10 @@ public class EndEffectorSubsystem extends SubsystemBase {
     
     // IR sensor
     public Boolean getFirstIR() {
-      return m_Debouncer.calculate(irSensor_CoralFirst.get());
+      return irSensor_CoralFirst.get();
     }
     public Boolean getSecondIR() {
-      return m_Debouncer.calculate(irSensor_CoralSecond.get());
+      return (irSensor_CoralSecond.get());
     }
 
     public boolean shouldCoralSlow() {return !getFirstIR() && !getSecondIR();}
