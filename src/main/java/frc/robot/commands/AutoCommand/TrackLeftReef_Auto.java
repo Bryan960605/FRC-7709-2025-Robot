@@ -4,21 +4,14 @@
 
 package frc.robot.commands.AutoCommand;
 
-import java.util.function.DoubleSupplier;
-
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.LEDConstants;
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.PhotonConstants;
-import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PhotonVisionSubsystem;
-import frc.robot.subsystems.SwerveSubsystem_Kraken;
 import frc.robot.subsystems.SwerveSubsystem_Kraken;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -42,8 +35,6 @@ public class TrackLeftReef_Auto extends Command {
   private double xPidOutput;
   private double yPidOutput;
   private double rotationPidOutput;
-
-  private int fiducialId;
 
   public TrackLeftReef_Auto(PhotonVisionSubsystem photonVisionSubsystem, SwerveSubsystem_Kraken swerveSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.

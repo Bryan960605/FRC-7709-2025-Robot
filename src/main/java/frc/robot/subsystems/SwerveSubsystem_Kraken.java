@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -41,14 +40,11 @@ public class SwerveSubsystem_Kraken extends SubsystemBase {
   private final Field2d field;
 
   private RobotConfig robotConfig;
-  private double zSpeed;
-  private ChassisSpeeds chassisSpeeds;
   
   /**
    * 
    */
   public SwerveSubsystem_Kraken() {
-    zSpeed = 0;
     leftFront = new SwerveModule_Kraken(
       Swerve_KrakenConstants.leftFrontTurning_ID,
       Swerve_KrakenConstants.leftFrontDrive_ID,
@@ -187,8 +183,6 @@ public class SwerveSubsystem_Kraken extends SubsystemBase {
     zSpeed = zSpeed * Math.toRadians(Swerve_KrakenConstants.maxAngularVelocity_Angle);;
     if(fieldOrient) {
       state = Swerve_KrakenConstants.swerveKinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, zSpeed, getRotation()));//之後要處理MaxSpeedPerSecond跟MaxRadianPerSecond的問題
-      chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, zSpeed, getRotation());
-      this.zSpeed = chassisSpeeds.omegaRadiansPerSecond;
     }else{
       state = Swerve_KrakenConstants.swerveKinematics.toSwerveModuleStates(new ChassisSpeeds(xSpeed, ySpeed, zSpeed));
     }

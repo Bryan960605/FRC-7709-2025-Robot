@@ -10,7 +10,6 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -20,16 +19,12 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.Debouncer;
-import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.util.datalog.BooleanLogEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.EndEffectorConstants;
-import frc.robot.Constants.Mode;
 
 public class EndEffectorSubsystem extends SubsystemBase {
   /** Creates a new IntakeSubsystem. */
@@ -48,7 +43,6 @@ public class EndEffectorSubsystem extends SubsystemBase {
   private final Slot0Configs wheelMotor_Slot0;
   private final Slot1Configs wheelMotor_Slot1;
   private final MotionMagicVelocityVoltage request_EndEffectorSpeed;
-  private final MotionMagicVoltage m_request;
   
 
   private final PIDController armPID;
@@ -72,7 +66,6 @@ public class EndEffectorSubsystem extends SubsystemBase {
       irSensor_CoralSecond = new DigitalInput(EndEffectorConstants.irSensor_CoralSecond_ID);
       irSensor_Algae = new DigitalInput(EndEffectorConstants.irSensor_Algae_ID);
       arriveAngle = EndEffectorConstants.primitiveAngle;
-      m_request = new MotionMagicVoltage(0);
       turnMotionMagicConfigs = new MotionMagicConfigs();
   
       // Motor Configurations

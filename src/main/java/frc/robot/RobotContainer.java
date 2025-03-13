@@ -4,31 +4,17 @@
 
 package frc.robot;
 
-import frc.robot.Constants.ElevatorConstants;
-import frc.robot.Constants.Mode;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.ChangeMode;
 import frc.robot.commands.ManualDrive_Kraken;
-// import frc.robot.commands.ArmTest_IntakeAlgae_Floor;
-// import frc.robot.commands.ArmTest_IntakeCoral;
-import frc.robot.commands.ManualDrive_Neo;
-import frc.robot.commands.AutoCommand.Coral_L4_Elevator;
+import frc.robot.commands.AutoCommand.Coral_L4_Elevator_Auto;
 import frc.robot.commands.AutoCommand.FeedCoral_Auto;
 import frc.robot.commands.AutoCommand.PrimitiveIntake_Auto;
 import frc.robot.commands.AutoCommand.ShootCoral_Auto;
 import frc.robot.commands.AutoCommand.TrackLeftReef_Auto;
-import frc.robot.commands.AutoCommand.TurnSome;
-// import frc.robot.commands.AutoCommand.Coral_L3_Auto_LeftReef;
-// import frc.robot.commands.AutoCommand.Coral_L3_Auto_RightReef;
-// import frc.robot.commands.AutoCommand.Coral_L4_Auto_LeftReef;
-// import frc.robot.commands.AutoCommand.Coral_L4_Auto_RightReef;
-// import frc.robot.commands.AutoCommand.FeedCoral_Auto;
 import frc.robot.commands.IntakeCommands.Coral_L1;
-// import frc.robot.commands.IntakeCommands.Coral_L1_Auto;
 import frc.robot.commands.IntakeCommands.Coral_L2;
 import frc.robot.commands.IntakeCommands.Coral_L3;
 import frc.robot.commands.IntakeCommands.Coral_L4;
-// import frc.robot.commands.IntakeCommands.Coral_L4_Auto;
 import frc.robot.commands.IntakeCommands.IntakeAlgae_Floor;
 import frc.robot.commands.IntakeCommands.IntakeAlgae_High;
 import frc.robot.commands.IntakeCommands.IntakeAlgae_Low;
@@ -36,24 +22,16 @@ import frc.robot.commands.IntakeCommands.IntakeCoral;
 import frc.robot.commands.IntakeCommands.OutAlgae;
 import frc.robot.commands.IntakeCommands.PrimitiveIntake;
 import frc.robot.commands.IntakeCommands.PrimitiveIntake_Algae;
-// import frc.robot.commands.IntakeCommands.OutAlgae;
-// import frc.robot.commands.IntakeCommands.PrimitiveIntake;
 import frc.robot.commands.IntakeCommands.ShootNet;
 import frc.robot.commands.IntakeCommands.ShootProcessor;
 import frc.robot.commands.IntakeCommands.TurnMore;
-import frc.robot.commands.TrackCommands.TrackCage;
 import frc.robot.commands.TrackCommands.TrackLeftReef;
 import frc.robot.commands.TrackCommands.TrackRightReef;
-// import frc.robot.commands.TrackCommands.TrackLeftReef_Neo;
-import frc.robot.commands.TrackCommands.TrackMiddleReef;
-// import frc.robot.commands.TrackCommands.TrackRightReef_Neo;
-// import frc.robot.commands.IntakeCommands.TurnMore;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.PhotonVisionSubsystem;
 import frc.robot.subsystems.SwerveSubsystem_Kraken;
-import frc.robot.subsystems.SwerveSubsystem_Neo;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
@@ -101,15 +79,11 @@ public class RobotContainer {
     // NamedCommands.registerCommand("Coral_L4_RightReef", new Coral_L4_Auto_RightReef(m_ElevatorSubsystem, m_EndEffectorSubsystem, m_SwerveSubsystem, m_PhotonVisionSubsystem));
     NamedCommands.registerCommand("stopMotor", Commands.runOnce(() -> m_SwerveSubsystem.stopMotor(), m_SwerveSubsystem));
     NamedCommands.registerCommand("PrimitiveIntake", new PrimitiveIntake_Auto(m_ElevatorSubsystem, m_EndEffectorSubsystem).withTimeout(1));
-    NamedCommands.registerCommand("Coral_L4_Intake", new Coral_L4_Elevator(m_ElevatorSubsystem, m_EndEffectorSubsystem).withTimeout(3));
+    NamedCommands.registerCommand("Coral_L4_Intake", new Coral_L4_Elevator_Auto(m_ElevatorSubsystem, m_EndEffectorSubsystem).withTimeout(1));
     NamedCommands.registerCommand("IntakeCoral_IDLE", new IntakeCoral(m_ElevatorSubsystem, m_EndEffectorSubsystem).withTimeout(1));
     NamedCommands.registerCommand("TrackReef_Auto", new TrackLeftReef_Auto(m_PhotonVisionSubsystem, m_SwerveSubsystem).withTimeout(2));
     NamedCommands.registerCommand("ShootCoral_Auto", new ShootCoral_Auto(m_EndEffectorSubsystem).withTimeout(1));
-    // NamedCommands.registerCommand("TrackLeftReef", new TrackLeftReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
-    // NamedCommands.registerCommand("TrackRightReef", new TrackRightReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
-    // NamedCommands.registerCommand("TrackMiddleReef", new TrackMiddleReef(m_PhotonVisionSubsystem, m_SwerveSubsystem));
     NamedCommands.registerCommand("FeedCoral", new FeedCoral_Auto(m_EndEffectorSubsystem).withTimeout(2));
-    NamedCommands.registerCommand("TurnSome", new TurnSome(m_EndEffectorSubsystem));
 
     autoChooser = AutoBuilder.buildAutoChooser();
     configureBindings();
@@ -135,7 +109,6 @@ public class RobotContainer {
     DoubleSupplier zSpeedFunc = ()-> driverController.getRawAxis(4);
 
     BooleanSupplier isSlowFunc = ()-> driverController.getHID().getRightTriggerAxis() > 0.2;
-    BooleanSupplier needSlow = ()-> ElevatorConstants.arriveLow;
     BooleanSupplier ifFeed = ()-> driverController.getHID().getLeftTriggerAxis() > 0.2;
     //
     
