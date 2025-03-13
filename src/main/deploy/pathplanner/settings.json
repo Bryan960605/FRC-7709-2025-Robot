@@ -3,15 +3,11 @@
   "robotLength": 0.85,
   "holonomicMode": true,
   "pathFolders": [
-    "LeftCoralStation",
+    "StartRightSide",
+    "StartMiddle",
+    "StartLeftSide",
     "RightCoralStation",
-    "StartLeftFieldLeft",
-    "StartLeftFieldMiddle",
-    "StartLeftFieldRight",
-    "StartMiddleField",
-    "StartRightFieldLeft",
-    "StartRightFieldMiddle",
-    "StartRightFieldRight"
+    "LeftCoralStation"
   ],
   "autoFolders": [],
   "defaultMaxVel": 6.0,
